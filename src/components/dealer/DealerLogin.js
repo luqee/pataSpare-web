@@ -6,7 +6,7 @@ class DealerLogin extends Component {
         return (
             <div className='dealer-login'>
                 <p>Dealer Login Page</p>
-                <DealerLoginForm />
+                <DealerLoginForm history={this.props.history} />
             </div>
         );
     }

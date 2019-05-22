@@ -4,9 +4,9 @@ import React, { Component } from 'react';
 class DealerDash extends Component {
     render(){
         return (
-            <dealer-home>
+            <dealer-dash>
                 <p>Dealer Home Page</p>
-            </dealer-home>
+            </dealer-dash>
         );
     }
 }
