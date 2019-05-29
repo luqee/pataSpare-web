@@ -19,8 +19,8 @@ class DealerLoginForm extends Component {
     event.preventDefault();
     let postData = {...this.state, user_type: 'auto_dealer'};
     console.log('post data is: '+ JSON.stringify(postData));
-    axios.post('/auto/api/v1/auth/login', JSON.stringify(postData), {
-      baseURL: 'http://127.0.0.1:8000',
+    axios.post('/auth/login', JSON.stringify(postData), {
+      baseURL: 'http://127.0.0.1:8000/auto/api/v1',
       headers: {'Content-Type': 'application/json'}
     })
     .then((response) => {
