@@ -34,7 +34,7 @@ class Shops extends Component {
         
         return (
             <div className="shops-content">
-                <Link to="dealer/shop/create">
+                <Link to={'/dealer/shops/create'}>
                 <Button>ADD SHOP</Button>
                 </Link>
                 <div className="shops">

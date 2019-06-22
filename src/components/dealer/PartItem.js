@@ -1,21 +1,27 @@
 import React, {Component} from 'react';
 import {Link} from 'react-router-dom';
 import {Container,Row, Col, Image, Button} from 'react-bootstrap';
-class ShopItem extends Component{
+class PartItem extends Component{
     render = () =>{
         return (
-            <div className="shop">
+            <div className="part">
                 <Container>
                     <Row>
                         <Col>
-                            <Image width='50' height='50' src={this.props.shop.image_url} rounded />
+                            <Image width='50' height='50' src={this.props.part.image_url} rounded />
                         </Col>
                         <Col>
-                        {this.props.shop.name}
+                        {this.props.part.name}
                         </Col>
                         <Col>
-                         <Link to={ '/dealer/shops/'+this.props.shop.id+'/manage'}>
-                         <Button>MANAGE {this.props.shop.name}</Button>
+                        {this.props.part.price}
+                        </Col>
+                        <Col>
+                        {this.props.part.stock}
+                        </Col>
+                        <Col>
+                         <Link to={ '/dealer/parts/'+this.props.part.id+'/manage'}>
+                         <Button>EDIT</Button>
                          </Link>
                         </Col>
                         <Col>
@@ -29,4 +35,4 @@ class ShopItem extends Component{
     }
 }
 
-export default ShopItem;
+export default PartItem;
