@@ -1,8 +1,6 @@
 const AuthService = {
     isAuthenticated(){
         let token = localStorage.getItem('access_token');
-        console.log('token is: '+token);
-        
         if (token !== null){
             return true;
         }
