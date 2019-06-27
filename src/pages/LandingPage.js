@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faSearch, faFacebook, faTwitter, faYoutube, faGooglePlus, faInstagram } from '@fortawesome/free-solid-svg-icons';
+import { faFacebook, faTwitter, faYoutube, faGooglePlus, faInstagram } from '@fortawesome/free-brands-svg-icons'
+import { faSearch } from '@fortawesome/free-solid-svg-icons';
+import HeaderBack from '../images/header-back.jpg';
 import exterior from '../images/exterior.png';
 import interior from '../images/interior.png';
 import performance from '../images/performance.png';
@@ -24,16 +26,26 @@ class LandingPage extends Component {
     render(){
         return (
             <div className='landing'>
-                <div className='banner'>
-                    <p>The Textbook Platform for Auto Parts Business</p>
-                    <p>The best eCommerce solution for auto parts</p>
-                </div>
-                <div className='search-bar'>
-                    <form className="example" action="action_page.php">
-                        <input type="text" placeholder="Search.." name="search" />
-                        <button type="submit"><FontAwesomeIcon icon={faSearch} /></button>
-                    </form>
-                </div>
+                <Container fluid className='Header' style={{backgroundImage: `url(${HeaderBack})`, height: '250px'}}>
+                    <Row style={{justifyContent: 'center'}}>
+                        <Col lg={5}>
+                        <div className='banner'>
+                            <p>The Textbook Platform for Auto Parts Business</p>
+                            <p>The best eCommerce solution for auto parts</p>
+                        </div>
+                        </Col>
+                    </Row>
+                    <Row style={{justifyContent: 'center'}}>
+                        <Col lg={5}>
+                        <div className='search-bar'>
+                            <form className="search">
+                                <input type="text" placeholder="Search by item.." name="search" />
+                                <button type="submit"><FontAwesomeIcon icon={faSearch} /></button>
+                            </form>
+                        </div>
+                        </Col>
+                    </Row>
+                </Container>
                 <Container className='categories'>
                     <Row style={{height: '250px'}}>
                         <Col style={{backgroundImage: `url(${exterior})`}}>
