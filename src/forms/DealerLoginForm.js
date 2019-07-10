@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import {Form, Button} from 'react-bootstrap';
-import axios from 'axios';
+import autoAPI from '../api/api';
+
 class DealerLoginForm extends Component {
   constructor(props){
     super(props);
@@ -19,10 +20,7 @@ class DealerLoginForm extends Component {
     event.preventDefault();
     let postData = {...this.state, user_type: 'auto_dealer'};
     console.log('post data is: '+ JSON.stringify(postData));
-    axios.post('/auth/login', JSON.stringify(postData), {
-      baseURL: 'http://127.0.0.1:8000/auto/api/v1',
-      headers: {'Content-Type': 'application/json'}
-    })
+    autoAPI.post('/auth/login', JSON.stringify(postData))
     .then((response) => {
       console.log(response);
       if (response.data.status === 200) {

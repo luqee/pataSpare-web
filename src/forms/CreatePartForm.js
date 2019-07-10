@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {Form, Button} from 'react-bootstrap';
-import axios from 'axios';
+import autoAPI from '../api/api';
 
 class CreatePartForm extends Component {
     constructor(props){
@@ -21,9 +21,7 @@ class CreatePartForm extends Component {
         }
     }
     componentDidMount = () => {
-        axios.get('/brands', {
-            baseURL: 'http://127.0.0.1:8000/auto/api/v1',
-        })
+        autoAPI.get('/brands')
         .then((response) => {
             console.log(response);
             if (response.status === 200){
@@ -38,9 +36,7 @@ class CreatePartForm extends Component {
             console.log(error);
             
         })
-        axios.get('/categories', {
-            baseURL: 'http://127.0.0.1:8000/auto/api/v1',
-        })
+        autoAPI.get('/categories')
         .then((response) => {
             console.log(response);
             if (response.status === 200){
@@ -71,7 +67,7 @@ class CreatePartForm extends Component {
     handleBrand = (event) => {
         console.log(event.target.value);
         this.state.brandSelectOptions.forEach((brand) => {
-            if (brand.id == event.target.value){
+            if (brand.id === parseInt(event.target.value)){
                 this.setState({modelSelectOptions: brand.models})
             }
         })
@@ -107,8 +103,7 @@ class CreatePartForm extends Component {
         }
         formData.set('part_image', this.state.partImage)
         
-        axios.post('/auto_dealer/shops/'+this.props.shopId+'/parts', formData, {
-            baseURL: 'http://127.0.0.1:8000/auto/api/v1',
+        autoAPI.post('/auto_dealer/shops/'+this.props.shopId+'/parts', formData, {
             headers: {
                 'Content-Type': 'multipart/form-data',
                 'Authorization': 'Bearer '+ localStorage.getItem('access_token')

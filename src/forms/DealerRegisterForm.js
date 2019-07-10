@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Form, Button } from 'react-bootstrap';
-import axios from 'axios';
+import autoAPI from '../api/api';
 
 class DealerRegisterForm extends Component {
   constructor(props){
@@ -29,11 +29,7 @@ class DealerRegisterForm extends Component {
     event.preventDefault();
     let postData = {...this.state, user_type: 'auto_dealer'};
     console.log('post data is: '+ JSON.stringify(postData));
-    const instance = axios.create({
-      baseURL: 'http://127.0.0.1:8000',
-      headers: {'Content-Type': 'application/json'}
-    });
-    instance.post('/auto/api/v1/auth/register', JSON.stringify(postData))
+    autoAPI.post('/auth/register', JSON.stringify(postData))
     .then(response => {
       console.log('Data is '+ JSON.stringify(response.data.data));
       console.log('data status is '+ response.data.status);

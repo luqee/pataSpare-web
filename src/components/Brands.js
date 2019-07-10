@@ -11,9 +11,11 @@ import Mitsu from '../images/13.png';
 function Brands(props){
     return (
         <Container className='partnerBrands'>
-            <Row>
-                <Col>
-                <h3>QUALITY CAR SPARE PARTS FROM TOP BRANDS</h3>
+            <Row style={{
+                justifyContent: 'center'
+            }}>
+                <Col lg={6}>
+                <h4>QUALITY CAR SPARE PARTS FROM TOP BRANDS</h4>
                 </Col>
             </Row>
             <Row>

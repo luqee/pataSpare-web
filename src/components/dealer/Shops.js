@@ -1,8 +1,9 @@
 import React, {Component} from 'react';
-import axios from 'axios';
 import {Link} from 'react-router-dom';
 import ShopItem from './ShopItem';
 import {Button} from 'react-bootstrap';
+import autoAPI from '../../api/api';
+
 class Shops extends Component {
     constructor(props){
         super(props);
@@ -13,8 +14,7 @@ class Shops extends Component {
 
     componentDidMount = () => {
         console.log('component did mount');
-        axios.get('/auto_dealer/shops', {
-            baseURL: 'http://127.0.0.1:8000/auto/api/v1',
+        autoAPI.get('/auto_dealer/shops', {
             headers: {'Authorization': 'Bearer '+ localStorage.getItem('access_token')}
         })
         .then((response) => {

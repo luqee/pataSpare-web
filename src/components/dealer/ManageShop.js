@@ -1,7 +1,7 @@
 import React, {Component} from 'react'
 import {Tabs, Tab} from 'react-bootstrap';
 import Inventory from '../dealer/Inventory';
-import axios from 'axios';
+import autoAPI from '../../api/api';
 
 class ManageShop extends Component {
     constructor(props){
@@ -13,8 +13,7 @@ class ManageShop extends Component {
     }
     componentDidMount = () => {
         console.log('component did mount');
-        axios.get('/auto_dealer/shops/'+ this.props.match.params.id, {
-            baseURL: 'http://127.0.0.1:8000/auto/api/v1',
+        autoAPI.get('/auto_dealer/shops/'+ this.props.match.params.id, {
             headers: {'Authorization': 'Bearer '+ localStorage.getItem('access_token')}
         })
         .then((response) => {

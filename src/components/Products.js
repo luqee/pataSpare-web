@@ -1,9 +1,10 @@
 import React from 'react';
 import {Container, Row, Col, Tabs, Tab} from 'react-bootstrap';
+import TabCategory from './TabCategory';
 
 function Products(props){
     return (
-        <Container className='products'>
+        <Container className='products' id='products'>
             <Row>
                 <Col>
                 <Tabs defaultActiveKey='featured' id='categoryTabs'>
@@ -11,16 +12,16 @@ function Products(props){
                     featured products
                 </Tab>
                 <Tab eventKey='exterior' title='EXTERIOR'>
-                    filtered by exterior
+                    <TabCategory category={`Exterior`} />
                 </Tab>
                 <Tab eventKey='interior' title='INTERIOR'>
-                    filtered by interior
+                    <TabCategory category={`Interior`} />
                 </Tab>
                 <Tab eventKey='performance' title='PERFORMANCE'>
-                    filtered by performance
+                    <TabCategory category={`Performance`} />
                 </Tab>
                 <Tab eventKey='accessories' title='ACCESSORIES'>
-                    filtered by accessories
+                    <TabCategory category={`Accessories`} />
                 </Tab>
                 </Tabs>
                 </Col>
