@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import {Link} from 'react-router-dom';
 import {Container,Row, Col, Image, Button} from 'react-bootstrap';
+
 class ShopItem extends Component{
     render = () =>{
         return (
@@ -15,7 +16,7 @@ class ShopItem extends Component{
                         </Col>
                         <Col>
                          <Link to={ '/dealer/shops/'+this.props.shop.id+'/manage'}>
-                         <Button>MANAGE {this.props.shop.name}</Button>
+                         <Button>MANAGE</Button>
                          </Link>
                         </Col>
                         <Col>

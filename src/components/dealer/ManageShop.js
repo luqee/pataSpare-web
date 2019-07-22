@@ -1,7 +1,8 @@
 import React, {Component} from 'react'
-import {Tabs, Tab} from 'react-bootstrap';
+import {Container, Row, Col, Tabs, Tab} from 'react-bootstrap';
 import Inventory from '../dealer/Inventory';
-import axios from 'axios';
+import autoAPI from '../../api/api';
+import urls from '../../config/config';
 
 class ManageShop extends Component {
     constructor(props){
@@ -13,8 +14,7 @@ class ManageShop extends Component {
     }
     componentDidMount = () => {
         console.log('component did mount');
-        axios.get('/auto_dealer/shops/'+ this.props.match.params.id, {
-            baseURL: 'http://127.0.0.1:8000/auto/api/v1',
+        autoAPI.get(`${urls.dealerHome}/shops/${this.props.match.params.id}`, {
             headers: {'Authorization': 'Bearer '+ localStorage.getItem('access_token')}
         })
         .then((response) => {
@@ -32,25 +32,31 @@ class ManageShop extends Component {
     }
     render = () => {
         return (
-            <div className="manage-shop">
-            <Tabs defaultActiveKey="staff" id="manage-tabs">
-            <Tab eventKey="staff" title="STAFF">
-            staff
-            </Tab>
-            <Tab eventKey="inventory" title="INVENTORY">
-                <Inventory parts={this.state.parts} shopId={this.props.match.params.id}/>
-            </Tab>
-            <Tab eventKey="messages" title="CHAT MESSAGES">
-                Your Messages
-            </Tab>
-            <Tab eventKey="orders" title="ORDERS/PAYMENTS">
-                Your Orders
-            </Tab>
-            <Tab eventKey="details" title="SHOP DETAILS">
-                Shop detials
-            </Tab>
-            </Tabs>
-            </div>
+            <Container>
+                <Row>
+                    <Col>
+                    <div className="manage-shop">
+                    <Tabs defaultActiveKey="staff" id="manage-tabs">
+                    <Tab eventKey="staff" title="STAFF">
+                    staff
+                    </Tab>
+                    <Tab eventKey="inventory" title="INVENTORY">
+                        <Inventory parts={this.state.parts} shopId={this.props.match.params.id}/>
+                    </Tab>
+                    <Tab eventKey="messages" title="CHAT MESSAGES">
+                        Your Messages
+                    </Tab>
+                    <Tab eventKey="orders" title="ORDERS/PAYMENTS">
+                        Your Orders
+                    </Tab>
+                    <Tab eventKey="details" title="SHOP DETAILS">
+                        Shop detials
+                    </Tab>
+                    </Tabs>
+                    </div>
+                    </Col>
+                </Row>
+            </Container>
         )
     }
 }

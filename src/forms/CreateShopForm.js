@@ -1,6 +1,8 @@
 import React, {Component} from 'react';
 import {Form, Button} from 'react-bootstrap';
-import axios from 'axios';
+import autoAPI from '../api/api';
+import urls from '../config/config';
+
 class CreateShopForm extends Component {
     constructor(props){
         super(props);
@@ -13,34 +15,35 @@ class CreateShopForm extends Component {
             marker: ''
         }
     }
-    componentDidMount = () => {
-        // if (!window.google) {
-        //     var s = document.createElement('script');
-        //     s.type = 'text/javascript';
-        //     s.src = 'https://maps.googleapis.com/maps/api/js?key=AIzaSyA7ffxu8SN1t1hf_WRMYXZ6_pq8L5vsKeo&callback=initMap';
-        //     var x = document.getElementsByTagName('script')[0];
-        //     x.parentNode.insertBefore(s, x);
-        //     // Below is important. 
-        //     //We cannot access google.maps until it's finished loading
-        //     s.addEventListener('load', e => {
-        //         this.initMap();
-        //     })
-        // } else {
-        //     this.initMap();
-        // }
-    }
     initMap = () => {
-        // let mapInput = new window.google.maps.Map(document.getElementById('map'), {
-        //     center: {lat: -3.397, lng: 40.644},
-        //     zoom:10
-        // });
-        // let defaultMarker = new window.google.maps.Marker({
-        //     position: {lat: -3.397, lng: 40.644},
-        //     map: mapInput,
-        //     draggable: true
-        // })
-        // this.setState({map: mapInput, marker: defaultMarker});
+        console.log('initialising map');
+        
+        let mapInput = new window.google.maps.Map(document.getElementById('map'), {
+            center: {lat: -1.308, lng: 36.825},
+            zoom:10
+        });
+        let defaultMarker = new window.google.maps.Marker({
+            position: {lat: -1.308, lng: 36.825},
+            map: mapInput,
+            draggable: true
+        })
+        this.setState({map: mapInput, marker: defaultMarker});
     }
+    componentDidMount = () => {
+        if (!window.google) {
+            var s = document.createElement('script');
+            s.type = 'text/javascript';
+            s.src = 'https://maps.googleapis.com/maps/api/js?key=AIzaSyAQEVFEK0Fn7_amIRqBRl_5vz4kRTJNCwA&callback=initMap';
+            var x = document.getElementsByTagName('script')[0];
+            x.parentNode.insertBefore(s, x);
+            s.addEventListener('load', e => {
+                this.initMap();
+            })
+        } else {
+            this.initMap();
+        }
+    }
+    
     handleBusinessName = (event) => {
         this.setState({name: event.target.value});
     }
@@ -61,8 +64,8 @@ class CreateShopForm extends Component {
             name: this.state.name,
             description: this.state.description,
             location: this.state.location,
-            latitude: -1.2345,
-            longitude: 38.3465
+            latitude: this.state.marker.getPosition().lat(),
+            longitude: this.state.marker.getPosition().lng()
         }
         let formData = new FormData();
         for (let name in shopData){
@@ -73,8 +76,7 @@ class CreateShopForm extends Component {
         console.log(shopData);
         console.log(formData);
         
-        axios.post('/auto_dealer/shops', formData, {
-            baseURL: 'http://127.0.0.1:8000/auto/api/v1',
+        autoAPI.post(`${urls.dealerHome}/shops`, formData, {
             headers: {
                 'Content-Type': 'multipart/form-data',
                 'Authorization': 'Bearer '+ localStorage.getItem('access_token')
@@ -83,7 +85,7 @@ class CreateShopForm extends Component {
         .then((response) => {
             console.log(response);
             if (response.status === 201){
-                this.props.history.push('/dealer');
+                this.props.history.push(urls.dealerHome);
             }
             
         })

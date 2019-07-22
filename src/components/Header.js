@@ -1,24 +1,28 @@
 import React, { Component } from 'react';
-import {withRouter} from 'react-router-dom';
+import {withRouter, Link} from 'react-router-dom';
 import AuthService from '../auth/auth';
 import Navbar from 'react-bootstrap/Navbar';
-import {Nav, NavDropdown, Form, FormControl, Button}from 'react-bootstrap';
+import {Container, Row, Col, Button, Nav, NavItem}from 'react-bootstrap';
 
 const AuthButton = withRouter(
     ({ history }) =>
     AuthService.isAuthenticated() ? (
-        <p>
-            Welcome!{" "}
-            <button
+            <Button
             onClick={() => {
                 AuthService.signout(() => history.push("/"));
             }}
             >
             Sign out
-            </button>
-        </p>
+            </Button>
         ) : (
-        <p>You are not logged in.</p>
+            <Container>
+                <Row>
+                    <Col>
+                    <Link to={`/dealer/register`}><Button>Become Partner</Button></Link>
+                    Or <Link to={`/dealer/login`}><Button>Login</Button></Link>
+                    </Col>
+                </Row>
+            </Container>
         )
 );
 
@@ -26,24 +30,16 @@ class Header extends Component {
   render() {
     return (
         <Navbar bg="dark" expand="lg">
-        <Navbar.Brand href="#home">AutoClinic</Navbar.Brand>
+        <Navbar.Brand href="/">PataSpare</Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="mr-auto">
-            <Nav.Link href="#home">Home</Nav.Link>
-            <Nav.Link href="#link">Link</Nav.Link>
-            <NavDropdown title="Dropdown" id="basic-nav-dropdown">
-                <NavDropdown.Item href="#action/3.1">Action</NavDropdown.Item>
-                <NavDropdown.Item href="#action/3.2">Another action</NavDropdown.Item>
-                <NavDropdown.Item href="#action/3.3">Something</NavDropdown.Item>
-                <NavDropdown.Divider />
-                <NavDropdown.Item href="#action/3.4">Separated link</NavDropdown.Item>
-            </NavDropdown>
+            <NavItem componentClass={Link}>Home</NavItem>
+            <NavItem componentClass={Link}><a href='/#categories'>Categories</a></NavItem>
+            <NavItem componentClass={Link}><a href='/#features'>Features</a></NavItem>
+            <NavItem componentClass={Link}><a href='/#shops'>Shops</a></NavItem>
+            <NavItem componentClass={Link}><a href='/#contact'>Contact</a></NavItem>
             </Nav>
-            <Form inline>
-            <FormControl type="text" placeholder="Search" className="mr-sm-2" />
-            <Button variant="outline-success">Search</Button>
-            </Form>
             <Navbar.Text>
             <div className='Auth-buttons'>
                 <AuthButton />

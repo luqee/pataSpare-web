@@ -1,20 +1,20 @@
 import React, { Component } from 'react';
 import { Form, Button } from 'react-bootstrap';
-import axios from 'axios';
+import autoAPI from '../api/api';
+import urls from '../config/config';
 
 class DealerRegisterForm extends Component {
   constructor(props){
     super(props);
     this.state = {
-      username: '',
+      name: '',
       number: '',
       email: '',
-      token: ''
+      password: ''
     }
-    // this.registerDealer = this.registerDealer.bind(this)
   }
   handleUserName = (event) => {
-    this.setState({username: event.target.value});
+    this.setState({name: event.target.value});
   }
   handleNumber = (event) => {
     this.setState({number: event.target.value});
@@ -23,17 +23,13 @@ class DealerRegisterForm extends Component {
     this.setState({email: event.target.value});
   }
   handlPassword = (event) => {
-    this.setState({token: event.target.value});
+    this.setState({password: event.target.value});
   }
   registerDealer = (event) => {
     event.preventDefault();
-    let postData = {...this.state, user_type: 'auto_dealer'};
+    let postData = {...this.state};
     console.log('post data is: '+ JSON.stringify(postData));
-    const instance = axios.create({
-      baseURL: 'http://127.0.0.1:8000',
-      headers: {'Content-Type': 'application/json'}
-    });
-    instance.post('/auto/api/v1/auth/register', JSON.stringify(postData))
+    autoAPI.post(urls.userRegister, JSON.stringify(postData))
     .then(response => {
       console.log('Data is '+ JSON.stringify(response.data.data));
       console.log('data status is '+ response.data.status);
@@ -42,7 +38,7 @@ class DealerRegisterForm extends Component {
         console.log('successful registration');
         console.log(this.props.history);
         
-        this.props.history.push('/dealer/login')
+        this.props.history.push(urls.userLogin)
         // (<Redirect to='/dealer/login' />)
       }
     })
