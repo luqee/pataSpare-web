@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import {Form, Button} from 'react-bootstrap';
 import autoAPI from '../api/api';
+import urls from '../config/config';
 
 class CreatePartForm extends Component {
     constructor(props){
@@ -90,7 +91,7 @@ class CreatePartForm extends Component {
         let partData = {
             title: this.state.name,
             brand_id: this.state.brand,
-            model_id: this.state.model,
+            b_model_id: this.state.model,
             price: this.state.price,
             stock: this.state.stock,
             description: this.state.description,
@@ -103,7 +104,7 @@ class CreatePartForm extends Component {
         }
         formData.set('part_image', this.state.partImage)
         
-        autoAPI.post('/auto_dealer/shops/'+this.props.shopId+'/parts', formData, {
+        autoAPI.post(`${urls.dealerHome}/shops/${this.props.shopId}/parts`, formData, {
             headers: {
                 'Content-Type': 'multipart/form-data',
                 'Authorization': 'Bearer '+ localStorage.getItem('access_token')
@@ -112,7 +113,7 @@ class CreatePartForm extends Component {
         .then((response) => {
             console.log(response);
             if (response.status === 201){
-                this.props.history.push('/dealer/shops/'+this.props.shopId+'/manage');
+                this.props.history.push(`${urls.dealerHome}/shops/${this.props.shopId}/manage`);
             }
             
         })

@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import {Form, Button} from 'react-bootstrap';
 import autoAPI from '../api/api';
+import urls from '../config/config';
 
 class CreateShopForm extends Component {
     constructor(props){
@@ -75,7 +76,7 @@ class CreateShopForm extends Component {
         console.log(shopData);
         console.log(formData);
         
-        autoAPI.post('/auto_dealer/shops', formData, {
+        autoAPI.post(`${urls.dealerHome}/shops`, formData, {
             headers: {
                 'Content-Type': 'multipart/form-data',
                 'Authorization': 'Bearer '+ localStorage.getItem('access_token')
@@ -84,7 +85,7 @@ class CreateShopForm extends Component {
         .then((response) => {
             console.log(response);
             if (response.status === 201){
-                this.props.history.push('/dealer');
+                this.props.history.push(urls.dealerHome);
             }
             
         })

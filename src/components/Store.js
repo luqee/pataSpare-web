@@ -5,8 +5,8 @@ function Store(props){
     return (
         <Container>
             <Row>
-                <Col>
-                <Image src={props.shop.image_url} />
+                <Col lg={4}>
+                <Image height={'inherit'} width={'inherit'}  src={props.shop.image_url} />
                 </Col>
             </Row>
         </Container>

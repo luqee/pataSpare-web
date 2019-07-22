@@ -1,35 +1,35 @@
 import React, { Component } from 'react';
 import {Form, Button} from 'react-bootstrap';
 import autoAPI from '../api/api';
+import urls from '../config/config';
 
 class DealerLoginForm extends Component {
   constructor(props){
     super(props);
     this.state = {
       email: '',
-      token: ''
+      password: ''
     }
   }
   handleEmail = (event) => {
     this.setState({email: event.target.value});
   }
   handlPassword = (event) => {
-    this.setState({token: event.target.value});
+    this.setState({password: event.target.value});
   }
   loginUser = (event) => {
     event.preventDefault();
-    let postData = {...this.state, user_type: 'auto_dealer'};
+    let postData = {...this.state};
     console.log('post data is: '+ JSON.stringify(postData));
-    autoAPI.post('/auth/login', JSON.stringify(postData))
+    autoAPI.post(urls.userLogin, JSON.stringify(postData))
     .then((response) => {
       console.log(response);
       if (response.data.status === 200) {
         console.log('successful login');
-        console.log(this.props.history);
-        let responseData = response.data.data[0];
+        let responseData = response.data.data;
         localStorage.setItem('access_token', responseData.access_token);
-        localStorage.setItem('refresh_token', responseData.refresh_token);
-        this.props.history.push('/dealer')
+        // localStorage.setItem('refresh_token', responseData.refresh_token);
+        this.props.history.push(urls.dealerHome);
         // (<Redirect to='/dealer/login' />)
       }
     })

@@ -11,9 +11,7 @@ class Stores extends React.Component {
         }
     }
     componentDidMount = () => {
-        autoAPI.get('/shops',{
-            baseURL: 'http://127.0.0.1:8000/auto/api/v1'
-        })
+        autoAPI.get('/shops')
         .then((response) => {
             console.log('response is');
             console.log(response);

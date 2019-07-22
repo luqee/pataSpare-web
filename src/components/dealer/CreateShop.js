@@ -1,12 +1,13 @@
 import React, { Component } from 'react';
 import CreateShopForm from '../../forms/CreateShopForm';
 import {Container,Row, Col} from 'react-bootstrap';
+
 class CreateShop extends Component {
     render = () => {
         return (
             <Container>
-                <Row>
-                    <Col lg={8}>
+                <Row className="justify-content-md-center">
+                    <Col lg={7}>
                     <CreateShopForm history={this.props.history}/>
                     </Col>
                 </Row>

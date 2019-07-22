@@ -1,6 +1,7 @@
 import axios from 'axios';
+import urls from '../config/config';
 
 export default axios.create({
-  baseURL: `http://127.0.0.1:8000/auto/api/v1`,
-  headers: {'Content-Type': 'application/json'}
+  baseURL: urls.baseURL,
+  headers: {'Content-Type': 'application/json', 'X-Requested-With': 'XMLHttpRequest'}
 });
