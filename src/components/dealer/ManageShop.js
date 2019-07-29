@@ -13,16 +13,16 @@ class ManageShop extends Component {
         }
     }
     componentDidMount = () => {
-        console.log('component did mount');
+        
         autoAPI.get(`${urls.dealerHome}/shops/${this.props.match.params.id}`, {
             headers: {'Authorization': 'Bearer '+ localStorage.getItem('access_token')}
         })
         .then((response) => {
-            console.log(response);
+            
             if (response.data.status === 200){
-                console.log('updating manageshops state');
+                
                 this.setState({parts: response.data.data.parts})
-                console.log(this.state.parts);
+                
             }
         })
         .catch((error) => {

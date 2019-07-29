@@ -13,12 +13,9 @@ class TabCategory extends Component {
     }
 
     componentDidMount = () => {
-        console.log('fetching by category'+ this.state.category);
         autoAPI.get('/search?category='+this.state.category)
         .then((response) => {
-            console.log(response);
             if (response.data.status === 200){
-                console.log('updating parts');
                 this.setState({parts: response.data.data.parts});
             }
         })

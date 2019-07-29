@@ -28,15 +28,11 @@ class DealerRegisterForm extends Component {
   registerDealer = (event) => {
     event.preventDefault();
     let postData = {...this.state};
-    console.log('post data is: '+ JSON.stringify(postData));
+    
     autoAPI.post(urls.userRegister, JSON.stringify(postData))
     .then(response => {
-      console.log('Data is '+ JSON.stringify(response.data.data));
-      console.log('data status is '+ response.data.status);
-      console.log('respose status: '+ response.status);
       if (response.data.status === 201) {
         console.log('successful registration');
-        console.log(this.props.history);
         
         this.props.history.push(urls.userLogin)
         // (<Redirect to='/dealer/login' />)

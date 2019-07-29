@@ -16,8 +16,6 @@ class CreateShopForm extends Component {
         }
     }
     initMap = () => {
-        console.log('initialising map');
-        
         let mapInput = new window.google.maps.Map(document.getElementById('map'), {
             center: {lat: -1.308, lng: 36.825},
             zoom:10
@@ -33,7 +31,7 @@ class CreateShopForm extends Component {
         if (!window.google) {
             var s = document.createElement('script');
             s.type = 'text/javascript';
-            s.src = 'https://maps.googleapis.com/maps/api/js?key=AIzaSyAQEVFEK0Fn7_amIRqBRl_5vz4kRTJNCwA&callback=initMap';
+            s.src = 'https://maps.googleapis.com/maps/api/js?key=AIzaSyC29r00wR6YbOeK8BL4QacVO1j2gMdzp5g&callback=initMap';
             var x = document.getElementsByTagName('script')[0];
             x.parentNode.insertBefore(s, x);
             s.addEventListener('load', e => {
@@ -51,7 +49,6 @@ class CreateShopForm extends Component {
         this.setState({description: event.target.value})
     }
     handleImageUpload = (event)=> {
-        console.log(event.target.files[0]);
         this.setState({shopImage: event.target.files[0]})
     }
     handleLocation = (event) => {
@@ -59,7 +56,6 @@ class CreateShopForm extends Component {
     }
     createShop = (event) => {
         event.preventDefault();
-        console.log(this.state);
         let shopData = {
             name: this.state.name,
             description: this.state.description,
@@ -70,11 +66,8 @@ class CreateShopForm extends Component {
         let formData = new FormData();
         for (let name in shopData){
             formData.set(name, shopData[name])
-            console.log(shopData[name]);
         }
         formData.set('shop_image', this.state.shopImage)
-        console.log(shopData);
-        console.log(formData);
         
         autoAPI.post(`${urls.dealerHome}/shops`, formData, {
             headers: {
@@ -83,7 +76,6 @@ class CreateShopForm extends Component {
             }
         })
         .then((response) => {
-            console.log(response);
             if (response.status === 201){
                 this.props.history.push(urls.dealerHome);
             }
@@ -116,7 +108,7 @@ class CreateShopForm extends Component {
                     </Form.Group>
                     <Form.Group controlId="formBasicMap">
                     <Form.Label>Selet On Map:</Form.Label>
-                    <div style={{ width: 250, height: 250 }} className="map" id="map"></div>
+                    <div style={{ width: 400, height: 400 }} className="map" id="map"></div>
                     </Form.Group>
                     <Button variant="primary" type="submit" onClick={this.createShop}>
                     CREATE SHOP

@@ -8,7 +8,6 @@ import DealerDash from '../components/dealer/DealerDash';
 import ManageShop from '../components/dealer/ManageShop';
 
 function DealerPage({match}){
-    console.log(match);
     
     return (
         <Switch>

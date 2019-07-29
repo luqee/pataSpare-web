@@ -5,7 +5,7 @@ import carouselBack from '../images/corouselBack.png';
 function Promotion(props){
     return (
         <Container className='promo' style={{backgroundImage: `url(${carouselBack})`}} id='features'>
-            <Row style={{justifyContent: 'center'}}>
+            <Row style={{justifyContent: 'center',  height: '500'}}>
                 <Col lg={4}>
                 <Carousel>
                 <Carousel.Item>
