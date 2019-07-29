@@ -9,7 +9,7 @@ class ShopItem extends Component{
                 <Container>
                     <Row>
                         <Col>
-                            <Image width='50' height='50' src={this.props.shop.image_url} rounded />
+                            <Image width='100' height='100' src={this.props.shop.shop_image} rounded />
                         </Col>
                         <Col>
                         {this.props.shop.name}

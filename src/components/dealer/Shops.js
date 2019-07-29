@@ -14,14 +14,14 @@ class Shops extends Component {
     }
 
     componentDidMount = () => {
-        console.log('component did mount');
+        
         autoAPI.get(`${urls.dealerHome}/shops`, {
             headers: {'Authorization': 'Bearer '+ localStorage.getItem('access_token')}
         })
         .then((response) => {
-            console.log(response);
+            
             if (response.data.status === 200){
-                console.log('updating shops state');
+                
                 this.setState({shops: response.data.data.shops});
             }
         })
@@ -48,7 +48,7 @@ class Shops extends Component {
                         {
                         (this.state.shops.length > 0) ? (
                             this.state.shops.map((shop) => {
-                                console.log(shop);
+                                
                                 return (<ShopItem key={shop.id} shop={shop}/>)
                             })
                         )

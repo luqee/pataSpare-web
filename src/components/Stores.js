@@ -11,10 +11,8 @@ class Stores extends React.Component {
         }
     }
     componentDidMount = () => {
-        autoAPI.get('/shops')
+        autoAPI.get(`/shops?preview=true`)
         .then((response) => {
-            console.log('response is');
-            console.log(response);
             let shops = response.data.data.shops
             this.setState({shops: shops})
         })
@@ -24,7 +22,6 @@ class Stores extends React.Component {
         })
     }
     render = () => {
-        console.log(this.state.shops);
         
         return (
             <Container className='partnerstore' id='shops'>
@@ -43,11 +40,7 @@ class Stores extends React.Component {
                 <Row style={{
                     justifyContent: 'center'
                 }}>
-                    <Col lg={8} style={{
-                        display: 'flex',
-                        flexDirection: 'column',
-                        alignItems: 'center'
-                    }}>
+                    <Col lg={8}>
                         <Container>
                             <Row style={{
                                 borderBottom: '10px solid #ff6200'
@@ -55,7 +48,7 @@ class Stores extends React.Component {
                                 {
                                     (this.state.shops.length > 0) ? (
                                         this.state.shops.map((shop, index) => {
-                                            return (<Col key={index} lg={4}><Store key={index} shop={shop} /></Col> )
+                                            return (<Col key={index} lg={4}><Store key={shop.id} shop={shop} /></Col> )
                                         })
                                     ):(
                                         <Col lg={12}>

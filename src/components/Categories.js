@@ -1,57 +1,73 @@
 import React from 'react';
 import {Container, Row, Col} from 'react-bootstrap';
-import exterior from '../images/exterior.png';
-import interior from '../images/interior.png';
-import performance from '../images/performance.png';
-import accessories from '../images/accessories.png';
+import {Link} from 'react-router-dom';
+import logo from '../images/cropped-temp_logo.png';
+import  axios from '../api/api';
 
-function Categories(props){
-    return (
-        <Container className='categories' id='categories'>
-            <Row style={{height: '250px'}}>
-                <Col style={{
-                    backgroundImage: `url(${exterior})`,
-                    display: 'flex',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    borderRight: '2px solid #ff6200',
-                    borderBottom: '10px solid #ff6200'
-                    }}>
-                <div style={{color: '#ff6200'}}>EXTERIOR</div>
-                </Col>
-                <Col style={{
-                    backgroundImage: `url(${interior})`,
-                    display: 'flex',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    borderRight: '2px solid #ff6200',
-                    borderBottom: '10px solid #ff6200'
-                    }}>
-                <div style={{color: '#ff6200'}}>INTERIOR</div>
-                </Col>
-                <Col style={{
-                    backgroundImage: `url(${performance})`,
-                    display: 'flex',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    borderRight: '2px solid #ff6200',
-                    borderBottom: '10px solid #ff6200'
-                    }}>
-                <div style={{color: '#ff6200'}}>PERFORMANCE</div>
-                </Col>
-                <Col style={{
-                    backgroundImage: `url(${accessories})`,
-                    display: 'flex',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    borderRight: '2px solid #ff6200',
-                    borderBottom: '10px solid #ff6200'
-                    }}>
-                <div style={{color: '#ff6200'}}>ACCESSORIES</div>
-                </Col>
-            </Row>
-        </Container>
-    )
+class Categories extends React.Component{
+    constructor(props){
+        super(props);
+        this.state = {
+            categories: []
+        }
+    }
+    componentDidMount = () => {
+        axios.get(`/categories?preview=true`)
+        .then((response) => {
+            
+            if (response.data.status === 200){
+                this.setState({categories: response.data.data.categories})
+            }
+        })
+        .catch((error) => {
+            console.log(error);
+            
+        })
+    }
+    render = () => {
+        const colStyle = {
+            backgroundImage: `url(${logo})`,
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            width: '90%',
+            height: '80%'
+        }
+        return (
+            <Container className='categories' id='categories'>
+                <Row style={{height: '320px'}}>
+                    {
+                        (this.state.categories.length > 0) ? (
+                            this.state.categories.map((cat, indx) => {
+                                return (
+                                    <Col lg={4} key={indx} style={{
+                                        display: 'flex',
+                                        justifyContent: 'center',
+                                        alignItems: 'center'
+                                    }}>
+                                        <div style={colStyle}>
+                                        <Link to={`/part-category/${cat.id}`} >
+                                        <div style={{
+                                            color: '#ff6200',
+                                            fontSize: '2em',
+                                            fontWeight: 'bold'
+                                        }}>
+                                            {cat.name}
+                                        </div>
+                                        </Link>
+                                        </div>
+                                        
+                                    </Col>
+                                );
+                            })
+                        ):(
+                            <div></div>
+                        )
+                    }
+                </Row>
+            </Container>
+        )
+    }
 }
 
 export default Categories;

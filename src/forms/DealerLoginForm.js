@@ -20,12 +20,12 @@ class DealerLoginForm extends Component {
   loginUser = (event) => {
     event.preventDefault();
     let postData = {...this.state};
-    console.log('post data is: '+ JSON.stringify(postData));
+    
     autoAPI.post(urls.userLogin, JSON.stringify(postData))
     .then((response) => {
-      console.log(response);
+      
       if (response.data.status === 200) {
-        console.log('successful login');
+        
         let responseData = response.data.data;
         localStorage.setItem('access_token', responseData.access_token);
         // localStorage.setItem('refresh_token', responseData.refresh_token);
