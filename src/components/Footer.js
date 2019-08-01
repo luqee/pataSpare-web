@@ -5,20 +5,30 @@ import { faFacebook, faTwitter, faYoutube, faInstagram } from '@fortawesome/free
 
 function Footer(props){
     return (
-        <Container className='footer'>
+        <Container className='footer' fluid style={{
+            paddingTop: '20px',
+            backgroundColor: '#212529',
+            color: '#ffffff',
+            flexShrink: 0
+        }}>
             <Row style={{
-                backgroundColor: '#212529',
-                color: '#ffffff'
+                justifyContent: 'space-evenly'
             }}>
-            <Col lg={4}>
+            <Col lg={4} style={{
+                flexBasis: '30%'
+            }}>
                 <div>SUPPORT</div>
                 <a href={'#contact'}>Contact Us</a>
             </Col>
-            <Col lg={4}>
+            <Col lg={4} style={{
+                flexBasis: '30%'
+            }}>
                 <div>LEGAL</div>
                 Privacy Policy
             </Col>
-            <Col lg={4}>
+            <Col lg={4} style={{
+                flexBasis: '30%'
+            }}>
                 <div>FOLLOW US ON</div>
                 <FontAwesomeIcon icon={faFacebook} /><br/>
                 <FontAwesomeIcon icon={faTwitter} /><br/>

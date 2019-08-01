@@ -1,6 +1,6 @@
 import React from 'react';
 import {Link} from 'react-router-dom';
-import {Container,Row, Col, Image, Button} from 'react-bootstrap';
+import {Container,Row, Col, Button, Card } from 'react-bootstrap';
 import urls from '../config/config';
 
 function PartItem(props){
@@ -8,21 +8,25 @@ function PartItem(props){
     return (
         <Container>
             <Row>
-                <Col style={{
-                    display: 'flex',
-                    flexDirection: 'column',
-                    alignItems: 'center'
-                }}>
+                <Col>
+                <Card style={{ width: '100%' }}>
                 <Link to={`/parts/${part.id}`}>
-                <Image src={`${urls.hostRoot}/${part.part_image}`} width={200} height={200} />
+                <Card.Img variant="top" src={`${urls.hostRoot}/${part.part_image}`}/>
                 </Link>
-                <div>{part.title}</div>
-                <div>{part.price}</div>
-                <Button>Add to cart</Button>
+                <Card.Body>
+                    <Card.Title>{part.title}</Card.Title>
+                    <Card.Text>
+                    {part.description}
+                    </Card.Text>
+                    <Card.Text>
+                    Price: {part.price}
+                    </Card.Text>
+                    <Button>Add to cart</Button>
+                </Card.Body>
+                </Card>
                 </Col>
             </Row>
         </Container>
-        
     )
 }
 

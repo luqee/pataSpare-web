@@ -5,7 +5,6 @@ import Brands from '../components/Brands';
 import Stores from '../components/Stores';
 import Categories from '../components/Categories';
 import Contact from '../components/Contact';
-import Footer from '../components/Footer';
 import Slider from '../components/Slider';
 
 class LandingPage extends Component {
@@ -19,7 +18,6 @@ class LandingPage extends Component {
                 <Stores />
                 <Brands />
                 <Contact />
-                <Footer />
             </div>
         );
     }

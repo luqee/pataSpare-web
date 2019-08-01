@@ -1,14 +1,18 @@
 import React from 'react';
-import {Container, Row, Col, Carousel, Card } from 'react-bootstrap';
+import {Container, Row, Col, Card } from 'react-bootstrap';
 import carouselBack from '../images/corouselBack.png';
 
 function Promotion(props){
     return (
-        <Container className='promo' style={{backgroundImage: `url(${carouselBack})`}} id='features'>
-            <Row style={{justifyContent: 'center',  height: '500'}}>
+        <Container className='promo' style={{
+            backgroundImage: `url(${carouselBack})`,
+            height: '400px',
+            backgroundAttachment: 'fixed',
+            backgroundRepeat: 'no-repeat',
+            backgroundSize: 'cover'
+            }}>
+            <Row style={{alignItems: 'center', height: 'inherit'}}>
                 <Col lg={4}>
-                <Carousel>
-                <Carousel.Item>
                 <Card>
                 <Card.Body>
                     <Card.Title>OUTSTANDING SERVICE</Card.Title>
@@ -19,8 +23,8 @@ function Promotion(props){
                     </Card.Text>
                 </Card.Body>
                 </Card>
-                </Carousel.Item>
-                <Carousel.Item>
+                </Col>
+                <Col lg={4}>
                 <Card>
                 <Card.Body>
                     <Card.Title>GREATLY REDUCED PRICES</Card.Title>
@@ -30,8 +34,8 @@ function Promotion(props){
                     </Card.Text>
                 </Card.Body>
                 </Card>
-                </Carousel.Item>
-                <Carousel.Item>
+                </Col>
+                <Col lg={4}>
                 <Card>
                 <Card.Body>
                     <Card.Title>HUGE ASSORTMENT</Card.Title>
@@ -41,8 +45,6 @@ function Promotion(props){
                     </Card.Text>
                 </Card.Body>
                 </Card>
-                </Carousel.Item>
-                </Carousel>
                 </Col>
             </Row>
         </Container>

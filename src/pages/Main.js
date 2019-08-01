@@ -15,7 +15,9 @@ class Main extends Component {
     render() {
         return (
         <main style={{
-            paddingTop: '100px'
+            paddingTop: '80px',
+            paddingBottom: '10px',
+            flex: '1 0 auto'
         }}>
             <Switch>
                 <Route exact path='/' component={LangingPage}/>

@@ -5,22 +5,30 @@ import Navbar from 'react-bootstrap/Navbar';
 import {Container, Row, Col, Button, Nav, NavDropdown,Form, FormControl}from 'react-bootstrap';
 import autoAPI from '../api/api';
 
+const autService = new AuthService();
+
 const AuthButton = withRouter(
     ({ history }) =>
-    AuthService.isAuthenticated() ? (
-            <Button
-            onClick={() => {
-                AuthService.signout(() => history.push("/"));
-            }}
-            >
-            Sign out
-            </Button>
+
+    autService.isAuthenticated() ? (
+            <Nav>
+                <NavDropdown title="Account" id="basic-nav-dropdown">
+                <NavDropdown.Item href={`/dealer`}>DashBoard</NavDropdown.Item>
+                <Navbar.Text>
+                    <a href="#" onClick={(e) => {
+                        e.preventDefault();
+                        console.log('Logging out');
+                        autService.signout(() => history.push("/"));
+                    }}>Log out</a>
+                </Navbar.Text>
+                </NavDropdown>
+            </Nav>
         ) : (
             <Container>
                 <Row>
                     <Col>
-                    <Link to={`/dealer/register`}><Button>Become Partner</Button></Link>
-                    Or <Link to={`/dealer/login`}><Button>Login</Button></Link>
+                    <Link to={`/dealer/register`}>Become Partner</Link>
+                    Or <Link to={`/dealer/login`}>Login</Link>
                     </Col>
                 </Row>
             </Container>
@@ -47,7 +55,7 @@ class Header extends Component {
     }
     render() {
     return (
-        <Navbar bg="dark" expand="lg" fixed='top'>
+        <Navbar bg="dark" variant='dark' expand="lg" fixed='top'>
         <Navbar.Brand href="/">PataSpare</Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
@@ -63,14 +71,12 @@ class Header extends Component {
             <Nav.Link href='/shop'>Shop</Nav.Link>
             <Nav.Link href='/stores'>Store List</Nav.Link>
             </Nav>
-            <Form inline>
+            <Form inline className='mr-auto ml-auto'>
                 <FormControl type="text" placeholder="Search" className=" mr-sm-2" />
-                <Button type="submit">Submit</Button>
+                <Button type="submit">Search</Button>
             </Form>
             <Navbar.Text>
-            <div className='Auth-buttons'>
                 <AuthButton />
-            </div>
             </Navbar.Text>
         </Navbar.Collapse>
         </Navbar>

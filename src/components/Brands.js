@@ -12,7 +12,8 @@ function Brands(props){
     return (
         <Container className='partnerBrands'>
             <Row style={{
-                justifyContent: 'center'
+                justifyContent: 'center',
+                padding: '10px 0px'
             }}>
                 <Col lg={6}>
                 <h4>QUALITY CAR SPARE PARTS FROM TOP BRANDS</h4>
