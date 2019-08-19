@@ -3,22 +3,18 @@ import { Form, Button } from 'react-bootstrap';
 import autoAPI from '../api/api';
 import urls from '../config/config';
 
-class DealerRegisterForm extends Component {
+class CustomerRegisterForm extends Component {
   constructor(props){
     super(props);
     this.state = {
       name: '',
-      number: '',
       email: '',
       password: '',
-      role: 'dealer'
+      role: 'customer'
     }
   }
   handleUserName = (event) => {
     this.setState({name: event.target.value});
-  }
-  handleNumber = (event) => {
-    this.setState({number: event.target.value});
   }
   handleEmail = (event) => {
     this.setState({email: event.target.value});
@@ -26,7 +22,7 @@ class DealerRegisterForm extends Component {
   handlPassword = (event) => {
     this.setState({password: event.target.value});
   }
-  registerDealer = (event) => {
+  registerClient = (event) => {
     event.preventDefault();
     let postData = {...this.state};
     
@@ -49,10 +45,6 @@ class DealerRegisterForm extends Component {
           <Form.Label>User Name</Form.Label>
           <Form.Control type="text" placeholder="Username" onChange={this.handleUserName} />
         </Form.Group>
-        <Form.Group controlId="formBasicNumber">
-          <Form.Label>Phone Number</Form.Label>
-          <Form.Control type="text" placeholder="Phone Number" onChange={this.handleNumber}/>
-        </Form.Group>
         <Form.Group controlId="formBasicEmail">
           <Form.Label>Email address</Form.Label>
           <Form.Control type="email" placeholder="Enter email" onChange={this.handleEmail} />
@@ -68,7 +60,7 @@ class DealerRegisterForm extends Component {
           <Form.Label>Confirm Password</Form.Label>
           <Form.Control type="password" placeholder="Password Confirmation" />
         </Form.Group>
-        <Button variant="primary" type="submit" onClick={this.registerDealer}>
+        <Button variant="primary" type="submit" onClick={this.registerClient}>
         Register
         </Button>
       </Form>
@@ -76,4 +68,4 @@ class DealerRegisterForm extends Component {
   }
 }
 
-export default DealerRegisterForm;
+export default CustomerRegisterForm;

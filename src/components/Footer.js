@@ -18,7 +18,7 @@ function Footer(props){
                 flexBasis: '30%'
             }}>
                 <div>SUPPORT</div>
-                <a href={'#contact'}>Contact Us</a>
+                <a href={'/#contact'}>Contact Us</a>
             </Col>
             <Col lg={4} style={{
                 flexBasis: '30%'

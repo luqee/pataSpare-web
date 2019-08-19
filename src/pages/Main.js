@@ -1,14 +1,17 @@
-
 import React, { Component } from 'react';
 import { Switch, Route } from 'react-router-dom'
 import PrivateRoute from './PrivateRoute';
 import DealerPage from './DealerPage';
+import CustomerPage from './CustomerPage';
+import AdminPage from './AdminPage';
 import LangingPage from './LandingPage';
-import DealerRegister from '../components/dealer/DealerRegister';
-import DealerLogin from '../components/dealer/DealerLogin';
+import DealerRegister from './DealerRegister';
+import CustomerRegister from './CustomerRegister';
+import UserLogin from './UserLogin';
 import Stores from './Stores';
 import PartCategory from './PartCategory';
 import PartsShop from './PartsShop';
+import SearchParts from './SearchParts';
 import PartDetails from './PartDetails';
 
 class Main extends Component {
@@ -25,9 +28,13 @@ class Main extends Component {
                 <Route exact path='/parts/:id' component={PartDetails}/>
                 <Route exact path='/shop' component={PartsShop}/>
                 <Route exact path='/stores' component={Stores}/>
+                <Route exact path='/search/:term' component={SearchParts}/>
                 <Route exact path='/dealer/register' component={DealerRegister}/>
-                <Route exact path='/dealer/login' component={DealerLogin}/>
-                <PrivateRoute path='/dealer' component={DealerPage}/>
+                <Route exact path='/customer/register' component={CustomerRegister}/>
+                <Route exact path='/user/login' component={UserLogin}/>
+                <PrivateRoute path='/dealer' userRole='dealer' component={DealerPage}/>
+                <PrivateRoute path='/customer' userRole='customer' component={CustomerPage}/>
+                <PrivateRoute path='/admin' userRole='admin' component={AdminPage}/>
             </Switch>
         </main>
         );

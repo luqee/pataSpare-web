@@ -3,7 +3,7 @@ import {Form, Button} from 'react-bootstrap';
 import autoAPI from '../api/api';
 import urls from '../config/config';
 
-class DealerLoginForm extends Component {
+class UserLoginForm extends Component {
   constructor(props){
     super(props);
     this.state = {
@@ -28,9 +28,9 @@ class DealerLoginForm extends Component {
         
         let responseData = response.data.data;
         localStorage.setItem('access_token', responseData.access_token);
+        localStorage.setItem('user', JSON.stringify(responseData.user));
         // localStorage.setItem('refresh_token', responseData.refresh_token);
-        this.props.history.push(urls.dealerHome);
-        // (<Redirect to='/dealer/login' />)
+        this.props.history.push(`/`);
       }
     })
     .catch((error) => {
@@ -50,11 +50,11 @@ class DealerLoginForm extends Component {
           <Form.Control type="password" placeholder="Password" onChange={ this.handlPassword } />
         </Form.Group>
         <Button variant="primary" type="submit" onClick={this.loginUser}>
-        Dealer Login
+        Login
         </Button>
       </Form>
     );
   }
 }
 
-export default DealerLoginForm;
+export default UserLoginForm;

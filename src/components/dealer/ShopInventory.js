@@ -3,7 +3,7 @@ import {Link} from 'react-router-dom';
 import {Container, Row, Col, Button} from 'react-bootstrap';
 import PartItem from './PartItem';
 
-class Inventory extends Component{
+class ShopInventory extends Component{
     render = () => {
         return (
             <Container className="Inventory">
@@ -11,7 +11,7 @@ class Inventory extends Component{
                     <Col>
                     <Link style={{
                         float:"right"
-                    }} to={"/dealer/shops/"+this.props.shopId+"/part/create"}>
+                    }} to={"/dealer/shops/manage/"+this.props.shopId+"/part/create"}>
                         <Button>ADD PART</Button>
                     </Link>
                     </Col>
@@ -39,4 +39,4 @@ class Inventory extends Component{
     }
 }
 
-export default Inventory;
+export default ShopInventory;

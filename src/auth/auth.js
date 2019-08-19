@@ -10,6 +10,10 @@ class AuthService {
     //     this.isAuthenticated = true;
     //     setTimeout(cb, 100); // fake async
     // }
+    getCurrentUser = () => {
+        let user = JSON.parse(localStorage.getItem('user'));
+        return user;
+    }
     signout = (cb) => {
         localStorage.removeItem('access_token');
         cb();

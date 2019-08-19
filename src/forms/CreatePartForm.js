@@ -16,6 +16,7 @@ class CreatePartForm extends Component {
             stock: '',
             tags: [],
             brandSelectOptions: [],
+            shop_id: this.props.shopId,
         
             modelSelectOptions: [],
             tagsOptions: []
@@ -95,7 +96,8 @@ class CreatePartForm extends Component {
             price: this.state.price,
             stock: this.state.stock,
             description: this.state.description,
-            categories: this.state.tags
+            categories: this.state.tags,
+            shop_id: this.state.shopId
         }
         let formData = new FormData();
         for (let name in partData){
@@ -104,7 +106,7 @@ class CreatePartForm extends Component {
         }
         formData.set('part_image', this.state.partImage)
         
-        autoAPI.post(`${urls.dealerHome}/shops/${this.props.shopId}/parts`, formData, {
+        autoAPI.post(`${urls.dealerHome}/parts`, formData, {
             headers: {
                 'Content-Type': 'multipart/form-data',
                 'Authorization': 'Bearer '+ localStorage.getItem('access_token')
@@ -113,7 +115,7 @@ class CreatePartForm extends Component {
         .then((response) => {
             console.log(response);
             if (response.status === 201){
-                this.props.history.push(`${urls.dealerHome}/shops/${this.props.shopId}/manage`);
+                this.props.history.push(`${urls.dealerHome}/manage/${this.props.shopId}`);
             }
             
         })

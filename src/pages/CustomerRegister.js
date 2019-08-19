@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
-import DealerRegisterForm from '../../forms/DealerRegisterForm';
+import CustomerRegisterForm from '../forms/CustomerRegisterForm';
 import {Container, Row, Col} from 'react-bootstrap';
 
-class DealerRegister extends Component {
+class CustomerRegister extends Component {
     render(){
         return (
             <Container>
@@ -10,7 +10,7 @@ class DealerRegister extends Component {
                 <Col lg={6}>
                 <div className='dealer-register'>
                     <p>Auto part Dealer Registration.</p>
-                    <DealerRegisterForm history={this.props.history} />
+                    <CustomerRegisterForm history={this.props.history} />
                 </div>
                 </Col>
             </Row>
@@ -19,4 +19,4 @@ class DealerRegister extends Component {
     }
 }
 
-export default DealerRegister;
+export default CustomerRegister;
