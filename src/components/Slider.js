@@ -19,7 +19,7 @@ function ImageSlider(props){
     // }
     const sliderPStyle = {
         color: '#ffffff',
-        fontSize: '2em'
+        fontSize: '2.5em'
     }
     return (
         <Container>

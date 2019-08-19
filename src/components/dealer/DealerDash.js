@@ -1,30 +1,52 @@
-import React, { Component } from 'react';
-import {Container, Row, Col, Tabs, Tab} from 'react-bootstrap';
+import React from 'react';
+import {Container, Row, Col} from 'react-bootstrap';
+import {Link, Switch, Route} from 'react-router-dom';
+import Dash from './Dash';
 import Shops from './Shops';
+import Orders from './Orders';
+import Inquiries from './Inquiries';
+import CreateShop from './CreateShop';
 
-class DealerDash extends Component {
-    render(){
-        return (
-            <Container>
-                <Row>
-                    <Col>
-                    <p>Dealer Home Page</p>
-                    <Tabs defaultActiveKey="shops" id="dash-tabs">
-                    <Tab eventKey="shops" title="Shops">
-                        <Shops />
-                    </Tab>
-                    <Tab eventKey="inventory" title="Inventory">
-                        Inventory section
-                    </Tab>
-                    <Tab eventKey="orders" title="Orders">
-                        Orders area!!
-                    </Tab>
-                    </Tabs>
-                    </Col>
-                </Row>
-            </Container>
-        );
-    }
+const sidebarStyle = {
+    height: '100%',
+    backgroundColor: '#111',
+    overflowX: 'hidden',
+    paddingTop: '20px'
+}
+const sideLinkStyle = {
+    padding: '6px 8px 6px 16px',
+    textDecoration: 'none',
+    fontSize: '25px',
+    color: '#818181',
+    display: 'block',
+}
+
+function  DealerDash(props){
+    return (
+        <Container>
+            <Row>
+                <Col md={3}>
+                <div id={`sidebar`} className={`sidebar`} style={sidebarStyle}>
+                    <Link to={`${props.match.url}`} style={sideLinkStyle}>Dashboard</Link>
+                    <Link to={`${props.match.url}/shops`} style={sideLinkStyle}>Shops</Link>
+                    <Link to={`${props.match.url}/orders`} style={sideLinkStyle}>Orders</Link>
+                    <Link to={`${props.match.url}/inquiries`} style={sideLinkStyle}>Inquiries</Link>
+                </div>
+                </Col>
+                <Col md={9}>
+                <div id='page-wrap'>
+                <Switch>
+                    <Route exact path={`${props.match.path}`} component={Dash}/>
+                    <Route exact path={`${props.match.path}/shops`} component={Shops}/>
+                    <Route exact path={`${props.match.path}/orders`} component={Orders}/>
+                    <Route exact path={`${props.match.path}/inquiries`} component={Inquiries}/>
+                    <Route exact path={`${props.match.path}/shops/create`} component={CreateShop}/>
+                </Switch>
+                </div>
+                </Col>
+            </Row>
+        </Container>
+    );
 }
 
 export default DealerDash;

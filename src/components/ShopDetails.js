@@ -13,7 +13,6 @@ class ShopDetails extends Component {
             directionsService: {},
             directionsDisplay: {}
         }
-        // this.showDirection = this.showDirection.bind(this);
     }
     initMap = () => {
         let map = new window.google.maps.Map(document.getElementById('map'), {
@@ -61,10 +60,10 @@ class ShopDetails extends Component {
                     window.alert('Directions request failed due to ' + status);
                   }
             });
-            infoWindow.setPosition(pos);
-            infoWindow.setContent('My Location');
-            infoWindow.open(this.state.map);
-            this.state.map.setCenter(pos);
+            // infoWindow.setPosition(pos);
+            // infoWindow.setContent('My Location');
+            // infoWindow.open(this.state.map);
+            // this.state.map.setCenter(pos);
           }, () => {
             this.handleLocationError(true, infoWindow, this.state.map.getCenter());
           });

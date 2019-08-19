@@ -77,7 +77,7 @@ class CreateShopForm extends Component {
         })
         .then((response) => {
             if (response.status === 201){
-                this.props.history.push(urls.dealerHome);
+                this.props.history.push(`${urls.dealerHome}/shops`);
             }
             
         })

@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import {Link} from 'react-router-dom';
 import {Container,Row, Col, Image, Button} from 'react-bootstrap';
+import urls from '../../config/config';
 
 class PartItem extends Component{
     render = () =>{
@@ -9,7 +10,7 @@ class PartItem extends Component{
                 <Container>
                     <Row>
                         <Col>
-                            <Image width='100' height='100' src={this.props.part.part_image} rounded />
+                            <Image width='100' height='100' src={`${urls.hostRoot}/${this.props.part.part_image}`} rounded />
                         </Col>
                         <Col>
                         {this.props.part.name}

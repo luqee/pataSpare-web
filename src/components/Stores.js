@@ -26,7 +26,8 @@ class Stores extends React.Component {
         return (
             <Container className='partnerstore' id='shops'>
                 <Row style={{
-                    justifyContent: 'center'
+                    justifyContent: 'center',
+                    padding: '10px 0px'
                 }}>
                     <Col lg={8} style={{
                         display: 'flex',
@@ -34,7 +35,7 @@ class Stores extends React.Component {
                         alignItems: 'center'
                     }}>
                         <h3>Stores Selling Auto parts</h3>
-                        <p>Auto Parts Sellers Thriving on pitstop autoclinic</p>
+                        <p>Auto Parts Sellers Thriving on PataSpare</p>
                     </Col>
                 </Row>
                 <Row style={{
@@ -43,6 +44,7 @@ class Stores extends React.Component {
                     <Col lg={8}>
                         <Container>
                             <Row style={{
+                                paddingBottom: '10px',
                                 borderBottom: '10px solid #ff6200'
                             }}>
                                 {

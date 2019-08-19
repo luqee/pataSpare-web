@@ -1,9 +1,9 @@
 import React, {Component} from 'react';
-import {Link} from 'react-router-dom';
-import ShopItem from './ShopItem';
-import {Container, Row, Col, Button} from 'react-bootstrap';
 import autoAPI from '../../api/api';
 import urls from '../../config/config';
+import {Container, Row, Col, Button} from 'react-bootstrap';
+import {Link} from 'react-router-dom';
+import ShopItem from './ShopItem';
 
 class Shops extends Component {
     constructor(props){
@@ -14,7 +14,6 @@ class Shops extends Component {
     }
 
     componentDidMount = () => {
-        
         autoAPI.get(`${urls.dealerHome}/shops`, {
             headers: {'Authorization': 'Bearer '+ localStorage.getItem('access_token')}
         })
@@ -30,15 +29,14 @@ class Shops extends Component {
             
         });
     }
-    
     render = () => {
-        
+        const shops = this.state.shops;
         return (
             <Container className="shops-content">
                 <Row>
                 <Link style={{
-                    float: 'right'
-                }} to={'/dealer/shops/create'}>
+                    float: "right"
+                }} to={`${this.props.match.url}/create`}>
                 <Button>ADD SHOP</Button>
                 </Link>
                 </Row>
@@ -46,8 +44,8 @@ class Shops extends Component {
                     <Col>
                         <div className="shops">
                         {
-                        (this.state.shops.length > 0) ? (
-                            this.state.shops.map((shop) => {
+                        (shops.length > 0) ? (
+                            shops.map((shop) => {
                                 
                                 return (<ShopItem key={shop.id} shop={shop}/>)
                             })
@@ -62,7 +60,7 @@ class Shops extends Component {
                     </Col>
                 </Row>
             </Container>
-        )
+        );
     };
 }
 

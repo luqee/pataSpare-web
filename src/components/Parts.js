@@ -39,7 +39,8 @@ class Parts extends React.Component{
             <Container className='products' id='products'>
                 <Row style={{
                     justifyContent: 'center',
-                    fontSize: '2em'
+                    fontSize: '2em',
+                    padding: '10px 0px'
                 }}>
                     <p>New In</p>
                 </Row>
