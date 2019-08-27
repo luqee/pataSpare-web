@@ -14,6 +14,7 @@ class ManageShop extends Component {
         super(props);
         this.state = {
             parts: [],
+            shop_id: props.match.params.id
             
         }
     }
@@ -65,7 +66,7 @@ class ManageShop extends Component {
                     <Switch>
                         <Route exact path={`${this.props.match.path}`} component={ShopDash}/>
                         <Route exact path={`${this.props.match.path}/inventory`} render={(routerProps)=> {
-                            return <ShopInventory {...routerProps} parts={this.state.parts}/>
+                            return <ShopInventory {...routerProps} parts={this.state.parts} shopId={this.state.shop_id}/>
                         }}/>
                         <Route exact path={`${this.props.match.path}/orders`} component={ShopOrders}/>
                         <Route exact path={`${this.props.match.path}/inquiries`} component={ShopInquiries}/>

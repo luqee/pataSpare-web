@@ -1,11 +1,48 @@
 import React, { Component } from 'react';
-import {withRouter, Link} from 'react-router-dom';
+import {withRouter} from 'react-router-dom';
 import AuthService from '../auth/auth';
 import Navbar from 'react-bootstrap/Navbar';
-import {Nav, NavDropdown}from 'react-bootstrap';
+import {Nav, NavDropdown, Container, Row, Col}from 'react-bootstrap';
 import autoAPI from '../api/api';
-
+import CartService from '../api/cart';
+import SearchBar from './SearchBar';
 const autService = new AuthService();
+const cartService = new CartService();
+
+class CartLink extends Component {
+    constructor(props){
+        super(props);
+        this.state = {
+            cart: [],
+            total: 0
+        }
+    }
+
+    componentDidMount = () => {
+        cartService.getCart((fetched) => {
+            if(fetched){
+                this.setState({cart: localStorage.getItem('cart')});
+            }
+            
+        });
+    }
+
+    render = () => {
+        if(this.state.cart.items && this.state.cart.items.length > 0){
+            let total = 0;
+            total = this.state.cart.items.map((item) => item.quantity).reduce((prev, next) => prev+next);
+            console.log(total);
+            this.setState({total: total});
+        }
+        console.log(this.state.cart);
+        
+        return (
+            <Nav>
+                <Nav.Link href="/cart">Cart <span>{this.state.total}</span></Nav.Link>
+            </Nav>
+        )
+    }
+}
 
 function AuthButton(props) {
     const currentUser = autService.getCurrentUser();
@@ -76,25 +113,43 @@ class Header extends Component {
     }
     render() {
         return (
-            <Navbar bg="dark" variant='dark' expand="lg" fixed='top'>
-            <Navbar.Brand href="/">PataSpare</Navbar.Brand>
-            <Navbar.Toggle aria-controls="basic-navbar-nav" />
-            <Navbar.Collapse id="basic-navbar-nav">
-                <Nav className="mr-auto">
-                <Nav.Link href="/">Home</Nav.Link>
-                <NavDropdown title="Categories" id="basic-nav-dropdown">
-                    {
-                        this.state.categories.map((category, index) => {
-                            return (<NavDropdown.Item key={index} href={`/part-category/${category.id}`}>{category.name}</NavDropdown.Item>)
-                        })
-                    }
-                </NavDropdown>
-                <Nav.Link href='/shop'>Shop</Nav.Link>
-                <Nav.Link href='/stores'>Store List</Nav.Link>
-                </Nav>
-                <AuthButton history={this.props.history} />
-            </Navbar.Collapse>
-            </Navbar>
+            <Container fluid  style={{
+                position: 'fixed',
+                top: '0',
+                zIndex: '12'
+            }}>
+                <Row style={{
+                    display: 'flex',
+                    flexDirection: 'column'
+                }}>
+                    <Col>
+                    <Navbar bg="dark" variant='dark' expand="lg">
+                    <Navbar.Brand href="/">PataSpare</Navbar.Brand>
+                    <Navbar.Toggle aria-controls="basic-navbar-nav" />
+                    <Navbar.Collapse id="basic-navbar-nav">
+                        <Nav className="mr-auto">
+                        <Nav.Link href="/">Home</Nav.Link>
+                        <NavDropdown title="Categories" id="basic-nav-dropdown">
+                            {
+                                this.state.categories.map((category, index) => {
+                                    return (<NavDropdown.Item key={index} href={`/part-category/${category.id}`}>{category.name}</NavDropdown.Item>)
+                                })
+                            }
+                        </NavDropdown>
+                        <Nav.Link href='/shop'>Shop</Nav.Link>
+                        <Nav.Link href='/stores'>Store List</Nav.Link>
+                        </Nav>
+                        <CartLink />
+                        <AuthButton history={this.props.history} />
+                    </Navbar.Collapse>
+                    </Navbar>
+                    </Col>
+                    <Col>
+                    <SearchBar />
+                    </Col>
+                </Row>
+            </Container>
+            
         );
     }
 }

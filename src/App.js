@@ -3,12 +3,13 @@ import { BrowserRouter } from 'react-router-dom';
 import Header from './components/Header';
 import Main from './pages/Main';
 import Footer from './components/Footer';
+import { Container } from 'react-bootstrap';
 
 class App extends Component {
   render() {
     return (
       <BrowserRouter>
-      <div className="App" style={{
+      <Container fluid className="App" style={{
         height: '100%',
         display: 'flex',
         flexDirection: 'column'
@@ -16,7 +17,7 @@ class App extends Component {
         <Header />
         <Main />
         <Footer />
-      </div>
+      </Container>
       </BrowserRouter>
     );
   }

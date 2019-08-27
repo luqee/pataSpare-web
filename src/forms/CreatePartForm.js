@@ -9,6 +9,7 @@ class CreatePartForm extends Component {
         this.state = {
             model: '',
             brand: '',
+            year: '',
             name: '',
             description: '',
             partImage: '',
@@ -17,7 +18,7 @@ class CreatePartForm extends Component {
             tags: [],
             brandSelectOptions: [],
             shop_id: this.props.shopId,
-        
+            yearSelectOptions: [],
             modelSelectOptions: [],
             tagsOptions: []
         }
@@ -53,6 +54,9 @@ class CreatePartForm extends Component {
             console.log(error);
             
         })
+    }
+    handleYear = (event) => {
+        this.setState({year: event.target.value});
     }
     handlePartName = (event) => {
         this.setState({name: event.target.value});
@@ -93,11 +97,12 @@ class CreatePartForm extends Component {
             title: this.state.name,
             brand_id: this.state.brand,
             b_model_id: this.state.model,
+            year: this.state.year,
             price: this.state.price,
             stock: this.state.stock,
             description: this.state.description,
             categories: this.state.tags,
-            shop_id: this.state.shopId
+            shop_id: this.state.shop_id
         }
         let formData = new FormData();
         for (let name in partData){
@@ -154,6 +159,17 @@ class CreatePartForm extends Component {
                     {
                         this.state.modelSelectOptions.map((model) => {
                             return (<option key={model.id} value={model.id}>{model.name}</option>)
+                        })
+                    }
+                    </Form.Control>
+                    </Form.Group>
+                    <Form.Group controlId="formBasicYear">
+                    <Form.Label>Year:</Form.Label>
+                    <Form.Control as="select" placeholder="Year" onChange={this.handleYear}>
+                    <option>select year</option>
+                    {
+                        this.state.yearSelectOptions.map((year, indx) => {
+                            return (<option key={indx} value={year}>{year}</option>)
                         })
                     }
                     </Form.Control>

@@ -11,14 +11,15 @@ import UserLogin from './UserLogin';
 import Stores from './Stores';
 import PartCategory from './PartCategory';
 import PartsShop from './PartsShop';
-import SearchParts from './SearchParts';
+import SearchResults from './SearchResults';
 import PartDetails from './PartDetails';
+import UserCart from './UserCart';
 
 class Main extends Component {
     render() {
         return (
         <main style={{
-            paddingTop: '80px',
+            paddingTop: '100px',
             paddingBottom: '10px',
             flex: '1 0 auto'
         }}>
@@ -28,7 +29,8 @@ class Main extends Component {
                 <Route exact path='/parts/:id' component={PartDetails}/>
                 <Route exact path='/shop' component={PartsShop}/>
                 <Route exact path='/stores' component={Stores}/>
-                <Route exact path='/search/:term' component={SearchParts}/>
+                <Route exact path='/cart' component={UserCart}/>
+                <Route exact path='/results' component={SearchResults}/>
                 <Route exact path='/dealer/register' component={DealerRegister}/>
                 <Route exact path='/customer/register' component={CustomerRegister}/>
                 <Route exact path='/user/login' component={UserLogin}/>

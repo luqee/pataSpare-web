@@ -1,36 +1,24 @@
 import React from 'react';
 import {Container, Row, Col} from 'react-bootstrap';
 import PartItem from '../components/PartItem';
-import  autoAPI from '../api/api';
 
-class SearchParts extends React.Component {
+class SearchResults extends React.Component {
     constructor(props){
         super(props);
         this.state = {
-            searchResults: {},
-            parts: []
+            searchResults: [],
+            term: '',
         }
     }
     componentDidMount = () => {
-        console.log('Getting search');
-        
-        autoAPI.get(`/search?term=${this.props.match.params.term}`)
-        .then((response) => {
-            if (response.data.status === 200){
-                this.setState({parts: response.data.data.results.parts})
-                console.log('Search results are ::');
-                console.log(response.data.data.results);
-            }
-        })
-        .catch((error) => {
-            console.log(error);
-            
-        });
+        console.log('Rendering search results');
+        this.setState({searchResults: this.props.location.state.results});
+        this.setState({term: this.props.location.state.term})
     }
     render = () => {
         console.log('rendering search page');
-        const parts = this.state.parts;
-        
+        const parts = this.state.searchResults;
+
         return (
             <Container className={'Search-results'}>
                 <Row style={{
@@ -38,7 +26,7 @@ class SearchParts extends React.Component {
                     fontSize: '2em',
                     padding: '10px 0px'
                 }}>
-                    <p>{`Search results for: "${this.props.match.params.term}"`}</p>
+                    <p>{`Search results for: "${this.state.term}"`}</p>
                 </Row>
                 <Row>
                     {
@@ -62,4 +50,4 @@ class SearchParts extends React.Component {
     }
 }
 
-export default SearchParts;
+export default SearchResults;

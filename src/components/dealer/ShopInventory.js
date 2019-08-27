@@ -11,7 +11,7 @@ class ShopInventory extends Component{
                     <Col>
                     <Link style={{
                         float:"right"
-                    }} to={"/dealer/shops/manage/"+this.props.shopId+"/part/create"}>
+                    }} to={`/dealer/manage/${this.props.shopId}/part/create`}>
                         <Button>ADD PART</Button>
                     </Link>
                     </Col>
