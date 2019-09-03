@@ -2,18 +2,19 @@ import React from 'react';
 import {Container, Row, Col, Form, Button} from 'react-bootstrap';
 import {Redirect} from 'react-router-dom';
 import autoAPI from '../api/api';
+import Select from 'react-select';
 
 class SearchBar extends React.Component {
     constructor(props){
         super(props);
         this.state = {
+            brands: [],
+            models: [],
+            years: [],
             brand: '',
             model: '',
             year: '',
             searchTerm: '',
-            yearSelectOptions: [],
-            brandSelectOptions: [],
-            modelSelectOptions: [],
             searchResults: [],
             results_set: false
         }
@@ -23,29 +24,29 @@ class SearchBar extends React.Component {
         .then((response) => {
             console.log(response);
             if (response.status === 200){
-                console.log('Updating brands');
-                this.setState({brandSelectOptions: response.data.data.brands})
-                console.log(this.state.brandSelectOptions);
+                this.setState({brands: response.data.data.brands})
             }
         })
         .catch((error) => {
-            console.log(error);
-            
+            console.log(error)
         })
     }
     handleBrand = (event) => {
-        console.log(event.target.value);
-        this.state.brandSelectOptions.forEach((brand) => {
+        this.setState({brand: parseInt(event.target.value)});
+        this.state.brands.forEach((brand) => {
             if (brand.id === parseInt(event.target.value)){
-                this.setState({modelSelectOptions: brand.models});
-                this.setState({brand: parseInt(event.target.value)});
+                this.setState({models: brand.models});
             }
         })
-        
         this.setState({model: ''})
     }
     handleModel = (event) => {
         this.setState({model: parseInt(event.target.value)})
+        this.state.models.forEach((model) => {
+            if (model.id === parseInt(event.target.value)){
+                this.setState({years: model.years})
+            }
+        })
     }
     handleYear = (event) => {
         this.setState({year: parseInt(event.target.value)})
@@ -56,7 +57,7 @@ class SearchBar extends React.Component {
     search = (event) => {
         event.preventDefault();
         console.log('Serching .....');
-        let query = `term=${this.props.match.params.term}&brand=${this.state.brand}&model=${this.state.model}$year=${this.state.year}`;
+        let query = `term=${this.state.searchTerm}&brand=${this.state.brand}&model=${this.state.model}&year=${this.state.year}`;
         autoAPI.get(`/search?${query}`)
         .then((response) => {
             if (response.data.status === 200){
@@ -71,56 +72,56 @@ class SearchBar extends React.Component {
         });
     }
     render = () => {
+        let brandOptions = this.state.brands.map((brand) => {
+            return {
+                value: brand.id,
+                label: brand.name
+            }
+        })
 
+        let modelOptions = this.state.models.map((model) => {
+            return {
+                value: model.id,
+                label: model.name
+            }
+        })
+        let yearOptions = this.state.years.map((year) => {
+            return {
+                value: year.year,
+                label: year.year
+            }
+        })
         return (this.state.results_set) ? <Redirect to={{
             pathname: '/results',
             state: {results: this.state.searchResults, term: this.state.searchTerm}
         }} />
         :
-        <Container className='searchbar' id='searchbar' fluid>
-            <Row className='justify-content-center'>
-            <Col lg={8}>
-                <Form inline>
-                    <Form.Group controlId="formBasicBrand">
-                    <Form.Control as="select" placeholder="Brand" onChange={this.handleBrand}>
-                        {/* <option>Select a brand</option> */}
-                        {
-                            (this.state.brandSelectOptions.length > 0) ? (
-                                this.state.brandSelectOptions.map((brand,index) => {
-                                    return (<option key={brand.id} value={brand.id}>{brand.name}</option>)
-                                })
-                            ):(
-                                <option>No Options</option>
-                            )
-                        }
-                    </Form.Control>
-                    </Form.Group>
-                    <Form.Group controlId="formBasicModel">
-                    <Form.Control as="select" placeholder="Model" onChange={this.handleModel}>
-                    {/* <option>select model</option> */}
-                    {
-                        this.state.modelSelectOptions.map((model) => {
-                            return (<option key={model.id} value={model.id}>{model.name}</option>)
-                        })
-                    }
-                    </Form.Control>
-                    </Form.Group>
-                    <Form.Group controlId="formBasicYear">
-                    <Form.Control as="select" placeholder="Year" onChange={this.handleYear}>
-                    {/* <option>select year</option> */}
-                    {
-                        this.state.yearSelectOptions.map((year, indx) => {
-                            return (<option key={indx} value={year}>{year}</option>)
-                        })
-                    }
-                    </Form.Control>
-                    </Form.Group>
-                    <Form.Group>
+        <Container className='searchbar' id='searchbar'>
+            <Row>
+            <Col>
+            <Form inline>
+                <Container>
+                    <Row>
+                    <Col>
+                    <Select options={brandOptions} />
+                    </Col>
+                    <Col>
+                    <Select options={modelOptions} />
+                    </Col>
+                    <Col>
+                    <Select options={yearOptions} />
+                    </Col>
+                    <Col style={{
+                        display: 'flex',
+
+                    }}>
                     <Form.Control type="text" placeholder="Search" className=" mr-sm-2" onChange={this.handleSearchInput} />
                     <Button type="submit" onClick={this.search}>Submit</Button>
-                    </Form.Group>
-                </Form>
-                </Col>
+                    </Col>
+                    </Row>
+                </Container>
+            </Form>
+            </Col>
             </Row>
         </Container>
     }

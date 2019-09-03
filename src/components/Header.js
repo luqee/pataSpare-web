@@ -13,29 +13,35 @@ class CartLink extends Component {
     constructor(props){
         super(props);
         this.state = {
-            cart: [],
-            total: 0
+            cart: {},
+            total: 0,
+            unlisten: ''
         }
     }
 
     componentDidMount = () => {
-        cartService.getCart((fetched) => {
-            if(fetched){
-                this.setState({cart: localStorage.getItem('cart')});
-            }
-            
+        let unlisten = this.props.history.listen((location, action) =>{
+            console.log('Message from cartLink:: Location changed .... ');
+            console.log(location);
+            console.log(action);
+            this.setState({cart: cartService.getCart()});
         });
+        this.setState({unlisten: unlisten})
+        this.setState({cart: cartService.getCart()});
+    }
+    componentWillUnmount = () => {
+        this.state.unlisten();
     }
 
     render = () => {
-        if(this.state.cart.items && this.state.cart.items.length > 0){
-            let total = 0;
-            total = this.state.cart.items.map((item) => item.quantity).reduce((prev, next) => prev+next);
-            console.log(total);
-            this.setState({total: total});
+        let total = 0;
+        let cart = this.state.cart;
+        if(!Object.keys(cart).length === 0){
+            if(cart.items && cart.items.length > 0){
+                total = cart.items.map((item) => item.quantity).reduce((prev, next) => prev+next);
+                this.setState({total: total});
+            }
         }
-        console.log(this.state.cart);
-        
         return (
             <Nav>
                 <Nav.Link href="/cart">Cart <span>{this.state.total}</span></Nav.Link>
@@ -139,7 +145,7 @@ class Header extends Component {
                         <Nav.Link href='/shop'>Shop</Nav.Link>
                         <Nav.Link href='/stores'>Store List</Nav.Link>
                         </Nav>
-                        <CartLink />
+                        <CartLink history={this.props.history}/>
                         <AuthButton history={this.props.history} />
                     </Navbar.Collapse>
                     </Navbar>

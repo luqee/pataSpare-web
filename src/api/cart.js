@@ -1,70 +1,81 @@
 import autoApi from './api';
 
 class CartService {
-    getCart = (cb) =>{
-        let cart = localStorage.getItem('cart') ? JSON.parse(localStorage.getItem('cart')): {};
-        console.log('the cart is ...');
-        console.log(cart);
-        if(cart !== {}){
-            autoApi.get(`/carts/${cart.id}`)
+    constructor(){
+        this.cart = localStorage.getItem('cart') ? JSON.parse(localStorage.getItem('cart')): {};
+    }
+    getCart = () =>{
+        return this.cart;
+    }
+    getCartItems = (cb) =>{
+        if(!Object.keys(this.cart).length === 0){
+            autoApi.get(`/carts/${this.cart.id}`)
             .then((response) => {
                 if (response.data.status === 200){
+                    this.cart = response.data.data.cart
                     localStorage.setItem('cart', JSON.stringify(response.data.data.cart));
-                    localStorage.setItem('cart_items', JSON.stringify(response.data.data.cart_items));
-                    cb(true);
-                    // return response.data.data.cart;
+                    // localStorage.setItem('cart_items', JSON.stringify(response.data.data.cart_items));
+                    cb(response.data.data.cart_items, this.cart);
                 }
             }).catch((error) => {
                 console.log(error);
+                cb(false, null);
             });
         }
-        return cart;
     }
     addToCart = (item, cb) => {
-        let cart = localStorage.getItem('cart') ? JSON.parse(localStorage.getItem('cart')): {};
-        console.log('the cart is ...');
-        console.log(cart);
-        if(Object.keys(cart).length === 0){
-            console.log('there is no cart posting new.');
-            // let uid = new Date().getUTCMilliseconds();
+        if(Object.keys(this.cart).length === 0){
             autoApi.post(`/carts`, JSON.stringify(item))
             .then((response) => {
                 if (response.data.status === 201){
-                    console.log('successfully added');
-                    console.log(response.data.data.cart);
+                    this.cart = response.data.data.cart
                     localStorage.setItem('cart', JSON.stringify(response.data.data.cart));
                     cb(true);
-                    // return response.data.data.cart;
                 }
             }).catch((error) => {
                 console.log(error);
+                cb(false);
             });
         }else{
-            console.log('the cart is not empty putting item.');
-            autoApi.put(`/carts/${cart.id}`, JSON.stringify(item))
+            autoApi.put(`/carts/${this.cart.id}`, JSON.stringify(item))
             .then((response) => {
                 if (response.data.status === 200){
-                    console.log('updating cart vrom server');
+                    this.cart = response.data.data.cart
                     localStorage.setItem('cart', JSON.stringify(response.data.data.cart));
                     cb(true);
                 }
             }).catch((error) => {
                 console.log(error);
+                cb(false);
             });
         }
-        
     }
-    removeFromCart = (cart_id, part_id, cb) => {
-        autoApi.delete(`/cart${cart_id}`, JSON.stringify({'part_id': part_id}))
+    removeFromCart = (item_id, cb) => {
+        autoApi.delete(`/carts/${this.cart.id}?part_id=${item_id}`)
         .then((response) => {
             if (response.data.status === 200){
-                console.log('updating cart vrom server');
+                this.cart = response.data.data.cart
                 localStorage.setItem('cart', JSON.stringify(response.data.data.cart));
                 cb(true);
             }
         }).catch((error) => {
             console.log(error);
+            cb(false);
         });
+    }
+    placeOrder = (cb) => {
+        autoApi.post(`/orders`, JSON.stringify(this.cart))
+        .then((response) => {
+            if (response.data.status === 201){
+                localStorage.removeItem('cart')
+                localStorage.removeItem('cart_items')
+                cb(true, response.data.data.order);
+            }
+        })
+        .catch((error) => {
+            console.log(error);
+            cb(false, null);
+        })
     }
 };
 

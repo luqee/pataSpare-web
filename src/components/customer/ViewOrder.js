@@ -3,37 +3,42 @@ import {Container, Row, Col, Table} from 'react-bootstrap';
 import OrderItem from './OrderItem';
 import autoAPI from '../../api/api';
 
-class Orders extends React.Component{
+class ViewOrder extends React.Component{
     constructor(props){
         super(props)
         this.state = {
-            order_items: [],
-            order_states: []
+            order: {}
         }
     }
-    componentDidMount = () => {
-        autoAPI.get(`dealer/orders`)
-        .then((response) => {
-            if(response.data.status === 200){
-                this.setState({order_items: response.data.data.order_items});
-            }
-        })
-        .catch((error) => {
-            console.log(error);
-        })
+    componentDidMount = () =>{
+        console.log('viewOrder component location state:::')
+        console.log(this.props.location.state);
+        if(this.props.location.state !== undefined){
+            this.setState({order: this.props.location.state.order})
+        }else{
+            autoAPI.get(`/orders/${this.props.match.params.id}`)
+            .then((response) => {
+                if(response.data.status === 200){
+                    this.setState({order: response.data.data.order});
+                }
+            })
+            .catch((error) => {
+                console.log(error);
+            })
+        }
     }
     render = () => {
         return (
             <Container>
                 <Row>
                     <Col>
-                    <p>Orders Across My Shops</p>
+                    <p>Order Id: {this.state.order.order_identity}</p>
                     </Col>
                 </Row>
                 <Row>
                 <Col lg={12}>
                 {
-                    this.state.order_items.length > 0 ?
+                    this.state.order.order_items.length > 0 ?
                     <Table>
                         <thead>
                             <tr>
@@ -42,12 +47,11 @@ class Orders extends React.Component{
                             <th>Cost</th>
                             <th>Quantity</th>
                             <th>Total</th>
-                            <th>Action</th>
                             </tr>
                         </thead>
                         <tbody>
                         {
-                            this.state.order_items.map((order_item, indx) => {
+                            this.state.order.order_items.map((order_item, indx) => {
                                 return <OrderItem match={this.props.match} key={indx} item={order_item} />
                                 })
                         }
@@ -63,4 +67,4 @@ class Orders extends React.Component{
     }
 }
 
-export default Orders;
+export default ViewOrder;

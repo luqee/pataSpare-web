@@ -5,6 +5,7 @@ import Dash from './Dash';
 import Orders from './Orders';
 import Inquiries from './Inquiries';
 import Account from './Account';
+import ViewOrder from './ViewOrder';
 import Menu from 'react-burger-menu/lib/menus/slide';
 
 
@@ -67,6 +68,7 @@ function CustomerDash(props){
             <Switch>
                 <Route exact path={`${props.match.path}`} component={Dash}/>
                 <Route exact path={`${props.match.path}/orders`} component={Orders}/>
+                <Route exact path={`${props.match.path}/orders/:id`} component={ViewOrder}/>
                 <Route exact path={`${props.match.path}/inquiries`} component={Inquiries}/>
                 <Route exact path={`${props.match.path}/account`} component={Account}/>
             </Switch>
