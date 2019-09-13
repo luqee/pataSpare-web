@@ -56,7 +56,7 @@ class ManageShop extends Component {
                     <Col md={3}>
                     <div id={ "manage-menu" } style={sidebarStyle}>
                         <Link to={`${this.props.match.url}`} style={sideLinkStyle}>Details</Link>
-                        <Link to={`${this.props.match.url}/inventory`} style={sideLinkStyle}>Inventory</Link>
+                        <Link to={`${this.props.match.url}/parts`} style={sideLinkStyle}>Parts</Link>
                         <Link to={`${this.props.match.url}/orders`} style={sideLinkStyle}>Orders</Link>
                         <Link to={`${this.props.match.url}/inquiries`} style={sideLinkStyle}>Inquiries</Link>
                     </div>
@@ -65,7 +65,7 @@ class ManageShop extends Component {
                     <div id='page-wrap'>
                     <Switch>
                         <Route exact path={`${this.props.match.path}`} component={ShopDash}/>
-                        <Route exact path={`${this.props.match.path}/inventory`} render={(routerProps)=> {
+                        <Route exact path={`${this.props.match.path}/parts`} render={(routerProps)=> {
                             return <ShopInventory {...routerProps} parts={this.state.parts} shopId={this.state.shop_id}/>
                         }}/>
                         <Route exact path={`${this.props.match.path}/orders`} component={ShopOrders}/>

@@ -2,20 +2,21 @@ import React, {Component} from 'react';
 import {Form, Button} from 'react-bootstrap';
 import autoAPI from '../api/api';
 import urls from '../config/config';
+import Select from 'react-select';
 
 class CreatePartForm extends Component {
     constructor(props){
         super(props);
         this.state = {
-            model: '',
-            brand: '',
-            year: '',
+            brand: null,
+            models: null,
+            years: null,
+            tags: null,
             name: '',
             description: '',
             partImage: '',
             price: '',
             stock: '',
-            tags: [],
             brandSelectOptions: [],
             shop_id: this.props.shopId,
             yearSelectOptions: [],
@@ -55,8 +56,8 @@ class CreatePartForm extends Component {
             
         })
     }
-    handleYear = (event) => {
-        this.setState({year: event.target.value});
+    handleYear = (selected) => {
+        this.setState({years: selected});
     }
     handlePartName = (event) => {
         this.setState({name: event.target.value});
@@ -67,18 +68,20 @@ class CreatePartForm extends Component {
     handleImageUpload = (event)=> {
         this.setState({partImage: event.target.files[0]})
     }
-    handleModel = (event) => {
-        this.setState({model: parseInt(event.target.value)})
+    handleModel = (selected) => {
+        console.log(`selected models..`);
+        console.log(selected);
+        
+        this.setState({models: selected})
     }
-    handleBrand = (event) => {
-        console.log(event.target.value);
+    handleBrand = (selected) => {
+        this.setState({brand: selected})
         this.state.brandSelectOptions.forEach((brand) => {
-            if (brand.id === parseInt(event.target.value)){
+            if (brand.id === selected.value){
                 this.setState({modelSelectOptions: brand.models})
             }
         })
-        this.setState({brand: parseInt(event.target.value)})
-        this.setState({model: ''})
+        this.setState({models: []})
     }
     handlePrice = (event) => {
         this.setState({price: parseInt(event.target.value)})
@@ -86,22 +89,29 @@ class CreatePartForm extends Component {
     handleStock = (event) => {
         this.setState({stock: parseInt(event.target.value)})
     }
-    handleTags = (event) => {
-        this.setState({tags: Array.from(event.target.selectedOptions, (item) => parseInt(item.value))})
-        console.log(this.state.tags);
+    handleTags = (selected) => {
+        // this.setState({tags: Array.from(event.target.selectedOptions, (item) => parseInt(item.value))})
+        console.log(selected);
+        this.setState({tags: selected})
     }
     createPart = (event) => {
         event.preventDefault();
         console.log(this.state);
+        let models = []
+        this.state.models.map((item) => models.push(item.value))
+        let tags = Array.from(this.state.tags, (tag) => parseInt(tag.value))
+        let years = Array.from(this.state.years, (year) => parseInt(year.value))
+        console.log(models);
+        
         let partData = {
             title: this.state.name,
-            brand_id: this.state.brand,
-            b_model_id: this.state.model,
-            year: this.state.year,
+            brand_id: this.state.brand.value,
+            models: models,
+            years: years,
             price: this.state.price,
             stock: this.state.stock,
             description: this.state.description,
-            categories: this.state.tags,
+            categories: tags,
             shop_id: this.state.shop_id
         }
         let formData = new FormData();
@@ -130,6 +140,32 @@ class CreatePartForm extends Component {
         })
     }
     render = () => {
+        let brandOptions = this.state.brandSelectOptions.map((brand) => {
+            return {
+                value: brand.id,
+                label: brand.name
+            }
+        })
+        let modelOptions = this.state.modelSelectOptions.map((model) => {
+            return {
+                value: model.id,
+                label: model.name
+            }
+        })
+        let tagOptions = this.state.tagsOptions.map((tag) => {
+            return {
+                value: tag.id,
+                label: tag.name
+            }
+        })
+        let today = new Date();
+        let yearOptions = []
+        for(let year = 2000; year <= parseInt(today.getFullYear()); year++){
+            yearOptions.push({
+                value: year,
+                label: year
+            })   
+        }
         return (
             <div className="form-holder">
                 <Form>
@@ -139,40 +175,32 @@ class CreatePartForm extends Component {
                     </Form.Group>
                     <Form.Group controlId="formBasicBrand">
                     <Form.Label>Brand:</Form.Label>
-                    <Form.Control as="select" placeholder="Brand" onChange={this.handleBrand}>
-                        <option>Select a brand</option>
-                        {
-                            (this.state.brandSelectOptions.length > 0) ? (
-                                this.state.brandSelectOptions.map((brand,index) => {
-                                    return (<option key={brand.id} value={brand.id}>{brand.name}</option>)
-                                })
-                            ):(
-                                <option>No Options</option>
-                            )
-                        }
-                    </Form.Control>
+                    <Select
+                        placeholder={`Select Make`}
+                        options={brandOptions}
+                        onChange={this.handleBrand}
+                        value={this.state.brand}
+                    />
                     </Form.Group>
                     <Form.Group controlId="formBasicModel">
-                    <Form.Label>Model:</Form.Label>
-                    <Form.Control as="select" placeholder="Model" onChange={this.handleModel}>
-                    <option>select model</option>
-                    {
-                        this.state.modelSelectOptions.map((model) => {
-                            return (<option key={model.id} value={model.id}>{model.name}</option>)
-                        })
-                    }
-                    </Form.Control>
+                    <Form.Label>Models:</Form.Label>
+                    <Select
+                        value={this.state.models}
+                        placeholder={`Select Model`}
+                        onChange={this.handleModel}
+                        options={modelOptions}
+                        isMulti={true}
+                    />
                     </Form.Group>
                     <Form.Group controlId="formBasicYear">
-                    <Form.Label>Year:</Form.Label>
-                    <Form.Control as="select" placeholder="Year" onChange={this.handleYear}>
-                    <option>select year</option>
-                    {
-                        this.state.yearSelectOptions.map((year, indx) => {
-                            return (<option key={indx} value={year}>{year}</option>)
-                        })
-                    }
-                    </Form.Control>
+                    <Form.Label>Years:</Form.Label>
+                    <Select
+                        value={this.state.years}
+                        placeholder={`Years`}
+                        onChange={this.handleYear}
+                        options={yearOptions}
+                        isMulti={true}
+                    />
                     </Form.Group>
                     <Form.Group controlId="formBasicPrice">
                     <Form.Label>Price:</Form.Label>
@@ -192,13 +220,13 @@ class CreatePartForm extends Component {
                     </Form.Group>
                     <Form.Group controlId="formBasicTags">
                     <Form.Label>Tags:</Form.Label>
-                    <Form.Control as="select" value={this.state.tags} multiple placeholder="Select tags" onChange={this.handleTags}>
-                    {
-                        this.state.tagsOptions.map((tag) => {
-                            return (<option key={tag.id} value={tag.id}>{tag.name}</option>)
-                        })
-                    }
-                    </Form.Control>
+                    <Select
+                        value={this.state.tags}
+                        placeholder={`Tags`}
+                        onChange={this.handleTags}
+                        options={tagOptions}
+                        isMulti={true}
+                    />
                     </Form.Group>
                     <Button variant="primary" type="submit" onClick={this.createPart}>
                     CREATE PART

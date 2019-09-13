@@ -8,13 +8,13 @@ class SearchBar extends React.Component {
     constructor(props){
         super(props);
         this.state = {
-            brands: [],
-            models: [],
-            years: [],
-            brand: '',
-            model: '',
-            year: '',
-            searchTerm: '',
+            brandOptions: [],
+            modelOptions: [],
+            yearOptions: [],
+            brand: null,
+            model: null,
+            year: null,
+            searchTerm: null,
             searchResults: [],
             results_set: false
         }
@@ -24,32 +24,35 @@ class SearchBar extends React.Component {
         .then((response) => {
             console.log(response);
             if (response.status === 200){
-                this.setState({brands: response.data.data.brands})
+                this.setState({brandOptions: response.data.data.brands})
             }
         })
         .catch((error) => {
             console.log(error)
         })
     }
-    handleBrand = (event) => {
-        this.setState({brand: parseInt(event.target.value)});
-        this.state.brands.forEach((brand) => {
-            if (brand.id === parseInt(event.target.value)){
-                this.setState({models: brand.models});
+    handleBrand = (selected) => {
+        this.setState({brand: selected});
+        this.state.brandOptions.forEach((brand) => {
+            if (brand.id === parseInt(selected.value)){
+                this.setState({modelOptions: brand.models});
+                this.setState({yearOptions: []});
             }
         })
-        this.setState({model: ''})
+        this.setState({model: null})
+        this.setState({year: null})
     }
-    handleModel = (event) => {
-        this.setState({model: parseInt(event.target.value)})
-        this.state.models.forEach((model) => {
-            if (model.id === parseInt(event.target.value)){
-                this.setState({years: model.years})
+    handleModel = (selected) => {
+        this.setState({model: selected})
+        this.state.modelOptions.forEach((model) => {
+            if (model.id === parseInt(selected.value)){
+                this.setState({yearOptions: model.years})
             }
         })
+        this.setState({year: null})
     }
-    handleYear = (event) => {
-        this.setState({year: parseInt(event.target.value)})
+    handleYear = (selected) => {
+        this.setState({year: selected})
     }
     handleSearchInput = (e) => {
         this.setState({searchTerm: e.target.value})
@@ -57,13 +60,14 @@ class SearchBar extends React.Component {
     search = (event) => {
         event.preventDefault();
         console.log('Serching .....');
-        let query = `term=${this.state.searchTerm}&brand=${this.state.brand}&model=${this.state.model}&year=${this.state.year}`;
+        let query = `term=${this.state.searchTerm}&brand=${this.state.brand.value}&model=${this.state.model.value}&year=${(this.state.year !== null) ? this.state.year.value: 0}`;
         autoAPI.get(`/search?${query}`)
         .then((response) => {
             if (response.data.status === 200){
-                this.setState({searchResults: response.data.data.results})
                 console.log('Search results are ::');
                 console.log(response.data.data.results);
+                this.setState({searchResults: response.data.data.results});
+                this.setState({results_set: true});
             }
         })
         .catch((error) => {
@@ -72,20 +76,20 @@ class SearchBar extends React.Component {
         });
     }
     render = () => {
-        let brandOptions = this.state.brands.map((brand) => {
+        let brandOptions = this.state.brandOptions.map((brand) => {
             return {
                 value: brand.id,
                 label: brand.name
             }
         })
 
-        let modelOptions = this.state.models.map((model) => {
+        let modelOptions = this.state.modelOptions.map((model) => {
             return {
                 value: model.id,
                 label: model.name
             }
         })
-        let yearOptions = this.state.years.map((year) => {
+        let yearOptions = this.state.yearOptions.map((year) => {
             return {
                 value: year.year,
                 label: year.year
@@ -103,13 +107,28 @@ class SearchBar extends React.Component {
                 <Container>
                     <Row>
                     <Col>
-                    <Select options={brandOptions} />
+                    <Select
+                        placeholder={`Select Make`}
+                        options={brandOptions}
+                        onChange={this.handleBrand}
+                        value={this.state.brand}
+                    />
                     </Col>
                     <Col>
-                    <Select options={modelOptions} />
+                    <Select
+                        value={this.state.model}
+                        placeholder={`Select Model`}
+                        onChange={this.handleModel}
+                        options={modelOptions}
+                    />
                     </Col>
                     <Col>
-                    <Select options={yearOptions} />
+                    <Select
+                        value={this.state.year}
+                        placeholder={`Select Year`}
+                        options={yearOptions}
+                        onChange={this.handleYear}
+                    />
                     </Col>
                     <Col style={{
                         display: 'flex',

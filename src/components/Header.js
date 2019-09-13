@@ -67,7 +67,7 @@ function AuthButton(props) {
                     (roles.indexOf('customer') !== -1) && <NavDropdown.Item href={`/customer`}>My Account</NavDropdown.Item>
                 }
                 {
-                    (roles.indexOf('dealer') !== -1) && <NavDropdown.Item href={`/dealer`}>Dealer</NavDropdown.Item>
+                    (roles.indexOf('dealer') !== -1) && <NavDropdown.Item href={`/dealer`}>Dashboard</NavDropdown.Item>
                 }
             <NavDropdown.Item>
             <Navbar.Text>
