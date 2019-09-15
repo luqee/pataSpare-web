@@ -1,79 +1,85 @@
 import React, { Component } from 'react';
-import {Container, Row, Col, Tab, Nav, Image} from 'react-bootstrap';
-import ShopDetails from '../components/ShopDetails';
-import autoAPI from '../api/api';
+import {Container, Row, Col, Form, Button, Image} from 'react-bootstrap';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faMapMarker, faPhone } from '@fortawesome/free-solid-svg-icons';
+import ShopLocation from '../components/ShopLocation';
+import ShopReview from '../components/ShopReview';
 import urls from '../config/config';
+import CartService from '../api/cart';
+import InquiryModal from '../components/InquiryModal';
+
+const cartService = new CartService();
 
 class PartDetails extends Component {
     constructor(props){
         super(props);
         this.state = {
-            part: {},
-            shop: {}
+            part: props.location.state.part,
+            shop: props.location.state.part.shop,
+            quantity: 1,
+            modalShow: false
         }
     }
-    componentDidMount = () => {
-        autoAPI.get(`/parts/${this.props.match.params.id}`)
-        .then((response) => {
-            if (response.data.status === 200){
-                this.setState({part: response.data.data.part, shop: response.data.data.part.shop})
+    handleModal = (show) => {this.setState({modalShow: show})}
+    
+    handleQty = (event) => {
+        this.setState({quantity: parseInt(event.target.value)})
+    }
+    addToCart = () => {
+        console.log('addint to cart');
+        let item_to_add  = {
+            part_id: this.state.part.id,
+            quantity: parseInt(this.state.quantity)
+        }
+        cartService.addToCart(item_to_add, (added)=> {
+            if(added){
+                console.log('added');
             }
-        })
-        .catch((error) => {
-            console.log(error);
-            
         });
+        
     }
     render() {
         const part = this.state.part
         const shop = this.state.shop
-        console.log('part item :');
-        console.log(part);
-        
+        const qty = this.state.quantity
         return (
             <Container>
+                <InquiryModal show={this.state.modalShow} onHide={()=>{this.handleModal(false)}}/>
                 <Row>
-                    <Col lg={4}>
-                    <Image src={`${urls.hostRoot}/${part.part_image}`} width={200} height={200} />
-                    </Col>
-                    <Col lg={8}>
+                    <Col lg={6}>
+                        <Image src={`${urls.hostRoot}/${part.part_image}`} width={200} height={200} />
                         <p>{part.title}</p>
-                        <p>{part.price}</p>
                         <p>{part.description}</p>
                         <p>{`In stock: ${part.stock}`}</p>
+                        <p>{part.price}</p>
+                        <div>
+                        <Form.Control type="number" min="1" max={`${part.stock}`} value={qty} onChange={this.handleQty}/>
+                        <Button onClick={this.addToCart}>Add to cart</Button>
+                        </div>
+                        <div>
+                        <Button onClick={() => {this.handleModal(true)}}>Ask Question</Button>
+                        </div>
                     </Col>
-                </Row>
-                <Row>
-                    <Tab.Container id="details-left-tabs" defaultActiveKey="shop">
-                        <Col lg={4}>
-                        <Nav variant="pills" className="flex-column" style={{
-                            width: '100'
-                        }}>
-                            <Nav.Item>
-                            <Nav.Link eventKey="shop">Shop</Nav.Link>
-                            </Nav.Item>
-                            <Nav.Item>
-                            <Nav.Link eventKey="reviews">Reviews</Nav.Link>
-                            </Nav.Item>
-                            <Nav.Item>
-                            <Nav.Link eventKey="policies">Store Policies</Nav.Link>
-                            </Nav.Item>
-                        </Nav>
-                        </Col>
-                        <Col lg={8}>
-                        <Tab.Content>
-                            <Tab.Pane eventKey="shop">
-                            <ShopDetails shop={shop} />
-                            </Tab.Pane>
-                            <Tab.Pane eventKey="reviews">
-                            <p>User reviews</p>
-                            </Tab.Pane>
-                            <Tab.Pane eventKey="policies">
-                            <p>Policies</p>
-                            </Tab.Pane>
-                        </Tab.Content>
-                        </Col>
-                    </Tab.Container>
+                    <Col lg={6}>
+                        <Image src={`${urls.hostRoot}/${shop.shop_image}`} height='100px'/>
+                        <p>{shop.name}</p>
+                        <p><FontAwesomeIcon icon={faMapMarker} />  {shop.location}</p>
+                        <p><FontAwesomeIcon icon={faPhone} />bizness phone</p>
+                        <div className={`location`}>
+                            <ShopLocation shop={shop}/>
+                        </div>
+                        <div className={`reviews`}>
+                            {
+                                (shop.reviews !== null && shop.reviews.length > 0) ? (
+                                    shop.reviews.map((review, indx) => {
+                                        return <ShopReview key={indx} review={review} />
+                                    })
+                                ):(
+                                    <p>No Reviews</p>
+                                )
+                            }
+                        </div>
+                    </Col>
                 </Row>
             </Container>
         )

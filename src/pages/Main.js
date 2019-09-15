@@ -14,6 +14,7 @@ import PartsShop from './PartsShop';
 import SearchResults from './SearchResults';
 import PartDetails from './PartDetails';
 import UserCart from './UserCart';
+import StoreView from './StoreView';
 
 class Main extends Component {
     render() {
@@ -29,6 +30,7 @@ class Main extends Component {
                 <Route exact path='/parts/:id' component={PartDetails}/>
                 <Route exact path='/shop' component={PartsShop}/>
                 <Route exact path='/stores' component={Stores}/>
+                <Route exact path='/stores/:id' component={StoreView}/>
                 <Route exact path='/cart' component={UserCart}/>
                 <Route exact path='/results' component={SearchResults}/>
                 <Route exact path='/dealer/register' component={DealerRegister}/>

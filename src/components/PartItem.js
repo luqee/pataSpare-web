@@ -33,7 +33,10 @@ class PartItem extends Component{
                 <Row>
                     <Col>
                     <Card style={{ width: '100%' }}>
-                    <Link to={`/parts/${part.id}`}>
+                    <Link to={{
+                        pathname: `/parts/${part.id}`,
+                        state: {part: part}
+                    }}>
                     <Card.Img variant="top" src={`${urls.hostRoot}/${part.part_image}`}/>
                     </Link>
                     <Card.Body>

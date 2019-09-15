@@ -1,8 +1,7 @@
 import React, {Component} from 'react';
 import autoAPI from '../../api/api';
 import urls from '../../config/config';
-import {Container, Row, Col, Button} from 'react-bootstrap';
-import {Link} from 'react-router-dom';
+import {Container, Row, Col} from 'react-bootstrap';
 import PartItem from './PartItem';
 
 class Inventory extends Component {

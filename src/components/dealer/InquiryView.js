@@ -31,9 +31,9 @@ function InquiryView(props){
             <Form>
                 <Form.Group controlId="formBasicReply">
                 <Form.Label>New Reply</Form.Label>
-                <Form.Control as="textarea" rows="5" placeholder="Write a reply.." onChange={this.handlMessage}/>
+                <Form.Control as="textarea" rows="5" placeholder="Write a reply.." onChange={(event) => setInquiry(event.target.value)}/>
                 </Form.Group>
-                <Button variant="primary" type="submit" onClick={this.sendReply}>
+                <Button variant="primary" type="submit" onClick={sendReply}>
                 SEND
                 </Button>
             </Form>
