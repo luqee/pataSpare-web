@@ -11,7 +11,7 @@ function Contact(props){
                     justifyContent: 'center'
                 }}>
                 <Col lg={6}>
-                    <ContactForm />
+                    <ContactForm history={props.history} />
                 </Col>
             </Row>
         </Container>

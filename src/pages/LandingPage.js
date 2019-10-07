@@ -13,11 +13,11 @@ class LandingPage extends Component {
             <div className='landing'>
                 <Slider />
                 <Categories />
-                <Parts />
+                <Parts history={this.props.history} />
                 <Promotion />
                 <Stores />
                 <Brands />
-                <Contact />
+                <Contact history={this.props.history} />
             </div>
         );
     }

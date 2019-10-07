@@ -3,6 +3,8 @@ import {Link} from 'react-router-dom';
 import {Container,Row, Col, Button, Card } from 'react-bootstrap';
 import urls from '../config/config';
 import CartService from '../api/cart';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faShoppingCart } from '@fortawesome/free-solid-svg-icons';
 
 const cartService = new CartService();
 
@@ -11,6 +13,7 @@ class PartItem extends Component{
         super(props)
         this.state = {
             quantity: 1,
+            part: props.part
         }
     }
     
@@ -21,33 +24,40 @@ class PartItem extends Component{
             quantity: parseInt(this.state.quantity)
         }
         cartService.addToCart(item_to_add, (added)=> {
-            console.log('added');
+            if(added){
+                let path = {
+                    pathname: this.props.history.location.pathname,
+                    state: {
+                        part: this.state.part
+                    }
+                }
+                this.props.history.push('')
+                this.props.history.push(path)
+            }
         });
-        
     }
 
     render = () =>{
-        const part = this.props.part;
+        const part = this.state.part;
         return (
-            <Container>
+            <Container style={{
+                width: '80%'
+            }}>
                 <Row>
                     <Col>
                     <Card style={{ width: '100%' }}>
                     <Link to={{
                         pathname: `/parts/${part.id}`,
-                        state: {part: part}
+                        state: {part: part, shop: part.shop}
                     }}>
                     <Card.Img variant="top" src={`${urls.hostRoot}/${part.part_image}`}/>
                     </Link>
                     <Card.Body>
                         <Card.Title>{part.title}</Card.Title>
                         <Card.Text>
-                        {part.description}
-                        </Card.Text>
-                        <Card.Text>
                         Price: {part.price}
                         </Card.Text>
-                        <Button onClick={this.addToCart}>Add to cart</Button>
+                        <Button onClick={this.addToCart}><FontAwesomeIcon icon={faShoppingCart} />  Add to cart</Button>
                     </Card.Body>
                     </Card>
                     </Col>

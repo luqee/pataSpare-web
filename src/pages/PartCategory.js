@@ -38,7 +38,7 @@ class PartCategory extends Component {
                         this.state.parts.map((part, index) => {
                             return (
                             <Col key={index} lg={4}>
-                                <PartItem part={part} key={part.id}/>
+                                <PartItem history={this.props.history} part={part} key={part.id}/>
                             </Col>
                             )
                         })

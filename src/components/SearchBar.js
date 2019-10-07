@@ -1,6 +1,5 @@
 import React from 'react';
 import {Container, Row, Col, Form, Button} from 'react-bootstrap';
-import {Redirect} from 'react-router-dom';
 import autoAPI from '../api/api';
 import Select from 'react-select';
 
@@ -60,14 +59,40 @@ class SearchBar extends React.Component {
     search = (event) => {
         event.preventDefault();
         console.log('Serching .....');
-        let query = `term=${this.state.searchTerm}&brand=${this.state.brand.value}&model=${this.state.model.value}&year=${(this.state.year !== null) ? this.state.year.value: 0}`;
-        autoAPI.get(`/search?${query}`)
+        let queryString = `term=${this.state.searchTerm}`
+        if(this.state.brand){
+            queryString.concat(`&brand=${this.state.brand.value}`)
+            console.log(`querystring is...`);
+            console.log(queryString);
+        }
+        if(this.state.model){
+            queryString.concat(`&model=${this.state.model.value}`)
+            console.log(`querystring is...`);
+            console.log(queryString);
+        }
+        if(this.state.year){
+            queryString.concat(`&year=${this.state.year.value}`)
+            console.log(`querystring is...`);
+            console.log(queryString);
+        }
+        console.log(`querystring is...`);
+        console.log(queryString);
+        
+        autoAPI.get(`/search?${queryString}`)
         .then((response) => {
             if (response.data.status === 200){
                 console.log('Search results are ::');
                 console.log(response.data.data.results);
-                this.setState({searchResults: response.data.data.results});
-                this.setState({results_set: true});
+                let path = {
+                    pathname: `/results`,
+                    state: {
+                        results: response.data.data,
+                        term: this.state.searchTerm
+                    }
+                }
+                this.props.history.push(path)
+                // this.setState({searchResults: response.data.data.results});
+                // this.setState({results_set: true});
             }
         })
         .catch((error) => {
@@ -95,12 +120,7 @@ class SearchBar extends React.Component {
                 label: year.year
             }
         })
-        return (this.state.results_set) ? <Redirect to={{
-            pathname: '/results',
-            state: {results: this.state.searchResults, term: this.state.searchTerm}
-        }} />
-        :
-        <Container className='searchbar' id='searchbar'>
+        return <Container fluid className='searchbar' id='searchbar'>
             <Row>
             <Col>
             <Form inline>
@@ -135,7 +155,7 @@ class SearchBar extends React.Component {
 
                     }}>
                     <Form.Control type="text" placeholder="Search" className=" mr-sm-2" onChange={this.handleSearchInput} />
-                    <Button type="submit" onClick={this.search}>Submit</Button>
+                    <Button type="submit" onClick={this.search}>Search</Button>
                     </Col>
                     </Row>
                 </Container>
@@ -143,6 +163,7 @@ class SearchBar extends React.Component {
             </Col>
             </Row>
         </Container>
+        
     }
 }
 

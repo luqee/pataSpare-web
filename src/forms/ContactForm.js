@@ -14,7 +14,7 @@ class ContactForm extends Component {
     this.setState({email: event.target.value});
   }
   handlMessage = (event) => {
-    this.setState({token: event.target.value});
+    this.setState({message: event.target.value});
   }
   sendMessage = (event) => {
     event.preventDefault();
@@ -27,9 +27,12 @@ class ContactForm extends Component {
     .then((response) => {
       console.log(response);
       if (response.data.status === 200) {
-        console.log('email sent');
-        let responseData = response.data.data;
-        console.log(responseData)
+        console.log(this.props.history);
+          let path = {
+            pathname: this.props.history.location.pathname
+        }
+        this.props.history.push('')
+        this.props.history.push(path)
       }
     })
     .catch((error) => {

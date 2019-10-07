@@ -7,12 +7,13 @@ class Orders extends React.Component{
     constructor(props){
         super(props)
         this.state = {
-            order_items: [],
-            order_states: []
+            order_items: []
         }
     }
     componentDidMount = () => {
-        autoAPI.get(`dealer/orders`)
+        autoAPI.get(`dealer/orders`, {
+            headers: {'Authorization': 'Bearer '+ localStorage.getItem('access_token')}
+        })
         .then((response) => {
             if(response.data.status === 200){
                 this.setState({order_items: response.data.data.order_items});
@@ -23,22 +24,25 @@ class Orders extends React.Component{
         })
     }
     render = () => {
+        const order_items = this.state.order_items
+
         return (
             <Container>
                 <Row>
                     <Col>
-                    <p>Orders Across My Shops</p>
+                    <p>Orders in all shops</p>
                     </Col>
                 </Row>
                 <Row>
                 <Col lg={12}>
                 {
-                    this.state.order_items.length > 0 ?
+                    order_items.length > 0 ?
                     <Table>
                         <thead>
                             <tr>
                             <th></th>
                             <th>Item</th>
+                            <th>Shop</th>
                             <th>Cost</th>
                             <th>Quantity</th>
                             <th>Total</th>
@@ -47,8 +51,8 @@ class Orders extends React.Component{
                         </thead>
                         <tbody>
                         {
-                            this.state.order_items.map((order_item, indx) => {
-                                return <OrderItem match={this.props.match} key={indx} item={order_item} />
+                            order_items.map((order_item, indx) => {
+                                return <OrderItem history={this.props.history} key={indx} item={order_item} />
                                 })
                         }
                         </tbody>

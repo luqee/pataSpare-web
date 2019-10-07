@@ -10,27 +10,27 @@ class UserCart extends React.Component {
     constructor(props){
         super(props);
         this.state = {
-            cart_items: [],
             cart: {},
             order: {},
             order_placed: false
         }
     }
     componentDidMount = () => {
-        this.getItems()
-    }
-    getItems = () => {
-        cartService.getCartItems((cart_items, cart) => {
-            if(cart_items){
-                this.setState({cart_items: cart_items});
-                this.setState({cart: cart});
-            } 
-        });
+        let cart = cartService.getCart();
+        console.log('cart mounted');
+        console.log(cart);
+        
+        this.setState({cart: cart});
     }
     removeFromCart = (part_id) => {
-        cartService.removeFromCart(this.state.cart.id, part_id, (removed) =>{
+        cartService.removeFromCart(part_id, (removed) =>{
             if(removed){
-                this.getItems();
+                let path = {
+                    pathname: this.props.history.location.pathname,
+                }
+                this.props.history.push('')
+                this.props.history.push(path)
+                // this.getItems();
             }
         });
     }
@@ -46,68 +46,73 @@ class UserCart extends React.Component {
         });
     }
     placeOrder = () => {
-        cartService.placeOrder((placed, order) => {
-            if(placed){
+        cartService.placeOrder((order) => {
+            if(order){
                 this.setState({order: order})
                 this.setState({order_placed: true})
             }
         });
     }
     render = () => {
-        let cart_items = this.state.cart_items
+        let cart = this.state.cart
+        console.log(`in render`);
         
-        return (this.state.order_placed) ?
-        <Redirect to={{
-            pathname: `/customer/orders/${this.state.order.id}`,
-            state: {order: this.state.order}
-        }} />
-        :
-        <Container className='stores' id='stores'>
-            <Row style={{
-                justifyContent: 'center'
-            }}>
-                <Col>
-                    <h3>Cart</h3>
+        console.log(cart);
+        
+        if (this.state.order_placed){
+            return <Redirect to={{
+                pathname: `/customer/orders/${this.state.order.id}`,
+                state: {order: this.state.order}
+            }} />
+        }else{
+            return  (cart.items === undefined) ? <p>No details</p> :(
+                <Container className='items' id='items'>
+                <Row style={{
+                    justifyContent: 'center'
+                }}>
+                    <Col>
+                        <h3>Cart</h3>
+                    </Col>
+                </Row>
+                <Row>
+                <Col lg={12}>
+                {
+                    (cart.items.length > 0) ? (
+                        <div>
+                            <Table>
+                            <thead>
+                                <tr>
+                                <th></th>
+                                <th>Product</th>
+                                <th>Price</th>
+                                <th>Quantity</th>
+                                <th>Total</th>
+                                <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            {
+                                cart.items.map((item, index) => {
+                                    return (
+                                        <CartItem key={index} item={item} removeFromCart={this.removeFromCart} />
+                                    )
+                                })
+                            }
+                            </tbody>
+                        </Table>
+                        <Row>
+                            <Button onClick={this.placeOrder}>Place Order</Button>
+                        </Row>
+                        </div>
+                    ):(
+                        <p>NO ITEMS IN CART</p>
+                    )
+                }
                 </Col>
-            </Row>
-            <Row>
-            <Col lg={12}>
-            {
-                (cart_items.length > 0) ? (
-                    <div>
-                        <Table>
-                        <thead>
-                            <tr>
-                            <th></th>
-                            <th>Product</th>
-                            <th>Price</th>
-                            <th>Quantity</th>
-                            <th>Total</th>
-                            <th></th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                        {
-                            cart_items.map((item, index) => {
-                                return (
-                                    <CartItem key={index} item={item} removeFromCart={this.removeFromCart} />
-                                )
-                            })
-                        }
-                        </tbody>
-                    </Table>
-                    <Row>
-                        <Button onClick={this.placeOrder}>Place Order</Button>
-                    </Row>
-                    </div>
-                ):(
-                    <p>NO ITEMS IN CART</p>
-                )
-            }
-            </Col>
-            </Row>
-        </Container>
-        
+                </Row>
+            </Container>
+            )
+        }
     }
 }
 

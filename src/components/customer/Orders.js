@@ -11,7 +11,9 @@ class Orders extends React.Component {
         }
     }
     componentDidMount = () => {
-        autoAPI.get(`/orders`)
+        autoAPI.get(`/orders`, {
+            headers: {'Authorization': 'Bearer '+ localStorage.getItem('access_token')}
+        })
         .then((response) => {
             if(response.data.status === 200){
                 this.setState({orders: response.data.data.orders});

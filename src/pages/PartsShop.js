@@ -11,6 +11,9 @@ class PartsShop extends Component {
         }
     }
     componentDidMount = () => {
+        console.log(`props are `);
+        console.log(this.props);
+        
         autoAPI.get(`/parts`)
         .then((response) => {
             if (response.data.status === 200){
@@ -36,7 +39,7 @@ class PartsShop extends Component {
                         this.state.parts.map((part, index) => {
                             return (
                             <Col key={index} lg={4}>
-                                <PartItem part={part} key={part.id}/>
+                                <PartItem history={this.props.history} part={part} key={part.id}/>
                             </Col>
                             )
                         })

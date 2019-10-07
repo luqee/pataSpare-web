@@ -8,15 +8,24 @@ function InquiryView(props){
     }
     return <Container>
         <Row style={{
-            display: `flex-column`
+            flexDirection: `column`
         }}>
             <Col>
             <p>{inquiry.query}</p>
             </Col>
-            <Col>
+            <Col style={{
+                display: `flex`,
+                flexDirection:`column`
+            }}>
             <p>Request for:</p>
-            <Image src={inquiry.part.part_image} width={'50px'} height={'50px'}></Image>
-            {inquiry.part.name}
+            {
+                (inquiry.part === null) ? '-' 
+                : <Image src={inquiry.part.part_image} width={'50px'} height={'50px'}></Image>
+            }
+            {
+                (inquiry.part === null) ? '-' 
+                : inquiry.part.name
+            }
             <Image src={inquiry.shop.shop_image} width={'50px'} height={'50px'}></Image>
             {inquiry.shop.name}
             <span>Time: {inquiry.created_at}</span>

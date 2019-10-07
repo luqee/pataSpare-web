@@ -7,7 +7,7 @@ class ViewOrder extends React.Component{
     constructor(props){
         super(props)
         this.state = {
-            order: {}
+            order: null
         }
     }
     componentDidMount = () =>{
@@ -28,7 +28,9 @@ class ViewOrder extends React.Component{
         }
     }
     render = () => {
-        return (
+        let order = this.state.order
+
+        return (order === null) ? 'loading...' :(
             <Container>
                 <Row>
                     <Col>
@@ -44,9 +46,11 @@ class ViewOrder extends React.Component{
                             <tr>
                             <th></th>
                             <th>Item</th>
+                            <th>Shop</th>
                             <th>Cost</th>
                             <th>Quantity</th>
                             <th>Total</th>
+                            <th>Status</th>
                             </tr>
                         </thead>
                         <tbody>

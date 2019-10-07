@@ -1,22 +1,61 @@
 import React, {Component} from 'react';
-import {Form, Button} from 'react-bootstrap';
+import {Form, Button, Image} from 'react-bootstrap';
 import autoAPI from '../api/api';
 import urls from '../config/config';
 import Select from 'react-select';
+import { Formik, ErrorMessage } from 'formik';
+import * as Yup from 'yup';
+
+const SUPPORTED_FORMATS = [
+    "image/jpg",
+    "image/jpeg",
+    "image/gif",
+    "image/png"
+];
+const PartSchema = Yup.object().shape({
+    name: Yup.string()
+      .min(3, 'Too Short!')
+      .required('Required field'),
+    price: Yup.number()
+      .positive('Must be postive')
+      .required('Required field'),
+    stock: Yup.number()
+      .integer('Must be an integer')
+      .positive('Must be postive')
+      .required('Required field'),
+    description: Yup.string()
+      .min(3, 'Too Short!')
+      .required('Required field'),
+    brand: Yup.object()
+        .nullable()
+        .shape({
+          value: Yup.number(),
+          label: Yup.string()
+        })
+        .required('Required field'),
+    models: Yup.array()
+        .of(Yup.object().shape({
+            value: Yup.number(),
+            label: Yup.string()
+        }))
+      .nullable()
+      .required('Required'),
+    years: Yup.array()
+        .nullable()
+        .required('Required'),
+    tags: Yup.array()
+        .nullable()
+        .required('Required'),
+    partImage: Yup.mixed()
+      .test('fileFormat', 'Unsupported file format', (value) => value && SUPPORTED_FORMATS.includes(value.type))
+    //   .test('fileSize', 'File too large', (value) => value && value.size <= FILE_SIZE)
+      .required('Required field'),
+  });
 
 class CreatePartForm extends Component {
     constructor(props){
         super(props);
         this.state = {
-            brand: null,
-            models: null,
-            years: null,
-            tags: null,
-            name: '',
-            description: '',
-            partImage: '',
-            price: '',
-            stock: '',
             brandSelectOptions: [],
             shop_id: this.props.shopId,
             yearSelectOptions: [],
@@ -56,61 +95,28 @@ class CreatePartForm extends Component {
             
         })
     }
-    handleYear = (selected) => {
-        this.setState({years: selected});
-    }
-    handlePartName = (event) => {
-        this.setState({name: event.target.value});
-    }
-    handleDescription = (event) => {
-        this.setState({description: event.target.value})
-    }
-    handleImageUpload = (event)=> {
-        this.setState({partImage: event.target.files[0]})
-    }
-    handleModel = (selected) => {
-        console.log(`selected models..`);
-        console.log(selected);
-        
-        this.setState({models: selected})
-    }
     handleBrand = (selected) => {
-        this.setState({brand: selected})
         this.state.brandSelectOptions.forEach((brand) => {
             if (brand.id === selected.value){
                 this.setState({modelSelectOptions: brand.models})
             }
         })
-        this.setState({models: []})
     }
-    handlePrice = (event) => {
-        this.setState({price: parseInt(event.target.value)})
-    }
-    handleStock = (event) => {
-        this.setState({stock: parseInt(event.target.value)})
-    }
-    handleTags = (selected) => {
-        // this.setState({tags: Array.from(event.target.selectedOptions, (item) => parseInt(item.value))})
-        console.log(selected);
-        this.setState({tags: selected})
-    }
-    createPart = (event) => {
-        event.preventDefault();
-        console.log(this.state);
+    createPart = (values, actions) => {
         let models = []
-        this.state.models.map((item) => models.push(item.value))
-        let tags = Array.from(this.state.tags, (tag) => parseInt(tag.value))
-        let years = Array.from(this.state.years, (year) => parseInt(year.value))
+        values.models.map((item) => models.push(item.value))
+        let tags = Array.from(values.tags, (tag) => parseInt(tag.value))
+        let years = Array.from(values.years, (year) => parseInt(year.value))
         console.log(models);
         
         let partData = {
-            title: this.state.name,
-            brand_id: this.state.brand.value,
+            title: values.name,
+            brand_id: values.brand.value,
             models: models,
             years: years,
-            price: this.state.price,
-            stock: this.state.stock,
-            description: this.state.description,
+            price: values.price,
+            stock: values.stock,
+            description: values.description,
             categories: tags,
             shop_id: this.state.shop_id
         }
@@ -119,7 +125,7 @@ class CreatePartForm extends Component {
             console.log(name, partData[name]);
             formData.set(name, partData[name])
         }
-        formData.set('part_image', this.state.partImage)
+        formData.set('part_image', values.partImage)
         
         autoAPI.post(`${urls.dealerHome}/parts`, formData, {
             headers: {
@@ -130,11 +136,13 @@ class CreatePartForm extends Component {
         .then((response) => {
             console.log(response);
             if (response.status === 201){
+                actions.setSubmitting(false);
                 this.props.history.push(`${urls.dealerHome}/manage/${this.props.shopId}`);
             }
             
         })
         .catch((error) => {
+            actions.setSubmitting(false);
             console.log(error);
             
         })
@@ -160,79 +168,191 @@ class CreatePartForm extends Component {
         })
         let today = new Date();
         let yearOptions = []
-        for(let year = 2000; year <= parseInt(today.getFullYear()); year++){
+        for(let year = 1990; year <= parseInt(today.getFullYear()); year++){
             yearOptions.push({
                 value: year,
                 label: year
             })   
         }
         return (
-            <div className="form-holder">
-                <Form>
-                    <Form.Group controlId="formBasicName">
-                    <Form.Label>Name:</Form.Label>
-                    <Form.Control placeholder="Title" onChange={this.handlePartName}/>
-                    </Form.Group>
-                    <Form.Group controlId="formBasicBrand">
-                    <Form.Label>Brand:</Form.Label>
-                    <Select
-                        placeholder={`Select Make`}
-                        options={brandOptions}
-                        onChange={this.handleBrand}
-                        value={this.state.brand}
-                    />
-                    </Form.Group>
-                    <Form.Group controlId="formBasicModel">
-                    <Form.Label>Models:</Form.Label>
-                    <Select
-                        value={this.state.models}
-                        placeholder={`Select Model`}
-                        onChange={this.handleModel}
-                        options={modelOptions}
-                        isMulti={true}
-                    />
-                    </Form.Group>
-                    <Form.Group controlId="formBasicYear">
-                    <Form.Label>Years:</Form.Label>
-                    <Select
-                        value={this.state.years}
-                        placeholder={`Years`}
-                        onChange={this.handleYear}
-                        options={yearOptions}
-                        isMulti={true}
-                    />
-                    </Form.Group>
-                    <Form.Group controlId="formBasicPrice">
-                    <Form.Label>Price:</Form.Label>
-                    <Form.Control placeholder="Price" onChange={this.handlePrice}/>
-                    </Form.Group>
-                    <Form.Group controlId="formBasicStock">
-                    <Form.Label>Stock:</Form.Label>
-                    <Form.Control type="number" min="1" placeholder="In stock" onChange={this.handleStock}/>
-                    </Form.Group>
-                    <Form.Group controlId="formBasicDescription">
-                    <Form.Label>Description:</Form.Label>
-                    <Form.Control as="textarea" rows="3" placeholder="Some description of the part item" onChange={this.handleDescription}/>
-                    </Form.Group>
-                    <Form.Group controlId="formBasicImage">
-                    <Form.Label>Part Image:</Form.Label>
-                    <Form.Control type="file" accept=".png" placeholder="Upload image" onChange={this.handleImageUpload}/>
-                    </Form.Group>
-                    <Form.Group controlId="formBasicTags">
-                    <Form.Label>Tags:</Form.Label>
-                    <Select
-                        value={this.state.tags}
-                        placeholder={`Tags`}
-                        onChange={this.handleTags}
-                        options={tagOptions}
-                        isMulti={true}
-                    />
-                    </Form.Group>
-                    <Button variant="primary" type="submit" onClick={this.createPart}>
-                    CREATE PART
-                    </Button>
-                </Form>
-            </div>
+            <Formik
+                validationSchema={PartSchema}
+                initialValues={{
+                    brand: null,
+                    models: null,
+                    years: null,
+                    tags: null,
+                    name: '',
+                    description: '',
+                    partImage: null,
+                    price: '',
+                    stock: '',
+                }}
+                onSubmit={this.createPart}
+                render={({
+                    values,
+                    setFieldValue,
+                    errors, 
+                    dirty,
+                    isSubmitting,
+                    handleChange,
+                    handleSubmit,
+                }) => {
+                    return <Form onSubmit={handleSubmit}>
+                        <Form.Group controlId="name">
+                        <Form.Label>Name:</Form.Label>
+                        <Form.Control placeholder="Title" onChange={handleChange}/>
+                        <ErrorMessage name="name" render={(msg) => {
+                            return <Form.Control.Feedback type="invalid" style={{
+                                display: `block`
+                              }}>
+                            {msg}
+                            </Form.Control.Feedback>
+                        }}/>
+                        </Form.Group>
+                        <Form.Group controlId="brand">
+                        <Form.Label>Brand:</Form.Label>
+                        <Select
+                            placeholder={`Select Make`}
+                            options={brandOptions}
+                            onChange={(selected) => {
+                                setFieldValue('brand', selected);
+                                setFieldValue('models', null);
+                                this.handleBrand(selected);
+                                
+                            }}
+                            value={values.brand}
+                        />
+                        <ErrorMessage name="brand" render={(msg) => {
+                            return <Form.Control.Feedback type="invalid" style={{
+                                display: `block`
+                              }}>
+                            {msg}
+                            </Form.Control.Feedback>
+                        }}/>
+                        </Form.Group>
+                        <Form.Group controlId="models">
+                        <Form.Label>Models:</Form.Label>
+                        <Select
+                            value={values.models}
+                            placeholder={`Select Model`}
+                            onChange={(selected) => {
+                                setFieldValue('models', selected)
+                            }}
+                            options={modelOptions}
+                            isMulti={true}
+                        />
+                        <ErrorMessage name="models" render={(msg) => {
+                            return <Form.Control.Feedback type="invalid" style={{
+                                display: `block`
+                              }}>
+                            {msg}
+                            </Form.Control.Feedback>
+                        }}/>
+                        </Form.Group>
+                        <Form.Group controlId="years">
+                        <Form.Label>Years:</Form.Label>
+                        <Select
+                            value={values.years}
+                            placeholder={`Years`}
+                            onChange={(selected) => {
+                                setFieldValue('years', selected)
+                            }}
+                            options={yearOptions}
+                            isMulti={true}
+                        />
+                        <ErrorMessage name="years" render={(msg) => {
+                            return <Form.Control.Feedback type="invalid" style={{
+                                display: `block`
+                              }}>
+                            {msg}
+                            </Form.Control.Feedback>
+                        }}/>
+                        </Form.Group>
+                        <Form.Group controlId="price">
+                        <Form.Label>Price:</Form.Label>
+                        <Form.Control placeholder="Price" onChange={handleChange}/>
+                        <ErrorMessage name="price" render={(msg) => {
+                            return <Form.Control.Feedback type="invalid" style={{
+                                display: `block`
+                              }}>
+                            {msg}
+                            </Form.Control.Feedback>
+                        }}/>
+                        </Form.Group>
+                        <Form.Group controlId="stock">
+                        <Form.Label>Stock:</Form.Label>
+                        <Form.Control type="number" min="1" placeholder="In stock" onChange={handleChange}/>
+                        <ErrorMessage name="stock" render={(msg) => {
+                            return <Form.Control.Feedback type="invalid" style={{
+                                display: `block`
+                              }}>
+                            {msg}
+                            </Form.Control.Feedback>
+                        }}/>
+                        </Form.Group>
+                        <Form.Group controlId="description">
+                        <Form.Label>Description:</Form.Label>
+                        <Form.Control as="textarea" rows="3" placeholder="Some description of the part item" onChange={handleChange}/>
+                        <ErrorMessage name="description" render={(msg) => {
+                            return <Form.Control.Feedback type="invalid" style={{
+                                display: `block`
+                              }}>
+                            {msg}
+                            </Form.Control.Feedback>
+                        }}/>
+                        </Form.Group>
+                        <Form.Group controlId="partImage">
+                        <Form.Label>Part Image:</Form.Label>
+                        <Form.Control type="file" placeholder="Upload image" onChange={(event) => {
+                            console.log(`setting image`);
+                            console.log(event.currentTarget.files[0]);
+                            let thumbImg = document.getElementById(`thumb`);
+                            let reader = new FileReader();
+                            reader.onloadend = () => {
+                                thumbImg.src = reader.result;
+                                thumbImg.height = 200
+                                thumbImg.width = 200
+                            };
+                            reader.readAsDataURL(event.currentTarget.files[0]);
+                            setFieldValue("partImage", event.currentTarget.files[0]);
+                            
+                        }}/>
+                        <Image
+                            id={`thumb`}/>
+                        <ErrorMessage name="partImage" render={(msg) => {
+                            return <Form.Control.Feedback type="invalid" style={{
+                                display: `block`
+                              }}>
+                            {msg}
+                            </Form.Control.Feedback>
+                        }}/>
+                        </Form.Group>
+                        <Form.Group controlId="tags">
+                        <Form.Label>Tags:</Form.Label>
+                        <Select
+                            value={values.tags}
+                            placeholder={`Tags`}
+                            onChange={(selected) => {
+                                setFieldValue('tags', selected)
+                            }}
+                            options={tagOptions}
+                            isMulti={true}
+                        />
+                        <ErrorMessage name="tags" render={(msg) => {
+                            return <Form.Control.Feedback type="invalid" style={{
+                                display: `block`
+                              }}>
+                            {msg}
+                            </Form.Control.Feedback>
+                        }}/>
+                        </Form.Group>
+                        <Button variant="primary" type="submit" disabled={isSubmitting || errors.length > 0 || !dirty}>
+                        CREATE PART
+                        </Button>
+                    </Form>
+                }}
+            />
         );
     }
 }

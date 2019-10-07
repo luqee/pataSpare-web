@@ -1,34 +1,36 @@
 import autoApi from './api';
 
 class CartService {
-    constructor(){
-        this.cart = localStorage.getItem('cart') ? JSON.parse(localStorage.getItem('cart')): {};
-    }
     getCart = () =>{
-        return this.cart;
+        return localStorage.getItem('cart') ? JSON.parse(localStorage.getItem('cart')): {}
     }
     getCartItems = (cb) =>{
-        if(!Object.keys(this.cart).length === 0){
-            autoApi.get(`/carts/${this.cart.id}`)
+        let cart = this.getCart()
+        if(!Object.keys(cart).length === 0){
+            autoApi.get(`/carts/${cart.id}`)
             .then((response) => {
                 if (response.data.status === 200){
-                    this.cart = response.data.data.cart
-                    localStorage.setItem('cart', JSON.stringify(response.data.data.cart));
-                    // localStorage.setItem('cart_items', JSON.stringify(response.data.data.cart_items));
-                    cb(response.data.data.cart_items, this.cart);
+                    cart = response.data.data.cart
+                    localStorage.setItem('cart', cart);
+                    cb(cart);
+                }else if(response.data.status === 404){
+                    localStorage.removeItem('cart');
+                    cb({});
                 }
             }).catch((error) => {
                 console.log(error);
                 cb(false, null);
             });
+        }else{
+            cb({})
         }
     }
     addToCart = (item, cb) => {
-        if(Object.keys(this.cart).length === 0){
+        let cart = this.getCart()
+        if(Object.keys(cart).length === 0){
             autoApi.post(`/carts`, JSON.stringify(item))
             .then((response) => {
                 if (response.data.status === 201){
-                    this.cart = response.data.data.cart
                     localStorage.setItem('cart', JSON.stringify(response.data.data.cart));
                     cb(true);
                 }
@@ -37,10 +39,9 @@ class CartService {
                 cb(false);
             });
         }else{
-            autoApi.put(`/carts/${this.cart.id}`, JSON.stringify(item))
+            autoApi.put(`/carts/${cart.id}`, JSON.stringify(item))
             .then((response) => {
                 if (response.data.status === 200){
-                    this.cart = response.data.data.cart
                     localStorage.setItem('cart', JSON.stringify(response.data.data.cart));
                     cb(true);
                 }
@@ -51,10 +52,10 @@ class CartService {
         }
     }
     removeFromCart = (item_id, cb) => {
-        autoApi.delete(`/carts/${this.cart.id}?part_id=${item_id}`)
+        let cart = this.getCart()
+        autoApi.delete(`/carts/${cart.id}?part_id=${item_id}`)
         .then((response) => {
             if (response.data.status === 200){
-                this.cart = response.data.data.cart
                 localStorage.setItem('cart', JSON.stringify(response.data.data.cart));
                 cb(true);
             }
@@ -64,17 +65,22 @@ class CartService {
         });
     }
     placeOrder = (cb) => {
-        autoApi.post(`/orders`, JSON.stringify(this.cart))
+        let cart = this.getCart()
+        let postData = {
+            cart: cart
+        }
+        autoApi.post(`/orders`, JSON.stringify(postData), {
+            headers: {'Authorization': 'Bearer '+ localStorage.getItem('access_token')}
+        })
         .then((response) => {
             if (response.data.status === 201){
                 localStorage.removeItem('cart')
-                localStorage.removeItem('cart_items')
-                cb(true, response.data.data.order);
+                cb(response.data.data.order);
             }
         })
         .catch((error) => {
             console.log(error);
-            cb(false, null);
+            cb(false);
         })
     }
 };

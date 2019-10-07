@@ -10,6 +10,7 @@ class App extends Component {
     return (
       <BrowserRouter>
       <Container fluid className="App" style={{
+        padding: '0',
         height: '100%',
         display: 'flex',
         flexDirection: 'column'

@@ -6,6 +6,9 @@ import {Nav, NavDropdown, Container, Row, Col}from 'react-bootstrap';
 import autoAPI from '../api/api';
 import CartService from '../api/cart';
 import SearchBar from './SearchBar';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faShoppingCart, faUser } from '@fortawesome/free-solid-svg-icons';
+
 const autService = new AuthService();
 const cartService = new CartService();
 
@@ -13,38 +16,64 @@ class CartLink extends Component {
     constructor(props){
         super(props);
         this.state = {
-            cart: {},
+            cart: null,
             total: 0,
             unlisten: ''
         }
     }
 
     componentDidMount = () => {
+        let cart = cartService.getCart();
+        console.log('cart is');
+        console.log(cart);
+        
+        if(cart !== {}){
+            this.setState({cart: cart});
+            let totalItems = cart.items.map((item) => {return item.quantity})
+            let sumOfItems =  totalItems.reduce((prev, next) => {
+                return prev.quantity + next.quantity
+            })
+            this.setState({total: sumOfItems})
+        }
         let unlisten = this.props.history.listen((location, action) =>{
-            console.log('Message from cartLink:: Location changed .... ');
-            console.log(location);
-            console.log(action);
-            this.setState({cart: cartService.getCart()});
+            
+            let cart = cartService.getCart();
+            console.log('reloaded page cart is');
+            console.log(cart);
+            if(cart !== {}){
+                this.setState({cart: cart});
+                let totalItems = cart.items.map((item) => {return item.quantity})
+                let sumOfItems =  totalItems.reduce((prev, next) => {
+                    return prev.quantity + next.quantity
+                })
+                this.setState({total: sumOfItems})
+            }
         });
         this.setState({unlisten: unlisten})
-        this.setState({cart: cartService.getCart()});
+        
     }
     componentWillUnmount = () => {
         this.state.unlisten();
     }
-
     render = () => {
-        let total = 0;
-        let cart = this.state.cart;
-        if(!Object.keys(cart).length === 0){
-            if(cart.items && cart.items.length > 0){
-                total = cart.items.map((item) => item.quantity).reduce((prev, next) => prev+next);
-                this.setState({total: total});
-            }
-        }
+        const total = this.state.total
+        const cart = this.state.cart;
+        // if (cart != null ){
+        //     console.log('items');
+        //     console.log(cart.items);
+            
+        //     let totalItems = this.state.cart.items.map((item) => {return item.quantity})
+        //     let sumOfItems =  totalItems.reduce((prev, next) => {
+        //         return prev.quantity + next.quantity
+        //     })
+        //     total = sumOfItems
+
+        // }
+        console.log(total);
+        
         return (
             <Nav>
-                <Nav.Link href="/cart">Cart <span>{this.state.total}</span></Nav.Link>
+                <Nav.Link href="/cart"><FontAwesomeIcon icon={faShoppingCart} /><span>{` (${total})`}</span></Nav.Link>
             </Nav>
         )
     }
@@ -62,21 +91,24 @@ function AuthButton(props) {
     }
     return autService.isAuthenticated() ? (
         <Nav>
-            <NavDropdown title="Account" id="basic-nav-dropdown">
+            <NavDropdown title={<FontAwesomeIcon icon={faUser} />} id="basic-nav-dropdown">
                 {
                     (roles.indexOf('customer') !== -1) && <NavDropdown.Item href={`/customer`}>My Account</NavDropdown.Item>
                 }
                 {
                     (roles.indexOf('dealer') !== -1) && <NavDropdown.Item href={`/dealer`}>Dashboard</NavDropdown.Item>
                 }
-            <NavDropdown.Item>
+            <NavDropdown.Item style={{
+                display: `block`
+            }}>
             <Navbar.Text>
                 <a href="/#" onClick={(e) => {
                     e.preventDefault();
                     console.log('Logging out');
                     autService.signout(() => props.history.push("/"));
                 }} style={{
-                    color: '#000000'
+                    color: '#000000',
+                    display: `block`
                 }}>Log out</a>
             </Navbar.Text>
             </NavDropdown.Item>
@@ -110,16 +142,10 @@ class Header extends Component {
             
         })
     }
-    search = () => {
-        console.log('Serching .....');
-        this.props.history.push(`/search/${this.state.searchTerm}`)
-    }
-    handleSearchInput = (e) => {
-        this.setState({searchTerm: e.target.value})
-    }
     render() {
         return (
             <Container fluid  style={{
+                padding: '0',
                 position: 'fixed',
                 top: '0',
                 zIndex: '12'
@@ -145,13 +171,16 @@ class Header extends Component {
                         <Nav.Link href='/shop'>Shop</Nav.Link>
                         <Nav.Link href='/stores'>Store List</Nav.Link>
                         </Nav>
+                        <Nav>
+                        <Nav.Link href='/dealer/register'>Sell on PataSpare</Nav.Link>
+                        </Nav>
                         <CartLink history={this.props.history}/>
                         <AuthButton history={this.props.history} />
                     </Navbar.Collapse>
                     </Navbar>
                     </Col>
                     <Col>
-                    <SearchBar />
+                    <SearchBar history={this.props.history} />
                     </Col>
                 </Row>
             </Container>

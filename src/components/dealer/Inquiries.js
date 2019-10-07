@@ -1,8 +1,7 @@
 import React, {Component} from 'react';
 import autoAPI from '../../api/api';
 import urls from '../../config/config';
-import {Container, Row, Col, Table} from 'react-bootstrap';
-import Inquiry from './Inquiry';
+import InquiriesTable from '../InquiriesTable';
 
 class Inquiries extends Component {
     constructor(props){
@@ -31,36 +30,10 @@ class Inquiries extends Component {
 
     render = () => {
         const inquiries = this.state.inquiries;
-        return (
-            <Container className="inquiries">
-                <Row>
-                <Col>
-                {
-                    inquiries.length > 0 ?
-                    <Table>
-                        <thead>
-                            <tr>
-                            <th>Query</th>
-                            <th>Product</th>
-                            <th>Store</th>
-                            <th>Replies</th>
-                            <th>Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                        {
-                            inquiries.map((inquiry, indx) => {
-                                return <Inquiry key={indx} match={this.props.match} inquiry={inquiry}/>
-                                })
-                        }
-                        </tbody>
-                    </Table>
-                    :
-                    <p>No Inquiries</p>
-                }
-                </Col>
-                </Row>
-            </Container>
+        return (inquiries.length > 0) ? (
+            <InquiriesTable inquiries={inquiries} />
+        ):(
+            <p>No Inquiries</p>
         );
     };
 }

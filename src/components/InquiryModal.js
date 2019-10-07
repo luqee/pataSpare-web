@@ -1,12 +1,37 @@
 import React, {useState} from 'react';
 import {Modal, Form, Button} from 'react-bootstrap';
+import autoAPI from '../api/api';
 
 function InquiryModal(props){
     const [query, handleQuery] = useState('');
+    const shop = props.shop;
     const sendInquiry = () => {
         console.log('sending query');
-        console.log(query);
-        props.onHide();
+        let req = {
+            shop_id: shop.id,
+            query: query
+        }
+        if(props.part !== null){
+            req['part_id'] = props.part.id
+        }
+        autoAPI.post('/inquiries', JSON.stringify(req), {
+            headers: {
+                'Authorization': 'Bearer '+ localStorage.getItem('access_token')
+            }
+        })
+        .then((response) => {
+            console.log(response);
+            if (response.data.status === 201) {
+                console.log('inquired success');
+                let responseData = response.data.data;
+                console.log(responseData)
+                props.onHide();
+            }
+        })
+        .catch((error) => {
+            console.log(error);
+        
+        });
     }
     const handleChange = (event) => {
         handleQuery(event.target.value)

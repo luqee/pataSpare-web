@@ -12,6 +12,9 @@ class ShopProducts extends Component {
         }
     }
     componentDidMount = () => {
+        console.log(`ShopProducts history`);
+        console.log(this.props);
+        
         autoAPI.get(`/parts?shop_id=${this.props.shop.id}`)
         .then((response) => {
             if (response.data.status === 200){
@@ -27,17 +30,12 @@ class ShopProducts extends Component {
         return (
             <Container>
                 <Row>
-                    <Col>
-                    <p>{`Parts`}</p>
-                    </Col>
-                </Row>
-                <Row>
                 {
                     (this.state.parts !== null && this.state.parts.length > 0) ? (
                         this.state.parts.map((part, index) => {
                             return (
                             <Col key={index} lg={4}>
-                                <PartItem part={part} key={part.id}/>
+                                <PartItem history={this.props.history} part={part} key={part.id}/>
                             </Col>
                             )
                         })

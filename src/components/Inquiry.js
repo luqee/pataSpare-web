@@ -11,8 +11,8 @@ function Inquiry(props){
     return (
         <tr>
             <td>{props.inquiry.query}</td>
-            <td>{props.inquiry.part.name}</td>
-            <td>{props.inquiry.part.shop.name}</td>
+            <td>{(props.inquiry.part === null) ? '-': props.inquiry.part.name}</td>
+            <td>{(props.inquiry.shop === null) ? '-': props.inquiry.shop.name}</td>
             <td>{num_of_replies}</td>
             <td>
             <Link to={{

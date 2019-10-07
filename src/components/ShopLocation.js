@@ -94,10 +94,10 @@ class ShopLocation extends Component {
     
     render = () => {
         return (
-            <div style={{ width: '100%', height: '100%' }}>
-                <div className='map' id='map'>
+            <div>
+                <div className='map' id='map' style={{ maxWidth: 'auto', height: '250px' }}>
                 </div>
-                <Button onClick={this.showDirection} >Show Directions</Button>
+                <Button onClick={this.showDirection} >Directions</Button>
             </div>
         )
     }

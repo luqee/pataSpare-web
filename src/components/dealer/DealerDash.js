@@ -7,7 +7,7 @@ import Orders from './Orders';
 import Inquiries from './Inquiries';
 import Inventory from './Inventory';
 import CreateShop from './CreateShop';
-import InquiryView from './InquiryView';
+import InquiryView from '../InquiryView';
 
 const sidebarStyle = {
     height: '100%',

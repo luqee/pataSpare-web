@@ -50,7 +50,7 @@ class Parts extends React.Component{
                             this.state.latestParts.map((part, indx) => {
                                 return (
                                     <Col lg={3} key={indx}>
-                                        <PartItem part={part} key={part.id}/>
+                                        <PartItem history={this.props.history} part={part} key={part.id}/>
                                     </Col>
                                 )
                             })
@@ -71,7 +71,7 @@ class Parts extends React.Component{
                             this.state.recommendParts.map((part, indx) => {
                                 return (
                                     <Col lg={3} key={indx}>
-                                        <PartItem part={part} key={part.id}/>
+                                        <PartItem history={this.props.history} part={part} key={part.id}/>
                                     </Col>
                                 )
                             })

@@ -1,4 +1,5 @@
 import React from 'react';
+import {Link} from 'react-router-dom';
 import {Container, Row, Col} from 'react-bootstrap';
 
 function ShopDash(props){
@@ -6,7 +7,7 @@ function ShopDash(props){
         <Container>
             <Row>
                 <Col>
-                <p>View and manage shop inventory and client inquiries.</p>
+                <p>View and manage shop's <Link to={`${props.match.url}/parts`}>inventory</Link> ,<Link to={`${props.match.url}/orders`}>orders</Link> and <Link to={`${props.match.url}/inquiries`}>inquiries</Link> .</p>
                 </Col>
             </Row>
         </Container>
