@@ -4,7 +4,7 @@ import carouselBack from '../images/corouselBack.png';
 
 function Promotion(props){
     return (
-        <Container className='promo' style={{
+        <Container fluid className='promo' style={{
             backgroundImage: `url(${carouselBack})`,
             height: '400px',
             backgroundAttachment: 'fixed',

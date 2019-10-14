@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {Link} from 'react-router-dom';
 import {Container, Row, Col, Button} from 'react-bootstrap';
-import PartItem from './PartItem';
+import PartsTable from './PartsTable';
 import autoAPI from '../../api/api';
 import urls from '../../config/config';
 
@@ -30,33 +30,28 @@ class ShopInventory extends Component{
     }
     render = () => {
         let parts = this.state.parts
+        let shop = this.props.location.state.shop
+        console.log(this.props);
+        
+        let shopName = shop.name[0].toUpperCase() + shop.name.slice(1)
         return (
-            <Container className="Inventory">
+            <Container>
                 <Row>
                     <Col>
+                    <p>{`${shopName}'s Inventory`}</p>
                     <Link style={{
                         float:"right"
-                    }} to={`/dealer/manage/${this.props.match.params.id}/part/create`}>
+                    }} to={{
+                        pathname: `${this.props.match.url}/create`,
+                        state: {shop: shop}
+                    }}>
                         <Button>ADD PART</Button>
                     </Link>
                     </Col>
                 </Row>
                 <Row>
-                    <Col>
-                    <div className="parts">
-                    {
-                        (parts.length > 0) ? (
-                            parts.map((part) => {
-                            return (<PartItem key={part.id} part={part}/>)
-                        })
-                        )
-                        :
-                        (<div>
-                            YOU CURRENTLY DON’T HAVE PARTS IN THIS STORE
-                        </div>
-                        )
-                    }
-                    </div>
+                    <Col lg={12}>
+                    <PartsTable match={this.props.match} parts={parts} />
                     </Col>
                 </Row>
             </Container>

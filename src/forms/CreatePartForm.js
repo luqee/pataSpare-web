@@ -57,7 +57,7 @@ class CreatePartForm extends Component {
         super(props);
         this.state = {
             brandSelectOptions: [],
-            shop_id: this.props.shopId,
+            shop_id: this.props.shop.id,
             yearSelectOptions: [],
             modelSelectOptions: [],
             tagsOptions: []
@@ -137,7 +137,11 @@ class CreatePartForm extends Component {
             console.log(response);
             if (response.status === 201){
                 actions.setSubmitting(false);
-                this.props.history.push(`${urls.dealerHome}/manage/${this.props.shopId}`);
+                let location ={
+                    pathname: `/dealer/shops/manage/${this.state.shop_id}`,
+                    state: {shop: this.props.shop}
+                }
+                this.props.history.push(location);
             }
             
         })
@@ -348,7 +352,7 @@ class CreatePartForm extends Component {
                         }}/>
                         </Form.Group>
                         <Button variant="primary" type="submit" disabled={isSubmitting || errors.length > 0 || !dirty}>
-                        CREATE PART
+                        {isSubmitting ? 'Submitting': 'CREATE PART'}
                         </Button>
                     </Form>
                 }}

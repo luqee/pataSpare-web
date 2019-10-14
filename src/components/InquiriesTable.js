@@ -1,39 +1,50 @@
-import React, {Component} from 'react';
-import {Container, Row, Col, Table} from 'react-bootstrap';
+import React from 'react';
+import {Table, Button} from 'react-bootstrap';
+import {Link} from 'react-router-dom';
 import Inquiry from './Inquiry';
 
 function InquiriesTable(props){
     let inquiries = props.inquiries
     return (
-        <Container className="inquiries">
-            <Row>
-            <Col>
+        inquiries.length > 0 ?
+        <Table>
+            <thead>
+                <tr>
+                <th>Query</th>
+                <th>Product</th>
+                <th>Store</th>
+                <th>Replies</th>
+                <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
             {
-                inquiries.length > 0 ?
-                <Table>
-                    <thead>
-                        <tr>
-                        <th>Query</th>
-                        <th>Product</th>
-                        <th>Store</th>
-                        <th>Replies</th>
-                        <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                    {
-                        inquiries.map((inquiry, indx) => {
-                            return <Inquiry key={indx} match={props.match} inquiry={inquiry}/>
-                            })
+                inquiries.map((inquiry, indx) => {
+                    let num_of_replies = 0
+                    if(inquiry.replies && inquiry.replies.length > 0){
+                        num_of_replies = inquiry.replies.length
                     }
-                    </tbody>
-                </Table>
-                :
-                <p>No Inquiries</p>
+                    return <tr key={indx}>
+                        <td>{inquiry.query}</td>
+                        <td>{(inquiry.part === null) ? '-': inquiry.part.name}</td>
+                        <td>{(inquiry.shop === null) ? '-': inquiry.shop.name}</td>
+                        <td>{num_of_replies}</td>
+                        <td>
+                        <Link to={{
+                            pathname: `${props.match.url}/${inquiry.id}`,
+                            state: {inquiry: inquiry }
+                        }}>
+                        <Button>View</Button>
+                        </Link>
+                            
+                        </td>
+                    </tr>
+                    })
             }
-            </Col>
-            </Row>
-        </Container>
+            </tbody>
+        </Table>
+        :
+        <p>No Inquiries</p>
     )
 }
 

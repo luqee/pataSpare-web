@@ -3,12 +3,13 @@ import {Container, Row, Col} from 'react-bootstrap';
 import {Link} from 'react-router-dom';
 import logo from '../images/cropped-temp_logo.png';
 import  axios from '../api/api';
-
+import Loader from './Loader'
 class Categories extends React.Component{
     constructor(props){
         super(props);
         this.state = {
-            categories: []
+            categories: [],
+            loading: true
         }
     }
     componentDidMount = () => {
@@ -17,11 +18,12 @@ class Categories extends React.Component{
             
             if (response.data.status === 200){
                 this.setState({categories: response.data.data.categories})
+                this.setState({loading: false})
             }
         })
         .catch((error) => {
             console.log(error);
-            
+            this.setState({loading: false})
         })
     }
     render = () => {
@@ -35,15 +37,17 @@ class Categories extends React.Component{
         }
         return (
             <Container className='categories' id='categories'>
-                <Row style={{height: '320px'}}>
+                <Row style={{minHeight: '20px', justifyContent: `center`}}>
+                    <Loader loading={this.state.loading} />
                     {
-                        (this.state.categories.length > 0) ? (
+                        (!this.state.loading && this.state.categories.length > 0) ? (
                             this.state.categories.map((cat, indx) => {
                                 return (
                                     <Col lg={4} key={indx} style={{
                                         display: 'flex',
                                         justifyContent: 'center',
-                                        alignItems: 'center'
+                                        alignItems: 'center',
+                                        minHeight: '300px'
                                     }}>
                                         <div style={colStyle}>
                                         <Link to={`/part-category/${cat.id}`} >
@@ -61,7 +65,7 @@ class Categories extends React.Component{
                                 );
                             })
                         ):(
-                            <div></div>
+                            <div>Could not fetch categories</div>
                         )
                     }
                 </Row>

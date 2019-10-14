@@ -3,11 +3,21 @@ import {Link} from 'react-router-dom';
 import {Container, Row, Col} from 'react-bootstrap';
 
 function ShopDash(props){
+    let shop = props.location.state.shop
     return (
         <Container>
             <Row>
                 <Col>
-                <p>View and manage shop's <Link to={`${props.match.url}/parts`}>inventory</Link> ,<Link to={`${props.match.url}/orders`}>orders</Link> and <Link to={`${props.match.url}/inquiries`}>inquiries</Link> .</p>
+                <p>View and manage shop's <Link to={{
+                        pathname: `${props.match.url}/parts`,
+                        state: {shop: shop}
+                    }}>inventory</Link> ,<Link to={{
+                        pathname: `${props.match.url}/orders`,
+                        state: {shop: shop}
+                    }}>orders</Link> and <Link to={{
+                        pathname: `${props.match.url}/inquiries`,
+                        state: {shop: shop}
+                    }}>inquiries</Link>.</p>
                 </Col>
             </Row>
         </Container>

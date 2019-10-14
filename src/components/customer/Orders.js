@@ -2,12 +2,14 @@ import React from 'react';
 import {Container, Row, Col, Table} from 'react-bootstrap';
 import autoAPI from '../../api/api';
 import Order from './Order';
+import Loader from '../Loader';
 
 class Orders extends React.Component {
     constructor(props){
         super(props)
         this.state = {
-            orders: []
+            orders: [],
+            loading: true
         }
     }
     componentDidMount = () => {
@@ -16,6 +18,7 @@ class Orders extends React.Component {
         })
         .then((response) => {
             if(response.data.status === 200){
+                this.setState({loading: false})
                 this.setState({orders: response.data.data.orders});
             }
         })
@@ -31,8 +34,12 @@ class Orders extends React.Component {
                     <p>My Orders</p>
                     </Col>
                 </Row>
-                <Row>
+                <Row style={{
+                    minHeight: `50px`,
+                    justifyContent: 'center'
+                }}>
                     <Col lg={12}>
+                        <Loader loading={this.state.loading} />
                     {
                         this.state.orders.length > 0 ?
                         <Table>

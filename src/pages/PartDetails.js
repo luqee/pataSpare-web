@@ -9,41 +9,33 @@ import CartService from '../api/cart';
 import InquiryModal from '../components/InquiryModal';
 import Rating from 'react-rating';
 import autoAPI from '../api/api';
-
+import Viewer from 'viewerjs'
+import 'viewerjs/dist/viewer.css';
 const cartService = new CartService();
 
 class PartDetails extends Component {
     constructor(props){
         super(props);
         this.state = {
-            part: {
-                shop: {
-                    reviews: []
-                }
-            },
+            part: {},
             quantity: 1,
             modalShow: false,
         }
         
     }
     componentDidMount = () => {
-        console.log(`Checking props`)
-        console.log(this.props);
-        
-        if(this.props.location !== undefined){
-            console.log(`setting part fron locatio state`)
+        if(this.props.location.state){
             this.setState({part: this.props.location.state.part})
-            
         }else{
-            console.log(`fetching part`)
+            console.log(`fetching part ----no see----`)
             this.fetchPartDetails()
         }
+        const viewer = new Viewer(document.getElementById('partImage'))
     }
     fetchPartDetails = () => {
         autoAPI.get(`/parts/${this.props.match.params.id}`)
         .then((response) => {
             if (response.data.status === 200) {
-                console.log(response.data.data.part);
                 this.setState({part: response.data.data.part})
             }
         })
@@ -58,43 +50,38 @@ class PartDetails extends Component {
     }
     
     addToCart = () => {
-        console.log('addint to cart');
         let item_to_add  = {
             part_id: this.state.part.id,
             quantity: parseInt(this.state.quantity)
         }
         cartService.addToCart(item_to_add, (added)=> {
             if(added){
-                let path = {
-                    pathname: this.props.location.pathname,
-                    state: {
-                        part: this.state.part
-                    }
-                }
-                this.props.history.push('')
-                this.props.history.push(path)
+                this.fetchPartDetails()
             }
         });
         
     }
     render() {
+        
         let part = this.state.part
-        let shop = part.shop
+        let shop = this.props.location.state.shop
         let qty = this.state.quantity
         let shopRating = 0
-        if(part.shop.reviews.length > 0 ){
-            let shopRatings = part.shop.reviews.map((review) => {
+        if(Object.keys(shop).length > 0){
+            let shopRatings = shop.reviews.map((review) => {
                 if(review.rating === undefined){
                     return 0
                 }else{
                     return review.rating
                 }
             })
-            shopRating = shopRatings.reduce((prev, next) => prev + next) / shop.reviews.length
+            if(shopRatings.length > 0){
+                shopRating = shopRatings.reduce((prev, next) => prev + next) / shop.reviews.length
+            }
         }
         
         return (part === {}) ? (
-            <div>No item to view</div>
+            <div></div>
         ):(
             <Container>
                 <InquiryModal shop={shop} part={part} show={this.state.modalShow} onHide={()=>{this.handleModal(false)}}/>
@@ -102,7 +89,7 @@ class PartDetails extends Component {
                     <Col lg={8}>
                         <Row>
                             <Col>
-                            <Image src={`${urls.hostRoot}/${part.part_image}`} width={200} height={200} />
+                            <Image id={`partImage`} src={`${urls.hostRoot}/${part.part_image}`} width={200} height={200} />
                             </Col>
                             <Col md={8}>
                             <p>{part.title}</p>
@@ -133,7 +120,7 @@ class PartDetails extends Component {
                             <Col style={{
                                 paddingBottom: `15px`
                             }}>
-                            <Image src={`${urls.hostRoot}/${shop.shop_image}`} height='100px'/>
+                            <Image src={`${urls.hostRoot}/${shop.shop_image}`} height='100px' width='100px'/>
                             <p>{shop.name}</p>
                             <Rating
                                 emptySymbol={<FontAwesomeIcon icon={faStar} />}
@@ -159,7 +146,7 @@ class PartDetails extends Component {
                                             return <ShopReview key={indx} review={review} />
                                         })
                                     ):(
-                                        <p>No Reviews</p>
+                                        <p></p>
                                     )
                                 }
                             </Col>

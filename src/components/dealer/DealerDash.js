@@ -8,6 +8,7 @@ import Inquiries from './Inquiries';
 import Inventory from './Inventory';
 import CreateShop from './CreateShop';
 import InquiryView from '../InquiryView';
+import InventoryItem from './InventoryItem'
 
 const sidebarStyle = {
     height: '100%',
@@ -43,6 +44,7 @@ function  DealerDash(props){
                     <Route exact path={`${props.match.path}/shops`} component={Shops}/>
                     <Route exact path={`${props.match.path}/orders`} component={Orders}/>
                     <Route exact path={`${props.match.path}/inventory`} component={Inventory}/>
+                    <Route exact path={`${props.match.path}/inventory/:id`} component={InventoryItem}/>
                     <Route exact path={`${props.match.path}/inquiries`} component={Inquiries}/>
                     <Route exact path={`${props.match.path}/inquiries/:id`} component={InquiryView}/>
                     <Route exact path={`${props.match.path}/shops/create`} component={CreateShop}/>

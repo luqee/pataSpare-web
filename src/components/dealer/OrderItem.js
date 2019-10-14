@@ -5,10 +5,13 @@ import Select from 'react-select';
 import autoAPI from '../../api/api';
 
 function OrderItem(props){
-    const [status,setStatus] = useState({
-        value: props.item.status,
-        label: props.item.status,
+    let [item, setItem] = useState(props.item)
+    let [status, setStatus] = useState({
+        value: item.status,
+        label: item.status,
     })
+    let [statusChanged, setStatusChanged] = useState(false)
+    let [updating, setUpdating] = useState(false)
     let options = ['processing', 'completed', 'cancelled']
     let statusOptions = options.map((item) => {
         return {
@@ -16,45 +19,54 @@ function OrderItem(props){
             label: item
         }
     })
-    const handleStatus = (value) => {
-        setStatus(value);
+    const handleStatus = (selected) => {
+        if(selected.value !== item.status){
+            setStatusChanged(true)
+        }else{
+            setStatusChanged(false)
+        }
+        setStatus(selected);
     }
     const changeStatus = () => {
+        setUpdating(true)
         let postData = {
-            status: status
+            status: status.value
         }
-        autoAPI.put(`${urls.dealerHome}/${props.item.id}`, JSON.stringify(postData))
+        autoAPI.put(`/dealer/orders/${item.id}`, JSON.stringify(postData), {
+            headers: {'Authorization': 'Bearer '+ localStorage.getItem('access_token')}
+        })
         .then((response) => {
-            console.log(response);
             if (response.status === 200){
-                // this.setState({brandOptions: response.data.data.order_items})
-                props.history.push('')
-                props.history.push(props.history.location.pathname)
+                setUpdating(false)
+                setItem(response.data.data.order_item)
+                setStatusChanged(false)
             }
         })
         .catch((error) => {
             console.log(error)
         })
     }
-    return (
-        <tr>
-            <td><Image width={'60px'} height={'60px'} src={`${urls.hostRoot}/${props.item.part.part_image}`} /> </td>
-            <td>{props.item.part.title}</td>
-            <td>{props.item.shop.name}</td>
-            <td>{props.item.price}</td>
-            <td>{props.item.quantity}</td>
-            <td>{props.item.quantity * props.item.price}</td>
+    return <tr>
+            <td><Image width={'60px'} height={'60px'} src={`${urls.hostRoot}/${item.part.part_image}`} /> </td>
+            <td>{item.part.title}</td>
+            <td>{item.shop.name}</td>
+            <td>{item.price}</td>
+            <td>{item.quantity}</td>
+            <td>{item.quantity * item.price}</td>
             <td>
-            <Select
-                placeholder={`Status`}
-                options={statusOptions}
-                onChange={handleStatus}
-                value={status}
-            />
-                <Button onClick={changeStatus}>Update</Button>
+                <div style={{
+                    display: 'flex'
+                }}>
+                <Select
+                    placeholder={`Status`}
+                    options={statusOptions}
+                    onChange={handleStatus}
+                    value={status}
+                /><span>{`  `}</span>
+                <Button size={"sm"} onClick={changeStatus} disabled={(!statusChanged)? true: false}>{updating?'Updating':'Update'}</Button>
+                </div>
             </td>
         </tr>
-    )
 }
 
 export default OrderItem;

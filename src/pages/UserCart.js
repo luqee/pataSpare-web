@@ -17,20 +17,12 @@ class UserCart extends React.Component {
     }
     componentDidMount = () => {
         let cart = cartService.getCart();
-        console.log('cart mounted');
-        console.log(cart);
-        
         this.setState({cart: cart});
     }
     removeFromCart = (part_id) => {
-        cartService.removeFromCart(part_id, (removed) =>{
-            if(removed){
-                let path = {
-                    pathname: this.props.history.location.pathname,
-                }
-                this.props.history.push('')
-                this.props.history.push(path)
-                // this.getItems();
+        cartService.removeFromCart(part_id, (cart) =>{
+            if(cart){
+                this.setState({cart: cart})
             }
         });
     }
@@ -39,9 +31,9 @@ class UserCart extends React.Component {
             part_id: part_id,
             quantity: quantity
         }
-        cartService.addToCart(item, (updated) =>{
-            if(updated){
-                this.getItems();
+        cartService.addToCart(item, (cart) =>{
+            if(cart){
+                this.setState({cart: cart})
             }
         });
     }
@@ -55,17 +47,13 @@ class UserCart extends React.Component {
     }
     render = () => {
         let cart = this.state.cart
-        console.log(`in render`);
-        
-        console.log(cart);
-        
         if (this.state.order_placed){
             return <Redirect to={{
                 pathname: `/customer/orders/${this.state.order.id}`,
                 state: {order: this.state.order}
             }} />
         }else{
-            return  (cart.items === undefined) ? <p>No details</p> :(
+            return  (cart.items === undefined) ? <p>NO ITEMS IN CART</p> :(
                 <Container className='items' id='items'>
                 <Row style={{
                     justifyContent: 'center'

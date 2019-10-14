@@ -27,29 +27,34 @@ class CartService {
     }
     addToCart = (item, cb) => {
         let cart = this.getCart()
-        if(Object.keys(cart).length === 0){
-            autoApi.post(`/carts`, JSON.stringify(item))
-            .then((response) => {
-                if (response.data.status === 201){
-                    localStorage.setItem('cart', JSON.stringify(response.data.data.cart));
-                    cb(true);
-                }
-            }).catch((error) => {
-                console.log(error);
-                cb(false);
-            });
-        }else{
-            autoApi.put(`/carts/${cart.id}`, JSON.stringify(item))
-            .then((response) => {
-                if (response.data.status === 200){
-                    localStorage.setItem('cart', JSON.stringify(response.data.data.cart));
-                    cb(true);
-                }
-            }).catch((error) => {
-                console.log(error);
-                cb(false);
-            });
+        let requestData = {...item}
+        if(cart.id !== undefined){
+            requestData['cart_id'] = cart.id
         }
+        autoApi.post(`/carts`, JSON.stringify(requestData))
+        .then((response) => {
+            if (response.data.status === 201){
+                localStorage.setItem('cart', JSON.stringify(response.data.data.cart));
+                cb(response.data.data.cart);
+            }
+        }).catch((error) => {
+            console.log(error);
+            cb(false);
+        });
+    }
+    updateCart = (item, cb) => {
+        let cart = this.getCart()
+        let requestData = {cart_id: cart.id, ...item}
+        autoApi.put(`/carts`, JSON.stringify(requestData))
+        .then((response) => {
+            if (response.data.status === 200){
+                localStorage.setItem('cart', JSON.stringify(response.data.data.cart));
+                cb(response.data.data.cart);
+            }
+        }).catch((error) => {
+            console.log(error);
+            cb(false);
+        });
     }
     removeFromCart = (item_id, cb) => {
         let cart = this.getCart()
@@ -57,7 +62,7 @@ class CartService {
         .then((response) => {
             if (response.data.status === 200){
                 localStorage.setItem('cart', JSON.stringify(response.data.data.cart));
-                cb(true);
+                cb(response.data.data.cart);
             }
         }).catch((error) => {
             console.log(error);

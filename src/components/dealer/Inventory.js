@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import autoAPI from '../../api/api';
 import urls from '../../config/config';
 import {Container, Row, Col} from 'react-bootstrap';
-import PartItem from './PartItem';
+import PartsTable from './PartsTable';
 
 class Inventory extends Component {
     constructor(props){
@@ -31,23 +31,15 @@ class Inventory extends Component {
     render = () => {
         const parts = this.state.parts;
         return (
-            <Container className="inventory">
+            <Container>
                 <Row>
                     <Col>
-                    <div className="parts">
-                    {
-                        (parts.length > 0) ? (
-                            parts.map((part) => {
-                            return (<PartItem key={part.id} part={part}/>)
-                        })
-                        )
-                        :
-                        (<div>
-                            Nothing On Your Inventory
-                        </div>
-                        )
-                    }
-                    </div>
+                    <p>My Inventory</p>
+                    </Col>
+                </Row>
+                <Row>
+                    <Col lg={12}>
+                    <PartsTable match={this.props.match} parts={parts} />
                     </Col>
                 </Row>
             </Container>

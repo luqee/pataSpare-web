@@ -17,11 +17,31 @@ import UserCart from './UserCart';
 import StoreView from './StoreView';
 
 class Main extends Component {
+    constructor(props){
+        super(props)
+        this.state = {
+            headerHeight: '10px'
+        }
+    }
+    componentDidMount = () =>{
+        window.addEventListener('resize', this.handleResize)
+        this.handleResize()
+    }
+    componentWillMount = ()=>{
+        window.removeEventListener('resize', this.handleResize)
+    }
+    handleResize = () =>{
+        let headerHeight = document.getElementById('Header').offsetHeight
+        this.setState({headerHeight: headerHeight})
+    }
     render() {
+        let height = this.state.headerHeight
+        
         return (
         <main style={{
-            paddingTop: '100px',
-            paddingBottom: '10px',
+            marginTop: `${height}px`,
+            paddingBottom: '10px,',
+            paddingTop: '10px',
             flex: '1 0 auto'
         }}>
             <Switch>

@@ -1,6 +1,8 @@
 import React from 'react';
 import { Form, Button } from 'react-bootstrap';
 import { Formik, ErrorMessage } from 'formik';
+import PhoneInput from 'react-phone-input-2';
+import 'react-phone-input-2/dist/style.css'
 import * as Yup from 'yup';
 import autoAPI from '../api/api';
 import urls from '../config/config';
@@ -54,6 +56,7 @@ function DealerRegisterForm(props){
       }}
       render={({
         values,
+        setFieldValue,
         touched,
         errors, 
         dirty,
@@ -76,7 +79,11 @@ function DealerRegisterForm(props){
           </Form.Group>
           <Form.Group controlId="number">
             <Form.Label>Phone Number</Form.Label>
-            <Form.Control type="text" placeholder="Phone Number" value={values.number} onChange={handleChange}/>
+            <PhoneInput style={{
+                width: `100%`
+            }} defaultCountry={'ke'} value={values.number} onChange={(value) => {
+                setFieldValue('number', value)
+            }} />
             <ErrorMessage name="number" render={(msg) => {
             return  <Form.Control.Feedback type="invalid" style={{
               display: `block`

@@ -1,5 +1,7 @@
-import React, {Component, useState} from 'react';
+import React, {Component} from 'react';
 import {Form, Button, Image} from 'react-bootstrap';
+import PhoneInput from 'react-phone-input-2';
+import 'react-phone-input-2/dist/style.css'
 import autoAPI from '../api/api';
 import urls from '../config/config';
 import { Formik, ErrorMessage } from 'formik';
@@ -169,7 +171,11 @@ class CreateShopForm extends Component {
                         </Form.Group>
                         <Form.Group controlId="number">
                         <Form.Label>Business Number:</Form.Label>
-                        <Form.Control placeholder="Business Phone Number" onChange={handleChange}/>
+                        <PhoneInput style={{
+                            width: `100%`
+                        }} defaultCountry={'ke'} value={values.number} onChange={(value) => {
+                            setFieldValue('number', value)
+                        }} />
                         <ErrorMessage name="number" render={(msg) => {
                             return <Form.Control.Feedback type="invalid" style={{
                                 display: `block`
@@ -218,7 +224,9 @@ class CreateShopForm extends Component {
                         </Form.Group>
                         <Form.Group controlId="location">
                         <Form.Label>Location:</Form.Label>
-                        <Form.Control type={`text`} placeholder="Where is your business?" onChange={handleChange} />
+                        <Form.Control type={`text`} placeholder="Where is your business?" onChange={(value)=>{
+                            setFieldValue('location', this.state.autoComplete.getPlace().name)
+                        }} />
                         <ErrorMessage name="location" render={(msg) => {
                             return <Form.Control.Feedback type="invalid" style={{
                                 display: `block`

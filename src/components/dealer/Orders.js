@@ -1,6 +1,6 @@
 import React from 'react';
-import {Container, Row, Col, Table} from 'react-bootstrap';
-import OrderItem from './OrderItem';
+import {Container, Row, Col} from 'react-bootstrap';
+import OrderItemsTable from './OrderItemsTable';
 import autoAPI from '../../api/api';
 
 class Orders extends React.Component{
@@ -30,36 +30,12 @@ class Orders extends React.Component{
             <Container>
                 <Row>
                     <Col>
-                    <p>Orders in all shops</p>
+                    <p>Orders in my shops</p>
                     </Col>
                 </Row>
                 <Row>
                 <Col lg={12}>
-                {
-                    order_items.length > 0 ?
-                    <Table>
-                        <thead>
-                            <tr>
-                            <th></th>
-                            <th>Item</th>
-                            <th>Shop</th>
-                            <th>Cost</th>
-                            <th>Quantity</th>
-                            <th>Total</th>
-                            <th>Action</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                        {
-                            order_items.map((order_item, indx) => {
-                                return <OrderItem history={this.props.history} key={indx} item={order_item} />
-                                })
-                        }
-                        </tbody>
-                    </Table>
-                    :
-                    <p>NO ITEMS</p>
-                }
+                <OrderItemsTable match={this.props.match} items={order_items} />
                 </Col>
                 </Row>
             </Container>

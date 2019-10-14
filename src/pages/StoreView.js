@@ -66,14 +66,7 @@ class StoreView extends React.Component {
         .then((response) => {
             console.log(response);
             if (response.data.status === 201) {
-                let path = {
-                    pathname: this.props.location.pathname,
-                    state: {
-                        shop: this.state.shop
-                    }
-                }
-                this.props.history.push('')
-                this.props.history.push(path)
+                this.fetchShopDetails()
             }
         })
         .catch((error) => {
@@ -134,7 +127,7 @@ class StoreView extends React.Component {
                 <Row style={{
                     paddingTop: '15px'
                 }}>
-                <Tab.Container id="details-left-tabs" defaultActiveKey="shop">
+                <Tab.Container id="details-left-tabs" defaultActiveKey="products">
                     <Col lg={4}>
                     <Nav variant="pills" className="flex-column" style={{
                         width: '100'

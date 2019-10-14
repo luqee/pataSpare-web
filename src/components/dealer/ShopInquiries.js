@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import {Container, Row, Col} from 'react-bootstrap';
 import autoAPI from '../../api/api';
 import urls from '../../config/config';
 import InquiriesTable from '../InquiriesTable';
@@ -30,11 +31,20 @@ class ShopInquiries extends Component {
 
     render = () => {
         const inquiries = this.state.inquiries;
-        return (inquiries.length > 0) ? (
-            <InquiriesTable inquiries={inquiries} />
-        ): (
-            <p>No inquiries</p>
-        );
+        return (
+            <Container>
+                <Row>
+                    <Col>
+                    <p>Inquiries</p>
+                    </Col>
+                </Row>
+                <Row>
+                    <Col lg={12}>
+                    <InquiriesTable match={this.props.match} inquiries={inquiries} />
+                    </Col>
+                </Row>
+            </Container>
+            )
     };
 }
 

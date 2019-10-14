@@ -11,12 +11,12 @@ class ViewOrder extends React.Component{
         }
     }
     componentDidMount = () =>{
-        console.log('viewOrder component location state:::')
-        console.log(this.props.location.state);
         if(this.props.location.state !== undefined){
             this.setState({order: this.props.location.state.order})
         }else{
-            autoAPI.get(`/orders/${this.props.match.params.id}`)
+            autoAPI.get(`/orders/${this.props.match.params.id}`, {
+                headers: {'Authorization': 'Bearer '+ localStorage.getItem('access_token')}
+            })
             .then((response) => {
                 if(response.data.status === 200){
                     this.setState({order: response.data.data.order});
@@ -34,13 +34,13 @@ class ViewOrder extends React.Component{
             <Container>
                 <Row>
                     <Col>
-                    <p>Order Id: {this.state.order.order_identity}</p>
+                    <p>Order Id: {order.order_identity}</p>
                     </Col>
                 </Row>
                 <Row>
                 <Col lg={12}>
                 {
-                    this.state.order.order_items.length > 0 ?
+                    order.order_items.length > 0 ?
                     <Table>
                         <thead>
                             <tr>
@@ -55,7 +55,7 @@ class ViewOrder extends React.Component{
                         </thead>
                         <tbody>
                         {
-                            this.state.order.order_items.map((order_item, indx) => {
+                            order.order_items.map((order_item, indx) => {
                                 return <OrderItem match={this.props.match} key={indx} item={order_item} />
                                 })
                         }

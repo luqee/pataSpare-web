@@ -13,7 +13,7 @@ class SearchBar extends React.Component {
             brand: null,
             model: null,
             year: null,
-            searchTerm: null,
+            searchTerm: '',
             searchResults: [],
             results_set: false
         }
@@ -58,31 +58,20 @@ class SearchBar extends React.Component {
     }
     search = (event) => {
         event.preventDefault();
-        console.log('Serching .....');
         let queryString = `term=${this.state.searchTerm}`
         if(this.state.brand){
-            queryString.concat(`&brand=${this.state.brand.value}`)
-            console.log(`querystring is...`);
-            console.log(queryString);
+            queryString = queryString.concat(`&brand=${this.state.brand.value}`)
         }
         if(this.state.model){
-            queryString.concat(`&model=${this.state.model.value}`)
-            console.log(`querystring is...`);
-            console.log(queryString);
+            queryString = queryString.concat(`&model=${this.state.model.value}`)
         }
         if(this.state.year){
-            queryString.concat(`&year=${this.state.year.value}`)
-            console.log(`querystring is...`);
-            console.log(queryString);
+            queryString = queryString.concat(`&year=${this.state.year.value}`)
         }
-        console.log(`querystring is...`);
-        console.log(queryString);
         
         autoAPI.get(`/search?${queryString}`)
         .then((response) => {
             if (response.data.status === 200){
-                console.log('Search results are ::');
-                console.log(response.data.data.results);
                 let path = {
                     pathname: `/results`,
                     state: {
@@ -90,9 +79,9 @@ class SearchBar extends React.Component {
                         term: this.state.searchTerm
                     }
                 }
+                this.setState({brand: null, model: null, year: null, searchTerm: null})
+                this.props.history.push('')
                 this.props.history.push(path)
-                // this.setState({searchResults: response.data.data.results});
-                // this.setState({results_set: true});
             }
         })
         .catch((error) => {
@@ -120,13 +109,14 @@ class SearchBar extends React.Component {
                 label: year.year
             }
         })
-        return <Container fluid className='searchbar' id='searchbar'>
-            <Row>
-            <Col>
-            <Form inline>
-                <Container>
-                    <Row>
-                    <Col>
+        return <Container fluid>
+            <Form inline style={{
+                    justifyContent: 'center'
+                }}>
+                <Form.Row style={{
+                    width: '80%',
+                }}>
+                    <Col sm={3}>
                     <Select
                         placeholder={`Select Make`}
                         options={brandOptions}
@@ -134,7 +124,7 @@ class SearchBar extends React.Component {
                         value={this.state.brand}
                     />
                     </Col>
-                    <Col>
+                    <Col sm={3}>
                     <Select
                         value={this.state.model}
                         placeholder={`Select Model`}
@@ -142,7 +132,7 @@ class SearchBar extends React.Component {
                         options={modelOptions}
                     />
                     </Col>
-                    <Col>
+                    <Col sm={3} >
                     <Select
                         value={this.state.year}
                         placeholder={`Select Year`}
@@ -150,19 +140,20 @@ class SearchBar extends React.Component {
                         onChange={this.handleYear}
                     />
                     </Col>
-                    <Col style={{
+                    <Col sm={3} >
+                    <Form.Group controlId="query" style={{
                         display: 'flex',
-
+                        flexWrap:"nowrap"
                     }}>
-                    <Form.Control type="text" placeholder="Search" className=" mr-sm-2" onChange={this.handleSearchInput} />
-                    <Button type="submit" onClick={this.search}>Search</Button>
+                        <Form.Control type="text" placeholder="Search" value={this.state.searchTerm} className=" mr-sm-2" onChange={this.handleSearchInput} />
+                        <Button type="submit" onClick={this.search}>Search</Button>
+                    </Form.Group>
+                    
                     </Col>
-                    </Row>
-                </Container>
+                </Form.Row>
             </Form>
-            </Col>
-            </Row>
         </Container>
+            
         
     }
 }

@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import {Container, Row, Col} from 'react-bootstrap';
 import PartItem from '../components/PartItem';
 import autoAPI from '../api/api';
+import Loader from '../components/Loader';
 
 class PartCategory extends Component {
     constructor(props){
@@ -9,6 +10,7 @@ class PartCategory extends Component {
         this.state = {
             category: '',
             parts: [],
+            loading: true
             
         }
     }
@@ -16,6 +18,7 @@ class PartCategory extends Component {
         autoAPI.get(`/parts?cat=${this.props.match.params.category}`)
         .then((response) => {
             if (response.data.status === 200){
+                this.setState({loading: false})
                 this.setState({parts: response.data.data.category.parts, category: response.data.data.category.name})
             }
         })
@@ -27,18 +30,23 @@ class PartCategory extends Component {
     render() {
         return (
             <Container>
-                <Row>
-                    <Col>
-                    <p>{this.state.category}</p>
-                    </Col>
+                <Row style={{
+                    minHeight: `50px`,
+                    justifyContent: 'center'
+                }}>
+                <p>{this.state.category}</p>
                 </Row>
-                <Row>
+                <Row style={{
+                    minHeight: `50px`,
+                    justifyContent: 'center'
+                }}>
+                    <Loader loading={this.state.loading} />
                 {
-                    (this.state.parts.length > 0) ? (
+                    (!this.state.loading && this.state.parts.length > 0) ? (
                         this.state.parts.map((part, index) => {
                             return (
-                            <Col key={index} lg={4}>
-                                <PartItem history={this.props.history} part={part} key={part.id}/>
+                            <Col key={index} lg={3}>
+                                <PartItem part={part} key={part.id}/>
                             </Col>
                             )
                         })

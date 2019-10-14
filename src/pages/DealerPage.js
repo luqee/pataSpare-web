@@ -7,7 +7,7 @@ function DealerPage({match}){
     
     return (
         <Switch>
-            <Route path={`${match.path}/manage/:id`} component={ManageShop}/>
+            <Route path={`${match.path}/shops/manage/:id`} component={ManageShop}/>
             <Route path={`${match.path}`} component={DealerDash}/>
         </Switch>
     );
