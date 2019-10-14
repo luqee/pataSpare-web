@@ -10,7 +10,9 @@ function Account(props){
                 </Col>
             </Row>
             <Row>
+                <Col>
                 Account details here, editing and all..
+                </Col>
             </Row>
         </Container>
     )

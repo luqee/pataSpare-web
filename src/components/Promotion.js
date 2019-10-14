@@ -4,7 +4,7 @@ import carouselBack from '../images/corouselBack.png';
 
 function Promotion(props){
     return (
-        <Container className='promo' style={{
+        <Container fluid className='promo' style={{
             backgroundImage: `url(${carouselBack})`,
             height: '400px',
             backgroundAttachment: 'fixed',
@@ -27,7 +27,7 @@ function Promotion(props){
                 <Col lg={4}>
                 <Card>
                 <Card.Body>
-                    <Card.Title>GREATLY REDUCED PRICES</Card.Title>
+                    <Card.Title>COMPETITIVE PRICES</Card.Title>
                     <Card.Text>
                     With us you get the best prices on the 
                     whole range.

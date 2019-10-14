@@ -11,15 +11,37 @@ import UserLogin from './UserLogin';
 import Stores from './Stores';
 import PartCategory from './PartCategory';
 import PartsShop from './PartsShop';
-import SearchParts from './SearchParts';
+import SearchResults from './SearchResults';
 import PartDetails from './PartDetails';
+import UserCart from './UserCart';
+import StoreView from './StoreView';
 
 class Main extends Component {
+    constructor(props){
+        super(props)
+        this.state = {
+            headerHeight: '10px'
+        }
+    }
+    componentDidMount = () =>{
+        window.addEventListener('resize', this.handleResize)
+        this.handleResize()
+    }
+    componentWillMount = ()=>{
+        window.removeEventListener('resize', this.handleResize)
+    }
+    handleResize = () =>{
+        let headerHeight = document.getElementById('Header').offsetHeight
+        this.setState({headerHeight: headerHeight})
+    }
     render() {
+        let height = this.state.headerHeight
+        
         return (
         <main style={{
-            paddingTop: '80px',
-            paddingBottom: '10px',
+            marginTop: `${height}px`,
+            paddingBottom: '10px,',
+            paddingTop: '10px',
             flex: '1 0 auto'
         }}>
             <Switch>
@@ -28,7 +50,9 @@ class Main extends Component {
                 <Route exact path='/parts/:id' component={PartDetails}/>
                 <Route exact path='/shop' component={PartsShop}/>
                 <Route exact path='/stores' component={Stores}/>
-                <Route exact path='/search/:term' component={SearchParts}/>
+                <Route exact path='/stores/:id' component={StoreView}/>
+                <Route exact path='/cart' component={UserCart}/>
+                <Route exact path='/results' component={SearchResults}/>
                 <Route exact path='/dealer/register' component={DealerRegister}/>
                 <Route exact path='/customer/register' component={CustomerRegister}/>
                 <Route exact path='/user/login' component={UserLogin}/>

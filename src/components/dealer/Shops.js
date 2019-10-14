@@ -3,7 +3,7 @@ import autoAPI from '../../api/api';
 import urls from '../../config/config';
 import {Container, Row, Col, Button} from 'react-bootstrap';
 import {Link} from 'react-router-dom';
-import ShopItem from './ShopItem';
+import ShopsTable from './ShopsTable';
 
 class Shops extends Component {
     constructor(props){
@@ -42,21 +42,7 @@ class Shops extends Component {
                 </Row>
                 <Row>
                     <Col>
-                        <div className="shops">
-                        {
-                        (shops.length > 0) ? (
-                            shops.map((shop) => {
-                                
-                                return (<ShopItem key={shop.id} shop={shop}/>)
-                            })
-                        )
-                        :
-                        (<div>
-                            YOU CURRENTLY DON’T OWN A SHOP
-                        </div>
-                        )
-                        }
-                        </div>
+                    <ShopsTable match={this.props.match} shops={shops}/>
                     </Col>
                 </Row>
             </Container>

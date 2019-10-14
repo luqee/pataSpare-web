@@ -1,17 +1,15 @@
 import React, {Component} from 'react';
-import {Container, Row, Col, Image, Button} from 'react-bootstrap';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faMapMarker, faEnvelope, faPhone } from '@fortawesome/free-solid-svg-icons';
-import urls from '../config/config';
+import {Button} from 'react-bootstrap';
 
-class ShopDetails extends Component {
+class ShopLocation extends Component {
     constructor(props){
         super(props);
         this.state = {
-            map: {},
-            deviceLocation: {},
-            directionsService: {},
-            directionsDisplay: {}
+            map: null,
+            shopLocationMarker: null,
+            deviceLocation: null,
+            directionsService: null,
+            directionsDisplay: null
         }
     }
     initMap = () => {
@@ -19,11 +17,11 @@ class ShopDetails extends Component {
             center: {lat: parseFloat(this.props.shop.latitude), lng: parseFloat(this.props.shop.longitude)},
             zoom: 10
         });
-        let defaultMarker = new window.google.maps.Marker({
+        let shopLocationMarker = new window.google.maps.Marker({
             position: {lat: parseFloat(this.props.shop.latitude), lng: parseFloat(this.props.shop.longitude)},
             map: map,
         })
-        this.setState({map: map});
+        this.setState({map: map, shopLocationMarker: shopLocationMarker});
     }
     handleLocationError = (browserHasGeolocation, infoWindow, pos) => {
         infoWindow.setPosition(pos);
@@ -48,7 +46,7 @@ class ShopDetails extends Component {
             var directionsDisplay = new window.google.maps.DirectionsRenderer();
             directionsDisplay.setMap(this.state.map);
             let directionRequest = {
-                origin: this.state.deviceLocation,
+                origin: pos,
                 destination: {lat: parseFloat(this.props.shop.latitude), lng: parseFloat(this.props.shop.longitude)},
                 travelMode: 'DRIVING'
             }
@@ -95,25 +93,14 @@ class ShopDetails extends Component {
     }
     
     render = () => {
-        const shop = this.props.shop;
-        
         return (
-            <Container>
-                <Row>
-                    <Col>
-                    <Image src={`${urls.hostRoot}/${shop.shop_image}`} height='200px'/>
-                    <p>{shop.name}</p>
-                    <p><FontAwesomeIcon icon={faMapMarker} /> {shop.location}</p>
-                    <p><FontAwesomeIcon icon={faEnvelope} /> {shop.location}</p>
-                    <p><FontAwesomeIcon icon={faPhone} /></p>
-                    <div className='map' id='map' style={{ width: 300, height: 300 }}>
-                    </div>
-                    <Button onClick={this.showDirection} >Show Directions</Button>
-                    </Col>
-                </Row>
-            </Container>
+            <div>
+                <div className='map' id='map' style={{ maxWidth: 'auto', height: '250px' }}>
+                </div>
+                <Button onClick={this.showDirection} >Directions</Button>
+            </div>
         )
     }
 }
 
-export default ShopDetails;
+export default ShopLocation;

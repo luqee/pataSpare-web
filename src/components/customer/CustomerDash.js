@@ -5,69 +5,43 @@ import Dash from './Dash';
 import Orders from './Orders';
 import Inquiries from './Inquiries';
 import Account from './Account';
-import Menu from 'react-burger-menu/lib/menus/slide';
+import ViewOrder from './ViewOrder';
+import InquiryView from '../InquiryView';
 
 
 function CustomerDash(props){
-    var styles = {
-        bmBurgerButton: {
-            position: 'fixed',
-            width: '36px',
-            height: '30px',
-            left: '36px',
-            top: '70px'
-        },
-        bmBurgerBars: {
-            background: '#373a47'
-        },
-        bmBurgerBarsHover: {
-            background: '#a90000'
-        },
-        bmCrossButton: {
-            height: '24px',
-            width: '24px'
-        },
-        bmCross: {
-            background: '#bdc3c7'
-        },
-        bmMenuWrap: {
-            position: 'fixed',
-            height: '100%'
-        },
-        bmMenu: {
-            background: '#373a47',
-            padding: '2.5em 1.5em 0',
-            fontSize: '1.15em'
-        },
-        bmMorphShape: {
-            fill: '#373a47'
-        },
-        bmItemList: {
-            color: '#b8b7ad',
-            padding: '0.8em'
-        },
-        bmItem: {
-            // display: 'inline-block'
-        },
-        bmOverlay: {
-            background: 'rgba(0, 0, 0, 0.3)'
-        }
+    const sidebarStyle = {
+        height: '100%',
+        backgroundColor: '#111',
+        overflowX: 'hidden',
+        paddingTop: '20px'
+    }
+    const sideLinkStyle = {
+        padding: '6px 8px 6px 16px',
+        textDecoration: 'none',
+        fontSize: '25px',
+        color: '#818181',
+        display: 'block',
     }
     return (
-        <Container id='customer-dash' fluid>
+        <Container id='customer-dash'>
             <Row>
-            <Col>
-            <Menu isOpen={true} styles={styles} pageWrapId={"customer-view"} outerContainerId={"customer-dash"}>
-                <Link to={`${props.match.url}`} className="menu-item">Dashboard</Link>
-                <Link to={`${props.match.url}/orders`} className="menu-item">Orders</Link>
-                <Link to={`${props.match.url}/inquiries`} className="menu-item">Inquiries</Link>
-                <Link to={`${props.match.url}/account`} className="menu-item">Acccount</Link>
-            </Menu>
+            <Col md={3}>
+            <div id={`sidebar`} className={`sidebar`} style={sidebarStyle}>
+                <Link to={`${props.match.url}`} style={sideLinkStyle}> Dashboard</Link>
+                <Link to={`${props.match.url}/orders`} style={sideLinkStyle}>Orders</Link>
+                <Link to={`${props.match.url}/inquiries`} style={sideLinkStyle}>Inquiries</Link>
+                <Link to={`${props.match.url}/account`} style={sideLinkStyle}>Acccount</Link>
+            </div>
+            </Col>
+            <Col md={9}>
             <div id='customer-view'>
             <Switch>
                 <Route exact path={`${props.match.path}`} component={Dash}/>
                 <Route exact path={`${props.match.path}/orders`} component={Orders}/>
+                <Route exact path={`${props.match.path}/orders/:id`} component={ViewOrder}/>
                 <Route exact path={`${props.match.path}/inquiries`} component={Inquiries}/>
+                <Route exact path={`${props.match.path}/inquiries/:id`} component={InquiryView}/>
                 <Route exact path={`${props.match.path}/account`} component={Account}/>
             </Switch>
             </div>

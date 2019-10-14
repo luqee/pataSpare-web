@@ -22,7 +22,9 @@ function ImageSlider(props){
         fontSize: '2.5em'
     }
     return (
-        <Container>
+        <Container fluid style={{
+            padding: 0,
+        }}>
             <Row>
                 <Col>
                 <Carousel>

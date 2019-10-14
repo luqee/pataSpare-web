@@ -2,23 +2,28 @@ import React from 'react';
 import {Container, Row, Col} from 'react-bootstrap';
 import Store from './Store';
 import autoAPI from '../api/api';
+import Loader from './Loader';
 
 class Stores extends React.Component {
     constructor(props){
         super(props);
         this.state = {
-            shops: []
+            shops: [],
+            loading: true
         }
     }
     componentDidMount = () => {
         autoAPI.get(`/shops?preview=true`)
         .then((response) => {
-            let shops = response.data.data.shops
-            this.setState({shops: shops})
+            if (response.data.status === 200){
+                let shops = response.data.data.shops
+                this.setState({loading: false})
+                this.setState({shops: shops})
+            }
         })
         .catch((error) => {
             console.log('Woops an error '+error);
-            
+            this.setState({loading: false})
         })
     }
     render = () => {
@@ -39,28 +44,20 @@ class Stores extends React.Component {
                     </Col>
                 </Row>
                 <Row style={{
+                    paddingBottom: '10px',
+                    minHeight: `50px`,
                     justifyContent: 'center'
                 }}>
-                    <Col lg={8}>
-                        <Container>
-                            <Row style={{
-                                paddingBottom: '10px',
-                                borderBottom: '10px solid #ff6200'
-                            }}>
-                                {
-                                    (this.state.shops.length > 0) ? (
-                                        this.state.shops.map((shop, index) => {
-                                            return (<Col key={index} lg={4}><Store key={shop.id} shop={shop} /></Col> )
-                                        })
-                                    ):(
-                                        <Col lg={12}>
-                                            OUR PARTNER STORES
-                                        </Col>
-                                    )
-                                }
-                            </Row>
-                        </Container>
-                    </Col>
+                    <Loader loading={this.state.loading} />
+                    {
+                        (!this.state.loading && this.state.shops.length > 0) ? (
+                            this.state.shops.map((shop, index) => {
+                                return (<Col key={index} lg={4}><Store key={shop.id} shop={shop} /></Col> )
+                            })
+                        ):(
+                            <p>No Shops</p>
+                        )
+                    }
                 </Row>
             </Container>
         )

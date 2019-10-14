@@ -5,7 +5,10 @@ import Dash from './Dash';
 import Shops from './Shops';
 import Orders from './Orders';
 import Inquiries from './Inquiries';
+import Inventory from './Inventory';
 import CreateShop from './CreateShop';
+import InquiryView from '../InquiryView';
+import InventoryItem from './InventoryItem'
 
 const sidebarStyle = {
     height: '100%',
@@ -29,6 +32,7 @@ function  DealerDash(props){
                 <div id={`sidebar`} className={`sidebar`} style={sidebarStyle}>
                     <Link to={`${props.match.url}`} style={sideLinkStyle}>Dashboard</Link>
                     <Link to={`${props.match.url}/shops`} style={sideLinkStyle}>Shops</Link>
+                    <Link to={`${props.match.url}/inventory`} style={sideLinkStyle}>Inventory</Link>
                     <Link to={`${props.match.url}/orders`} style={sideLinkStyle}>Orders</Link>
                     <Link to={`${props.match.url}/inquiries`} style={sideLinkStyle}>Inquiries</Link>
                 </div>
@@ -39,7 +43,10 @@ function  DealerDash(props){
                     <Route exact path={`${props.match.path}`} component={Dash}/>
                     <Route exact path={`${props.match.path}/shops`} component={Shops}/>
                     <Route exact path={`${props.match.path}/orders`} component={Orders}/>
+                    <Route exact path={`${props.match.path}/inventory`} component={Inventory}/>
+                    <Route exact path={`${props.match.path}/inventory/:id`} component={InventoryItem}/>
                     <Route exact path={`${props.match.path}/inquiries`} component={Inquiries}/>
+                    <Route exact path={`${props.match.path}/inquiries/:id`} component={InquiryView}/>
                     <Route exact path={`${props.match.path}/shops/create`} component={CreateShop}/>
                 </Switch>
                 </div>

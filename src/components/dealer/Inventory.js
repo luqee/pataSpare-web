@@ -1,26 +1,26 @@
 import React, {Component} from 'react';
-import {Container, Row, Col} from 'react-bootstrap';
 import autoAPI from '../../api/api';
 import urls from '../../config/config';
-import InquiriesTable from '../InquiriesTable';
+import {Container, Row, Col} from 'react-bootstrap';
+import PartsTable from './PartsTable';
 
-class ShopInquiries extends Component {
+class Inventory extends Component {
     constructor(props){
         super(props);
         this.state = {
-            inquiries: [],
+            parts: [],
         }
     }
 
     componentDidMount = () => {
-        autoAPI.get(`${urls.dealerHome}/inquiries/shop/${this.props.match.params.id}`, {
+        autoAPI.get(`${urls.dealerHome}/parts`, {
             headers: {'Authorization': 'Bearer '+ localStorage.getItem('access_token')}
         })
         .then((response) => {
             
             if (response.data.status === 200){
                 
-                this.setState({inquiries: response.data.data.inquiries});
+                this.setState({parts: response.data.data.parts});
             }
         })
         .catch((error) => {
@@ -28,24 +28,23 @@ class ShopInquiries extends Component {
             
         });
     }
-
     render = () => {
-        const inquiries = this.state.inquiries;
+        const parts = this.state.parts;
         return (
             <Container>
                 <Row>
                     <Col>
-                    <p>Inquiries</p>
+                    <p>My Inventory</p>
                     </Col>
                 </Row>
                 <Row>
                     <Col lg={12}>
-                    <InquiriesTable match={this.props.match} inquiries={inquiries} />
+                    <PartsTable match={this.props.match} parts={parts} />
                     </Col>
                 </Row>
             </Container>
-            )
+        );
     };
 }
 
-export default ShopInquiries;
+export default Inventory;
