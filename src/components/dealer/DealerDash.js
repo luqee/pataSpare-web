@@ -41,13 +41,23 @@ function  DealerDash(props){
                 <div id='page-wrap'>
                 <Switch>
                     <Route exact path={`${props.match.path}`} component={Dash}/>
-                    <Route exact path={`${props.match.path}/shops`} component={Shops}/>
-                    <Route exact path={`${props.match.path}/orders`} component={Orders}/>
-                    <Route exact path={`${props.match.path}/inventory`} component={Inventory}/>
+                    <Route exact path={`${props.match.path}/shops`} render={routeProps =>{
+                    return <Shops {...routeProps} user={props.user} />
+                }}/>
+                    <Route exact path={`${props.match.path}/orders`} render={routeProps =>{
+                    return <Orders {...routeProps} user={props.user} />
+                }}/>
+                    <Route exact path={`${props.match.path}/inventory`} render={routeProps =>{
+                    return <Inventory {...routeProps} user={props.user} />
+                }}/>
                     <Route exact path={`${props.match.path}/inventory/:id`} component={InventoryItem}/>
-                    <Route exact path={`${props.match.path}/inquiries`} component={Inquiries}/>
+                    <Route exact path={`${props.match.path}/inquiries`} render={routeProps =>{
+                    return <Inquiries {...routeProps} user={props.user} />
+                }}/>
                     <Route exact path={`${props.match.path}/inquiries/:id`} component={InquiryView}/>
-                    <Route exact path={`${props.match.path}/shops/create`} component={CreateShop}/>
+                    <Route exact path={`${props.match.path}/shops/create`} render={routeProps =>{
+                    return <CreateShop {...routeProps} user={props.user} />
+                }}/>
                 </Switch>
                 </div>
                 </Col>

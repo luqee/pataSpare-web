@@ -2,6 +2,7 @@ import React from 'react';
 import {Container, Row, Col} from 'react-bootstrap';
 import OrderItemsTable from './OrderItemsTable';
 import autoAPI from '../../api/api';
+import { UserContext } from '../../App';
 
 class Orders extends React.Component{
     constructor(props){
@@ -12,7 +13,7 @@ class Orders extends React.Component{
     }
     componentDidMount = () => {
         autoAPI.get(`dealer/orders`, {
-            headers: {'Authorization': 'Bearer '+ localStorage.getItem('access_token')}
+            headers: {'Authorization': 'Bearer '+ this.props.user.token}
         })
         .then((response) => {
             if(response.data.status === 200){

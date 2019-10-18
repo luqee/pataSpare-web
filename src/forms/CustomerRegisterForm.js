@@ -31,9 +31,7 @@ function CustomerRegisterForm(props){
         passwordConfirm: '',
       }}
       onSubmit={(values, actions) => {
-        console.log(`submitiing`);
         let postData = {name: values.username, ...values ,role: `customer`};
-        console.log(postData);
         autoAPI.post(urls.userRegister, JSON.stringify(postData))
         .then(response => {
           if (response.data.status === 201) {

@@ -4,15 +4,12 @@ import {Container,Row, Col} from 'react-bootstrap';
 
 class CreatePart extends Component {
     render = () => {
-        console.log('createPart page');
-        console.log(this.props);
-        
         return (
             <Container>
                 <Row className="justify-content-md-center">
                     <Col lg={6}>
                     <div className="create-part">
-                    <CreatePartForm history={this.props.history} shop={this.props.shop}/>
+                    <CreatePartForm history={this.props.history} shop={this.props.shop} user={this.props.user}/>
                     </div>
                     </Col>
                 </Row>

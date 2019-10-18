@@ -3,6 +3,7 @@ import {Container, Row, Col, Table} from 'react-bootstrap';
 import autoAPI from '../../api/api';
 import Order from './Order';
 import Loader from '../Loader';
+import { UserContext } from '../../App';
 
 class Orders extends React.Component {
     constructor(props){
@@ -14,7 +15,7 @@ class Orders extends React.Component {
     }
     componentDidMount = () => {
         autoAPI.get(`/orders`, {
-            headers: {'Authorization': 'Bearer '+ localStorage.getItem('access_token')}
+            headers: {'Authorization': 'Bearer '+ this.props.user.token}
         })
         .then((response) => {
             if(response.data.status === 200){
@@ -70,5 +71,4 @@ class Orders extends React.Component {
         )
     }
 }
-
 export default Orders;

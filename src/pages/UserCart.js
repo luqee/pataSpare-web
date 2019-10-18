@@ -1,8 +1,9 @@
 import React from 'react';
-import {Redirect} from 'react-router-dom';
+import {Redirect, Link} from 'react-router-dom';
 import {Container, Row, Col, Table, Button} from 'react-bootstrap';
 import CartService from '../api/cart';
 import CartItem from '../components/CartItem';
+import { UserContext } from '../App';
 
 const cartService = new CartService();
 
@@ -10,19 +11,16 @@ class UserCart extends React.Component {
     constructor(props){
         super(props);
         this.state = {
-            cart: {},
+            cart: this.props.cartContext.cart,
             order: {},
             order_placed: false
         }
     }
-    componentDidMount = () => {
-        let cart = cartService.getCart();
-        this.setState({cart: cart});
-    }
     removeFromCart = (part_id) => {
-        cartService.removeFromCart(part_id, (cart) =>{
+        cartService.removeFromCart(part_id, this.state.cart, (cart) =>{
             if(cart){
                 this.setState({cart: cart})
+                this.props.cartContext.updateCart(cart)
             }
         });
     }
@@ -31,15 +29,17 @@ class UserCart extends React.Component {
             part_id: part_id,
             quantity: quantity
         }
-        cartService.addToCart(item, (cart) =>{
+        cartService.updateCart(item, this.state.cart, (cart) =>{
             if(cart){
                 this.setState({cart: cart})
+                this.props.cartContext.updateCart(cart)
             }
         });
     }
-    placeOrder = () => {
-        cartService.placeOrder((order) => {
+    placeOrder = (user) => {
+        cartService.placeOrder(user, this.state.cart, (order) => {
             if(order){
+                this.props.cartContext.updateCart({})
                 this.setState({order: order})
                 this.setState({order_placed: true})
             }
@@ -82,14 +82,22 @@ class UserCart extends React.Component {
                             {
                                 cart.items.map((item, index) => {
                                     return (
-                                        <CartItem key={index} item={item} removeFromCart={this.removeFromCart} />
+                                        <CartItem key={index} item={item} updateCart={this.updateCart} removeFromCart={this.removeFromCart} />
                                     )
                                 })
                             }
                             </tbody>
                         </Table>
                         <Row>
-                            <Button onClick={this.placeOrder}>Place Order</Button>
+                            <UserContext.Consumer>
+                                {props=>{
+                                    return Object.keys(props.user).length > 0 ? <Button onClick={()=>{this.placeOrder(props.user)}}>Place Order</Button>
+                                    :<Link to={`/user/login`}>
+                                        Login to place an order
+                                    </Link>
+                                }}
+                            </UserContext.Consumer>
+                            
                         </Row>
                         </div>
                     ):(

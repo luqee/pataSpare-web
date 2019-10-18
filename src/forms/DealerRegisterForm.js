@@ -39,9 +39,7 @@ function DealerRegisterForm(props){
         passwordConfirm: '',
       }}
       onSubmit={(values, actions) => {
-        console.log(`submitting`);
         let postData = {name: values.username, ...values ,role: `dealer`};
-        console.log(postData);
         autoAPI.post(urls.userRegister, JSON.stringify(postData))
         .then(response => {
           if (response.data.status === 201) {
@@ -80,7 +78,7 @@ function DealerRegisterForm(props){
           <Form.Group controlId="number">
             <Form.Label>Phone Number</Form.Label>
             <PhoneInput style={{
-                width: `100%`
+                width: '100%'
             }} defaultCountry={'ke'} value={values.number} onChange={(value) => {
                 setFieldValue('number', value)
             }} />

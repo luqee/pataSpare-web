@@ -50,12 +50,18 @@ function ManageShop(props){
                 <div id='page-wrap'>
                 <Switch>
                     <Route exact path={`${props.match.path}`} component={ShopDash}/>
-                    <Route exact path={`${props.match.path}/parts`} component={ShopInventory}/>
-                    <Route exact path={`${props.match.path}/orders`} component={ShopOrders}/>
-                    <Route exact path={`${props.match.path}/inquiries`} component={ShopInquiries}/>
+                    <Route exact path={`${props.match.path}/parts`} render={(routeProps)=>{
+                        return <ShopInventory shop={shop} {...routeProps} user={props.user} />
+                    }}/>
+                    <Route exact path={`${props.match.path}/orders`} render={(routeProps)=>{
+                        return <ShopOrders shop={shop} {...routeProps} user={props.user} />
+                    }}/>
+                    <Route exact path={`${props.match.path}/inquiries`} render={(routeProps)=>{
+                        return <ShopInquiries shop={shop} {...routeProps} user={props.user} />
+                    }}/>
                     <Route exact path={`${props.match.path}/inquiries/:id`} component={InquiryView}/>
                     <Route exact path={`${props.match.path}/parts/create`} render={(props)=>{
-                        return <CreatePart shop={shop} {...props} />
+                        return <CreatePart shop={shop} {...props} user={props.user}/>
                     }}/>
                 </Switch>
                 </div>

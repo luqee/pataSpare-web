@@ -9,6 +9,7 @@ import urls from '../config/config';
 import Rating from 'react-rating';
 import InquiryModal from '../components/InquiryModal';
 import autoAPI from '../api/api';
+import { UserContext } from '../App';
 
 class StoreView extends React.Component {
     constructor(props){
@@ -19,21 +20,21 @@ class StoreView extends React.Component {
             },
             review: '',
             rating: 0,
-            modalShow: false
+            modalShow: false,
+            sending: false
         }
     }
+    static contextType = UserContext
+    userContext = this.context
 
     componentDidMount = () => {
         if(!this.props.location.state){
+            console.log('shoul never happen');
             this.fetchShopDetails()
         }else{
             this.setState({shop: this.props.location.state.shop})
         }
     }
-    // const [modalShow, setModalShow] = useState(false)
-    // const [review, setReview] = useState('')
-    // const [rating, setRating] = useState(0)
-    // const [shop, setShop] = useState({})
     handleModal = (show) => {this.setState({modalShow: show})}
     handleChange = (event) => {this.setState({review: event.target.value})}
     setRating = (rating) => {this.setState({rating: rating})}
@@ -42,8 +43,12 @@ class StoreView extends React.Component {
         autoAPI.get(`/shops/${this.props.match.params.id}/`)
         .then((response) => {
             if (response.data.status === 200) {
-                console.log(response.data.data.shop);
+                let path = {
+                    pathname: this.props.location.pathname,
+                    state: {shop: response.data.data.shop}
+                }
                 this.setState({shop: response.data.data.shop})
+                this.props.history.push(path)
             }
         })
         .catch((error) => {
@@ -53,6 +58,7 @@ class StoreView extends React.Component {
 
     
     sendReview = () => {
+        this.setState({sending: true})
         let newReview = {
             rating: parseInt(this.state.rating),
             review: this.state.review,
@@ -60,12 +66,14 @@ class StoreView extends React.Component {
         }
         autoAPI.post('/reviews', JSON.stringify(newReview), {
             headers: {
-                'Authorization': 'Bearer '+ localStorage.getItem('access_token')
+                'Authorization': 'Bearer '+ this.userContext.user.token
             }
         })
         .then((response) => {
-            console.log(response);
             if (response.data.status === 201) {
+                this.setState({sending: false})
+                this.setState({review: ''})
+                this.setState({rating: 0})
                 this.fetchShopDetails()
             }
         })
@@ -164,9 +172,9 @@ class StoreView extends React.Component {
                                     fullSymbol={<FontAwesomeIcon icon={faStar} color={`gold`}/>}
                                     onClick={(value)=>{this.setRating(value)}}
                                 />
-                                <Form.Control as="textarea" rows="5" placeholder="Your review.." onChange={this.handleChange}/>
-                                <Button variant="secondary" onClick={this.sendReview}>
-                                Send
+                                <Form.Control disabled={this.state.rating === 0 ? true:false} as="textarea" rows="5" placeholder="Your review.." value={this.state.review} onChange={this.handleChange}/>
+                                <Button size={'sm'} variant="secondary" onClick={this.sendReview} disabled={this.state.sending?true:false}>
+                                {this.state.sending?'Sending...': 'Send'}
                                 </Button>
                                 </div>
                             
@@ -178,7 +186,7 @@ class StoreView extends React.Component {
                                                 return <ShopReview key={indx} review={review} />
                                             })
                                         ):(
-                                            <p>No Reviews</p>
+                                            <p></p>
                                         )
                                     }
                                 </div>

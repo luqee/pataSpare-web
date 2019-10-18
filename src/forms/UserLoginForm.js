@@ -23,13 +23,9 @@ class UserLoginForm extends Component {
     
     autoAPI.post(urls.userLogin, JSON.stringify(postData))
     .then((response) => {
-      
       if (response.data.status === 200) {
-        
         let responseData = response.data.data;
-        localStorage.setItem('access_token', responseData.access_token);
-        localStorage.setItem('user', JSON.stringify(responseData.user));
-        // localStorage.setItem('refresh_token', responseData.refresh_token);
+        this.props.userContext.updateUser(responseData.user)
         this.props.history.push(`/`);
       }
     })

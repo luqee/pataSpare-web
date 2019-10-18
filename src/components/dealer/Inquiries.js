@@ -3,6 +3,7 @@ import {Container, Row, Col} from 'react-bootstrap';
 import autoAPI from '../../api/api';
 import urls from '../../config/config';
 import InquiriesTable from '../InquiriesTable';
+import { UserContext } from '../../App';
 
 class Inquiries extends Component {
     constructor(props){
@@ -11,10 +12,12 @@ class Inquiries extends Component {
             inquiries: [],
         }
     }
+    static contextType = UserContext
+    userContext = this.context
 
     componentDidMount = () => {
         autoAPI.get(`${urls.dealerHome}/inquiries`, {
-            headers: {'Authorization': 'Bearer '+ localStorage.getItem('access_token')}
+            headers: {'Authorization': 'Bearer '+ this.props.user.token}
         })
         .then((response) => {
             

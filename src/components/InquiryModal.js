@@ -1,12 +1,13 @@
-import React, {useState} from 'react';
+import React, {useState, useContext} from 'react';
 import {Modal, Form, Button} from 'react-bootstrap';
 import autoAPI from '../api/api';
+import { UserContext } from '../App';
 
 function InquiryModal(props){
     const [query, handleQuery] = useState('');
     const shop = props.shop;
+    const userContext = useContext(UserContext)
     const sendInquiry = () => {
-        console.log('sending query');
         let req = {
             shop_id: shop.id,
             query: query
@@ -16,15 +17,12 @@ function InquiryModal(props){
         }
         autoAPI.post('/inquiries', JSON.stringify(req), {
             headers: {
-                'Authorization': 'Bearer '+ localStorage.getItem('access_token')
+                'Authorization': 'Bearer '+ userContext.user.token
             }
         })
         .then((response) => {
-            console.log(response);
             if (response.data.status === 201) {
-                console.log('inquired success');
                 let responseData = response.data.data;
-                console.log(responseData)
                 props.onHide();
             }
         })

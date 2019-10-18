@@ -5,6 +5,7 @@ import urls from '../config/config';
 import Select from 'react-select';
 import { Formik, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
+import { UserContext } from '../App';
 
 const SUPPORTED_FORMATS = [
     "image/jpg",
@@ -66,12 +67,8 @@ class CreatePartForm extends Component {
     componentDidMount = () => {
         autoAPI.get('/brands')
         .then((response) => {
-            console.log(response);
             if (response.status === 200){
-                console.log('Updating brands');
                 this.setState({brandSelectOptions: response.data.data.brands})
-                console.log(this.state.brandSelectOptions);
-                
             }
             
         })
@@ -81,12 +78,8 @@ class CreatePartForm extends Component {
         })
         autoAPI.get('/categories')
         .then((response) => {
-            console.log(response);
             if (response.status === 200){
-                console.log('Updating categories');
                 this.setState({tagsOptions: response.data.data.categories})
-                console.log(this.state.tagsOptions);
-                
             }
             
         })
@@ -107,7 +100,6 @@ class CreatePartForm extends Component {
         values.models.map((item) => models.push(item.value))
         let tags = Array.from(values.tags, (tag) => parseInt(tag.value))
         let years = Array.from(values.years, (year) => parseInt(year.value))
-        console.log(models);
         
         let partData = {
             title: values.name,
@@ -122,7 +114,6 @@ class CreatePartForm extends Component {
         }
         let formData = new FormData();
         for (let name in partData){
-            console.log(name, partData[name]);
             formData.set(name, partData[name])
         }
         formData.set('part_image', values.partImage)
@@ -130,11 +121,10 @@ class CreatePartForm extends Component {
         autoAPI.post(`${urls.dealerHome}/parts`, formData, {
             headers: {
                 'Content-Type': 'multipart/form-data',
-                'Authorization': 'Bearer '+ localStorage.getItem('access_token')
+                'Authorization': 'Bearer '+ this.props.user.token
             }
         })
         .then((response) => {
-            console.log(response);
             if (response.status === 201){
                 actions.setSubmitting(false);
                 let location ={
@@ -309,8 +299,6 @@ class CreatePartForm extends Component {
                         <Form.Group controlId="partImage">
                         <Form.Label>Part Image:</Form.Label>
                         <Form.Control type="file" placeholder="Upload image" onChange={(event) => {
-                            console.log(`setting image`);
-                            console.log(event.currentTarget.files[0]);
                             let thumbImg = document.getElementById(`thumb`);
                             let reader = new FileReader();
                             reader.onloadend = () => {

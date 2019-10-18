@@ -3,6 +3,7 @@ import autoAPI from '../../api/api';
 import urls from '../../config/config';
 import {Container, Row, Col} from 'react-bootstrap';
 import PartsTable from './PartsTable';
+import { UserContext } from '../../App';
 
 class Inventory extends Component {
     constructor(props){
@@ -11,10 +12,9 @@ class Inventory extends Component {
             parts: [],
         }
     }
-
     componentDidMount = () => {
         autoAPI.get(`${urls.dealerHome}/parts`, {
-            headers: {'Authorization': 'Bearer '+ localStorage.getItem('access_token')}
+            headers: {'Authorization': 'Bearer '+ this.props.user.token}
         })
         .then((response) => {
             

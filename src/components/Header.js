@@ -1,16 +1,12 @@
-import React, { Component } from 'react';
+import React, { Component, useContext } from 'react';
 import {withRouter} from 'react-router-dom';
-import AuthService from '../auth/auth';
 import Navbar from 'react-bootstrap/Navbar';
 import {Nav, NavDropdown, Container, Row, Col}from 'react-bootstrap';
 import autoAPI from '../api/api';
-import CartService from '../api/cart';
 import SearchBar from './SearchBar';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faShoppingCart, faUser } from '@fortawesome/free-solid-svg-icons';
-
-const autService = new AuthService();
-const cartService = new CartService();
+import {UserContext, CartContext} from '../App'
 
 class CartLink extends Component {
     constructor(props){
@@ -21,10 +17,11 @@ class CartLink extends Component {
             unlisten: ''
         }
     }
-
     componentDidMount = () => {
-        let cart = cartService.getCart();
-        if(cart !== {} && cart.items){
+        this.setCart(this.props.cart)
+    }
+    setCart = (cart) =>{
+        if(Object.keys(cart).length > 0 && cart.items){
             if(cart.items.length > 0){
                 this.setState({cart: cart});
                 let totalItems = cart.items.map((item) => {return item.quantity})
@@ -34,47 +31,55 @@ class CartLink extends Component {
                 this.setState({total: sumOfItems})
             }
         }
-        let unlisten = this.props.history.listen((location, action) =>{
-
-            let cart = cartService.getCart();
-            if(cart !== {} && cart.items){
-                if(cart.items.length > 0){
-                    this.setState({cart: cart});
-                    let totalItems = cart.items.map((item) => {return item.quantity})
-                    let sumOfItems =  totalItems.reduce((prev, next) => {
-                        return prev.quantity + next.quantity
-                    })
-                    this.setState({total: sumOfItems})
-                }
-            }
-        });
-        this.setState({unlisten: unlisten})
-
-    }
-    componentWillUnmount = () => {
-        this.state.unlisten();
     }
     render = () => {
-        const total = this.state.total
+        let total = this.state.total
+        let cart = this.props.cart
+        if(Object.keys(cart).length > 0 && cart.items){
+            if(cart.items.length > 0){
+                let totalItems = cart.items.map((item) => {return item.quantity})
+                let sumOfItems =  totalItems.reduce((prev, next) => {
+                    return prev + next
+                })
+                total = sumOfItems
+            }
+        }
         return (
             <Nav>
                 <Nav.Link href="/cart"><FontAwesomeIcon icon={faShoppingCart} /><span>{` (${total})`}</span></Nav.Link>
             </Nav>
+            
         )
     }
 }
 
 function AuthButton(props) {
-    const currentUser = autService.getCurrentUser();
+    const userContext = useContext(UserContext)
+    let currentUser = userContext.user
+    
     let roles = [];
-    if(currentUser === null){
-        roles = []
-    }else{
+    if(currentUser !== {} && currentUser.roles){
         roles = currentUser.roles.map((role) => {
             return role.name;
         });
     }
-    return autService.isAuthenticated() ? (
+    const signOut = ()=>{
+        autoAPI.post(`/auth/logout`,{},{
+            headers: {
+                'Authorization': 'Bearer '+ currentUser.token
+            }
+        })
+        .then((response) => {
+            if (response.status === 200){
+                userContext.updateUser({})
+                props.history.push("/")
+            }
+        })
+        .catch((error) => {
+            console.log(error);
+        })
+    }
+    return currentUser.id ? (
         <Nav>
             <NavDropdown title={<FontAwesomeIcon icon={faUser} />} id="basic-nav-dropdown">
                 {
@@ -89,8 +94,7 @@ function AuthButton(props) {
                 }}>
                     <a href="/#" onClick={(e) => {
                         e.preventDefault();
-                        console.log('Logging out');
-                        autService.signout(() => props.history.push("/"));
+                        signOut()
                     }} style={{
                         color: '#212529',
                         display: `block`,
@@ -135,7 +139,9 @@ class Header extends Component {
                 top: '0',
                 zIndex: '12'
             }}>
-                <Navbar bg="dark" variant='dark' expand="lg">
+                <Navbar bg="dark" variant='dark' expand="lg" style={{
+                    borderBottom: '5px solid #007bff'
+                }}>
                 <Navbar.Brand href="/">PataSpare</Navbar.Brand>
                 <Navbar.Toggle aria-controls="basic-navbar-nav" />
                 <Navbar.Collapse id="basic-navbar-nav">
@@ -154,7 +160,12 @@ class Header extends Component {
                     <Nav>
                     <Nav.Link href='/dealer/register'>Sell on PataSpare</Nav.Link>
                     </Nav>
-                    <CartLink history={this.props.history}/>
+                    <CartContext.Consumer>
+                        {value => {
+                            return <CartLink history={this.props.history} cart={value.cart}/>
+                        }}
+                    </CartContext.Consumer>
+                    
                     <AuthButton history={this.props.history} />
                 </Navbar.Collapse>
                 </Navbar>

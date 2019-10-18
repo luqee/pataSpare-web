@@ -15,6 +15,7 @@ import SearchResults from './SearchResults';
 import PartDetails from './PartDetails';
 import UserCart from './UserCart';
 import StoreView from './StoreView';
+import { CartContext } from '../App';
 
 class Main extends Component {
     constructor(props){
@@ -51,7 +52,15 @@ class Main extends Component {
                 <Route exact path='/shop' component={PartsShop}/>
                 <Route exact path='/stores' component={Stores}/>
                 <Route exact path='/stores/:id' component={StoreView}/>
-                <Route exact path='/cart' component={UserCart}/>
+                <Route exact path='/cart' render={(routeProps)=>{
+                    return (
+                        <CartContext.Consumer>
+                            {value =>{
+                                return <UserCart {...routeProps} cartContext={value}/>
+                            }}
+                        </CartContext.Consumer>
+                    )
+                }}/>
                 <Route exact path='/results' component={SearchResults}/>
                 <Route exact path='/dealer/register' component={DealerRegister}/>
                 <Route exact path='/customer/register' component={CustomerRegister}/>

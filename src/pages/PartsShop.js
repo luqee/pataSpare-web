@@ -19,7 +19,7 @@ class PartsShop extends Component {
                 this.setState({loading: false})
                 this.setState({parts: response.data.data.parts})
             }else {
-                console.log('Erroer fethis parts');
+                console.log('Error fetching parts');
                 this.setState({loading: false})
             }
         })

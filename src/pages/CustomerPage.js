@@ -4,11 +4,17 @@ import { Switch, Route } from 'react-router-dom'
 
 import CustomerDash from '../components/customer/CustomerDash';
 
-function CustomerPage({match}){
+function CustomerPage(props){
     
     return (
         <Switch>
-            <Route path={`${match.path}`} component={CustomerDash}/>
+            <Route path={`${props.match.path}`} render={
+                roteProps =>{
+                    return (
+                        <CustomerDash user={props.user} {...roteProps}/>
+                    )
+                }
+            }/>
         </Switch>
     );
 }

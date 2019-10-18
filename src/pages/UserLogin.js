@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import UserLoginForm from '../forms/UserLoginForm';
 import {Container, Row, Col} from 'react-bootstrap';
+import { UserContext } from '../App';
 
 class UserLogin extends Component {
     render(){
@@ -10,7 +11,12 @@ class UserLogin extends Component {
                     <Col lg={6}>
                     <div className='dealer-login'>
                         <p>Login to PataSpare</p>
-                        <UserLoginForm history={this.props.history} />
+                        <UserContext.Consumer>
+                            {value => {
+                                return <UserLoginForm userContext={value} history={this.props.history} />
+                            }}
+                        </UserContext.Consumer>
+                        
                     </div>
                     </Col>
                 </Row>

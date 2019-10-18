@@ -14,7 +14,6 @@ class SearchResults extends React.Component {
     }
     componentDidMount = () => {
         let results = this.props.location.state.results;
-        console.log(results);
         
         if(results.type === `searchables`){
             if(results.results.parts !== undefined && results.results.parts.length > 0){

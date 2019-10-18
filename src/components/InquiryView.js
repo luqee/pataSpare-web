@@ -1,45 +1,32 @@
-import React, {useState}from 'react'
-import {Container,Row, Col, Image, Button, Form} from 'react-bootstrap';
+import React, {useState, useContext}from 'react'
+import {Container,Row, Col, Image, Button, Form, Card} from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faClock } from '@fortawesome/free-solid-svg-icons';
 import autoAPI from '../api/api';
 import urls from '../config/config';
+import { UserContext } from '../App';
 
 function InquiryView(props){
     const [inquiry, setInquiry] = useState(props.location.state.inquiry)
     const [reply, setReply] = useState('')
+    let userContext = useContext(UserContext)
     let [submitting, setSubmitting] = useState(false)
     let totalReplies = 0
     if(inquiry.replies && inquiry.replies.length > 0){
         totalReplies = inquiry.replies.length
     }
-    const fetchInquiry = () => {
-        console.log(`fetching inquiry`);
-        autoAPI.get(`/inquiries/${inquiry.id}`,{
-            headers: {'Authorization': 'Bearer '+ localStorage.getItem('access_token')}
-        })
-        .then((response) => {
-            if(response.status === 200){
-                setInquiry(response.data.data.inquiry)
-            }
-        })
-        .catch((error) => {
-            console.log(error)
-        })
-    }
     const sendReply = (event) => {
         event.preventDefault()
         setSubmitting(true)
-        console.log(`sending inquiry reply`);
         autoAPI.post(`/inquiries/${inquiry.id}/replies`, JSON.stringify({reply: reply}), {
-            headers: {'Authorization': 'Bearer '+ localStorage.getItem('access_token')}
+            headers: {'Authorization': 'Bearer '+ userContext.user.token}
         })
         .then((response) => {
             if(response.status === 201){
                 setSubmitting(false)
                 setReply('')
-                fetchInquiry()
-                // setInquiry(response.data.data.inquiry)
+                setInquiry(response.data.data.inquiry)
+                // fetchInquiry()
             }
         })
         .catch((error) => {
@@ -78,7 +65,10 @@ function InquiryView(props){
             <p>{`Replies (${totalReplies})`}</p>
             <div className={`replies`}>
                 { totalReplies > 0 ? (
-                    inquiry.replies.map((reply)=>{return <div>{reply.reply}</div>})
+                    inquiry.replies.map((reply, indx)=>{return <Card key={indx}>
+                        <Card.Header>{`By: ${reply.user.name}`}</Card.Header>
+                        <Card.Body>{reply.reply}</Card.Body>
+                    </Card>})
                 ):<p></p>
                 }
             </div>

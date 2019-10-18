@@ -51,7 +51,8 @@ class Parts extends React.Component{
                 </Row>
                 <Row style={{
                     minHeight:'100px',
-                    justifyContent: `center`
+                    justifyContent: `center`,
+                    paddingBottom: '5px'
                 }}>
                     <Loader loading={this.state.loading} />
                 
@@ -77,7 +78,8 @@ class Parts extends React.Component{
                 </Row>
                 <Row style={{
                     minHeight:'100px',
-                    justifyContent: `center`
+                    justifyContent: `center`,
+                    paddingBottom: '5px'
                 }}>
                     <Loader loading={this.state.loading} />
                     {

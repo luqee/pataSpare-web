@@ -38,9 +38,13 @@ function CustomerDash(props){
             <div id='customer-view'>
             <Switch>
                 <Route exact path={`${props.match.path}`} component={Dash}/>
-                <Route exact path={`${props.match.path}/orders`} component={Orders}/>
+                <Route exact path={`${props.match.path}/orders`} render={routeProps =>{
+                    return <Orders {...routeProps} user={props.user} />
+                }}/>
                 <Route exact path={`${props.match.path}/orders/:id`} component={ViewOrder}/>
-                <Route exact path={`${props.match.path}/inquiries`} component={Inquiries}/>
+                <Route exact path={`${props.match.path}/inquiries`} render={routeProps =>{
+                    return <Inquiries {...routeProps} user={props.user} />
+                }}/>
                 <Route exact path={`${props.match.path}/inquiries/:id`} component={InquiryView}/>
                 <Route exact path={`${props.match.path}/account`} component={Account}/>
             </Switch>

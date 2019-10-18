@@ -11,6 +11,8 @@ import Rating from 'react-rating';
 import autoAPI from '../api/api';
 import Viewer from 'viewerjs'
 import 'viewerjs/dist/viewer.css';
+import { CartContext } from '../App';
+
 const cartService = new CartService();
 
 class PartDetails extends Component {
@@ -23,6 +25,7 @@ class PartDetails extends Component {
         }
         
     }
+    static contextType = CartContext
     componentDidMount = () => {
         if(this.props.location.state){
             this.setState({part: this.props.location.state.part})
@@ -54,9 +57,10 @@ class PartDetails extends Component {
             part_id: this.state.part.id,
             quantity: parseInt(this.state.quantity)
         }
-        cartService.addToCart(item_to_add, (added)=> {
-            if(added){
-                this.fetchPartDetails()
+        cartService.addToCart(item_to_add, this.context.cart, (cart)=> {
+            if(cart){
+                let cartContext = this.context
+                cartContext.updateCart(cart)
             }
         });
         

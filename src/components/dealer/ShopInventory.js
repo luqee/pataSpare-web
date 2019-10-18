@@ -4,6 +4,7 @@ import {Container, Row, Col, Button} from 'react-bootstrap';
 import PartsTable from './PartsTable';
 import autoAPI from '../../api/api';
 import urls from '../../config/config';
+import { UserContext } from '../../App';
 
 class ShopInventory extends Component{
     constructor(props){
@@ -14,7 +15,7 @@ class ShopInventory extends Component{
     }
     componentDidMount = () => {
         autoAPI.get(`${urls.dealerHome}/parts/shop/${this.props.match.params.id}`, {
-            headers: {'Authorization': 'Bearer '+ localStorage.getItem('access_token')}
+            headers: {'Authorization': 'Bearer '+ this.props.user.token}
         })
         .then((response) => {
             
@@ -30,10 +31,12 @@ class ShopInventory extends Component{
     }
     render = () => {
         let parts = this.state.parts
-        let shop = this.props.location.state.shop
-        console.log(this.props);
+        let shop = this.props.shop
         
-        let shopName = shop.name[0].toUpperCase() + shop.name.slice(1)
+        let shopName = ''
+        if(shop !== undefined){
+            shopName = shop.name[0].toUpperCase() + shop.name.slice(1)
+        }
         return (
             <Container>
                 <Row>

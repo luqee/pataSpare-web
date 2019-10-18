@@ -1,8 +1,9 @@
-import React, {useState} from 'react';
+import React, {useState, useContext} from 'react';
 import {Image, Button} from 'react-bootstrap';
 import urls from '../../config/config';
 import Select from 'react-select';
 import autoAPI from '../../api/api';
+import { UserContext } from '../../App';
 
 function OrderItem(props){
     let [item, setItem] = useState(props.item)
@@ -19,6 +20,7 @@ function OrderItem(props){
             label: item
         }
     })
+    const userContext = useContext(UserContext)
     const handleStatus = (selected) => {
         if(selected.value !== item.status){
             setStatusChanged(true)
@@ -33,7 +35,7 @@ function OrderItem(props){
             status: status.value
         }
         autoAPI.put(`/dealer/orders/${item.id}`, JSON.stringify(postData), {
-            headers: {'Authorization': 'Bearer '+ localStorage.getItem('access_token')}
+            headers: {'Authorization': 'Bearer '+ userContext.user.token}
         })
         .then((response) => {
             if (response.status === 200){

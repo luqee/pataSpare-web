@@ -1,25 +1,28 @@
-import React, {Component, useState} from 'react';
-import {Link} from 'react-router-dom';
+import React, {useState, useContext} from 'react';
+import {Link, withRouter} from 'react-router-dom';
 import {Container,Row, Col, Button, Card } from 'react-bootstrap';
 import urls from '../config/config';
 import CartService from '../api/cart';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faShoppingCart } from '@fortawesome/free-solid-svg-icons';
+import { CartContext } from '../App';
 
 const cartService = new CartService();
 
 function PartItem(props){
     let [part, setPart] = useState(props.part)
-
+    let [adding, setAdding] = useState(false)
+    let cartContext = useContext(CartContext)
     const addToCart = () => {
+        setAdding(true)
         let item_to_add  = {
             part_id: part.id,
             quantity: parseInt(1)
         }
-        cartService.addToCart(item_to_add, (added)=> {
-            if(added){
-                console.log('enable button');
-
+        cartService.addToCart(item_to_add, cartContext.cart, (cart)=> {
+            if(cart){
+                setAdding(false)
+                cartContext.updateCart(cart)
             }
         });
     }
@@ -42,7 +45,7 @@ function PartItem(props){
                     <Card.Text>
                     Price: {part.price}
                     </Card.Text>
-                    <Button onClick={addToCart}><FontAwesomeIcon icon={faShoppingCart} />  Add to cart</Button>
+                    <Button onClick={addToCart}><FontAwesomeIcon icon={faShoppingCart} /> {adding?'Adding':'Add to cart'} </Button>
                 </Card.Body>
                 </Card>
                 </Col>
@@ -52,4 +55,4 @@ function PartItem(props){
 
 }
 
-export default PartItem;
+export default withRouter(PartItem);

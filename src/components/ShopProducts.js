@@ -12,9 +12,6 @@ class ShopProducts extends Component {
         }
     }
     componentDidMount = () => {
-        console.log(`ShopProducts history`);
-        console.log(this.props);
-        
         autoAPI.get(`/parts?shop_id=${this.props.shop.id}`)
         .then((response) => {
             if (response.data.status === 200){

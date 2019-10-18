@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import autoAPI from '../../api/api';
 import {Container, Row, Col} from 'react-bootstrap';
 import InquiriesTable from '../InquiriesTable';
+import { UserContext } from '../../App';
 
 class Inquiries extends Component {
     constructor(props){
@@ -10,10 +11,9 @@ class Inquiries extends Component {
             inquiries: [],
         }
     }
-
     componentDidMount = () => {
         autoAPI.get(`/inquiries`, {
-            headers: {'Authorization': 'Bearer '+ localStorage.getItem('access_token')}
+            headers: {'Authorization': 'Bearer '+ this.props.user.token}
         })
         .then((response) => {
             if (response.data.status === 200){

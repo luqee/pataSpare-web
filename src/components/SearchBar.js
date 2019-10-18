@@ -21,7 +21,6 @@ class SearchBar extends React.Component {
     componentDidMount = () => {
         autoAPI.get('/brands')
         .then((response) => {
-            console.log(response);
             if (response.status === 200){
                 this.setState({brandOptions: response.data.data.brands})
             }
@@ -79,7 +78,7 @@ class SearchBar extends React.Component {
                         term: this.state.searchTerm
                     }
                 }
-                this.setState({brand: null, model: null, year: null, searchTerm: null})
+                this.setState({brand: null, model: null, year: null, searchTerm: ''})
                 this.props.history.push('')
                 this.props.history.push(path)
             }
@@ -111,7 +110,8 @@ class SearchBar extends React.Component {
         })
         return <Container fluid>
             <Form inline style={{
-                    justifyContent: 'center'
+                    justifyContent: 'center',
+                    paddingTop: '5px ' 
                 }}>
                 <Form.Row style={{
                     width: '80%',

@@ -2,6 +2,7 @@ import React from 'react';
 import {Container, Row, Col, Table} from 'react-bootstrap';
 import OrderItem from './OrderItem';
 import autoAPI from '../../api/api';
+import { UserContext } from '../../App';
 
 class ViewOrder extends React.Component{
     constructor(props){
@@ -10,12 +11,14 @@ class ViewOrder extends React.Component{
             order: null
         }
     }
+    static contextType = UserContext
+    userContext = this.context
     componentDidMount = () =>{
         if(this.props.location.state !== undefined){
             this.setState({order: this.props.location.state.order})
         }else{
             autoAPI.get(`/orders/${this.props.match.params.id}`, {
-                headers: {'Authorization': 'Bearer '+ localStorage.getItem('access_token')}
+                headers: {'Authorization': 'Bearer '+ this.userContext.user.token}
             })
             .then((response) => {
                 if(response.data.status === 200){

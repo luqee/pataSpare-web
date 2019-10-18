@@ -6,6 +6,7 @@ import autoAPI from '../api/api';
 import urls from '../config/config';
 import { Formik, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
+import { UserContext } from '../App';
 
 const rePhoneNumber = /^\+[0-9]?()[0-9](\s|\S)(\d[0-9]{9})$/;
 // const FILE_SIZE = 16 * 1024;
@@ -48,9 +49,11 @@ class CreateShopForm extends Component {
             autoComplete: ''
         }
     }
+    static contextType = UserContext
+    userContext = this.context
+
     placeChanged = () => {
         let place = this.state.autoComplete.getPlace();
-        console.log(place);
         let pos = {
             lat: place.geometry.location.lat(),
             lng: place.geometry.location.lng()
@@ -107,7 +110,7 @@ class CreateShopForm extends Component {
             name: values.name,
             number: values.number,
             description: values.description,
-            location: values.location,
+            location: this.state.location,
             latitude: this.state.marker.getPosition().lat(),
             longitude: this.state.marker.getPosition().lng()
         }
@@ -120,7 +123,7 @@ class CreateShopForm extends Component {
         autoAPI.post(`${urls.dealerHome}/shops`, formData, {
             headers: {
                 'Content-Type': 'multipart/form-data',
-                'Authorization': 'Bearer '+ localStorage.getItem('access_token')
+                'Authorization': 'Bearer '+ this.props.user.token
             }
         })
         .then((response) => {
@@ -145,7 +148,7 @@ class CreateShopForm extends Component {
                     number: '',
                     description: '',
                     shopImage: null,
-                    location: '',
+                    location: this.state.location,
                 }}
                 onSubmit={this.createShop}
                 render={({
@@ -172,7 +175,7 @@ class CreateShopForm extends Component {
                         <Form.Group controlId="number">
                         <Form.Label>Business Number:</Form.Label>
                         <PhoneInput style={{
-                            width: `100%`
+                            width: '100%'
                         }} defaultCountry={'ke'} value={values.number} onChange={(value) => {
                             setFieldValue('number', value)
                         }} />
@@ -198,8 +201,6 @@ class CreateShopForm extends Component {
                         <Form.Group controlId="shopImage">
                         <Form.Label>Shop Image:</Form.Label>
                         <Form.Control type="file" placeholder="Upload shop image" onChange={(event) => {
-                            console.log(`setting image`);
-                            console.log(event.currentTarget.files[0]);
                             let thumbImg = document.getElementById(`thumb`);
                             let reader = new FileReader();
                             reader.onloadend = () => {
@@ -224,9 +225,7 @@ class CreateShopForm extends Component {
                         </Form.Group>
                         <Form.Group controlId="location">
                         <Form.Label>Location:</Form.Label>
-                        <Form.Control type={`text`} placeholder="Where is your business?" onChange={(value)=>{
-                            setFieldValue('location', this.state.autoComplete.getPlace().name)
-                        }} />
+                        <Form.Control type={`text`} placeholder="Where is your business?" onChange={handleChange} />
                         <ErrorMessage name="location" render={(msg) => {
                             return <Form.Control.Feedback type="invalid" style={{
                                 display: `block`

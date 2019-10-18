@@ -39,8 +39,6 @@ class ShopLocation extends Component {
               lat: position.coords.latitude,
               lng: position.coords.longitude
             };
-            console.log('my posiyion:');
-            console.log(pos);
             this.setState({deviceLocation: pos});
             var directionsService = new window.google.maps.DirectionsService();
             var directionsDisplay = new window.google.maps.DirectionsRenderer();
@@ -52,7 +50,6 @@ class ShopLocation extends Component {
             }
             directionsService.route(directionRequest, (response, status) =>{
                 if (status === 'OK') {
-                    console.log('showing directions');
                     directionsDisplay.setDirections(response);
                   } else {
                     window.alert('Directions request failed due to ' + status);
