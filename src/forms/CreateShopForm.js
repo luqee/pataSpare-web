@@ -76,7 +76,6 @@ class CreateShopForm extends Component {
     initMap = () => {
         let locationInput = document.getElementById('location');
         let options = {
-            types: ['(cities)'],
             componentRestrictions: {country: 'ke'}
           };
         let autocomplete = new window.google.maps.places.Autocomplete(locationInput, options);

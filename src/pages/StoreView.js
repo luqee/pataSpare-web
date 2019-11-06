@@ -1,4 +1,5 @@
-import React from 'react'
+import React from 'react';
+import {Link} from 'react-router-dom';
 import {Container, Row, Col, Tab, Nav, Form, Button} from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMapMarker, faPhone, faStar, faQuestionCircle } from '@fortawesome/free-solid-svg-icons';
@@ -24,9 +25,6 @@ class StoreView extends React.Component {
             sending: false
         }
     }
-    static contextType = UserContext
-    userContext = this.context
-
     componentDidMount = () => {
         if(!this.props.location.state){
             console.log('shoul never happen');
@@ -66,7 +64,7 @@ class StoreView extends React.Component {
         }
         autoAPI.post('/reviews', JSON.stringify(newReview), {
             headers: {
-                'Authorization': 'Bearer '+ this.userContext.user.token
+                'Authorization': 'Bearer '+ this.props.user.token
             }
         })
         .then((response) => {
@@ -109,11 +107,24 @@ class StoreView extends React.Component {
                         backgroundImage: `url(${urls.hostRoot}/${shop.shop_image})`,
                         backgroundSize: 'cover',
                         }}>
-                        <Button style={{
-                            position: 'absolute',
-                            bottom: '10px',
-                            right: '10px'
-                        }} onClick={() => {this.handleModal(true)}}><FontAwesomeIcon icon={faQuestionCircle} />  Inquiry</Button>
+                            {
+                                Object.keys(this.props.user).length > 0? <Button style={{
+                                    position: 'absolute',
+                                    bottom: '10px',
+                                    right: '10px'
+                                }} onClick={() => {this.handleModal(true)}}><FontAwesomeIcon icon={faQuestionCircle} />  Inquiry</Button>
+                                :<Link style={{
+                                    position: 'absolute',
+                                    bottom: '10px',
+                                    right: '10px'
+                                }} to={{
+                                    pathname:`/user/login`,
+                                    state: {from: this.props.location.pathname}
+                                }}>
+                                    Login to Inquire
+                                </Link>
+                            }
+                        
                     </div>
                     </Col>
                     <Col style={{
@@ -165,19 +176,27 @@ class StoreView extends React.Component {
                         </Tab.Pane>
                         <Tab.Pane eventKey="reviews">
                             <div>
-                                <div>
-                                <Rating
-                                    initialRating={this.state.rating}
-                                    emptySymbol={<FontAwesomeIcon icon={faStar} />}
-                                    fullSymbol={<FontAwesomeIcon icon={faStar} color={`gold`}/>}
-                                    onClick={(value)=>{this.setRating(value)}}
-                                />
-                                <Form.Control disabled={this.state.rating === 0 ? true:false} as="textarea" rows="5" placeholder="Your review.." value={this.state.review} onChange={this.handleChange}/>
-                                <Button size={'sm'} variant="secondary" onClick={this.sendReview} disabled={this.state.sending?true:false}>
-                                {this.state.sending?'Sending...': 'Send'}
-                                </Button>
+                            {
+                                Object.keys(this.props.user).length > 0 ? <div className="userReview">
+                                    <Rating
+                                        initialRating={this.state.rating}
+                                        emptySymbol={<FontAwesomeIcon icon={faStar} />}
+                                        fullSymbol={<FontAwesomeIcon icon={faStar} color={`gold`}/>}
+                                        onClick={(value)=>{this.setRating(value)}}
+                                    />
+                                    <Form.Control disabled={this.state.rating === 0 ? true:false} as="textarea" rows="5" placeholder="Your review.." value={this.state.review} onChange={this.handleChange}/>
+                                    <Button size={'sm'} variant="secondary" onClick={this.sendReview} disabled={this.state.sending?true:false}>
+                                    {this.state.sending?'Sending...': 'Send'}
+                                    </Button>
                                 </div>
-                            
+                                :
+                                <Link to={{
+                                    pathname: `/user/login`,
+                                    state: {from: this.props.history.location.pathname}
+                                }}>
+                                    Login to review store
+                                </Link>
+                            }
                                 <div className={`reviews`}>
                                     <p>Reviews</p>
                                     {

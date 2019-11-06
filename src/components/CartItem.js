@@ -4,14 +4,14 @@ import urls from '../config/config';
 
 function CartItem(props){
     let cartItem = props.item
-    let [qty, setQty] = useState(cartItem.quantity)
+    let [qty, setQty] = useState(parseInt(cartItem.quantity))
     let [qtyChanged, setQtyChanged] = useState(false)
     let [updating, setUpdating] = useState(false)
     let [removing, setRemoving] = useState(false)
 
     const handleQty = (event) => {
         let newValue = parseInt(event.target.value)
-        if(newValue !== cartItem.quantity){
+        if(newValue !== qty){
             setQtyChanged(true)
         }else{
             setQtyChanged(false)

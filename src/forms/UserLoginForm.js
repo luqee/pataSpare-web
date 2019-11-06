@@ -10,6 +10,8 @@ class UserLoginForm extends Component {
       email: '',
       password: ''
     }
+    console.log(props);
+    
   }
   handleEmail = (event) => {
     this.setState({email: event.target.value});
@@ -20,18 +22,24 @@ class UserLoginForm extends Component {
   loginUser = (event) => {
     event.preventDefault();
     let postData = {...this.state};
-    
+
     autoAPI.post(urls.userLogin, JSON.stringify(postData))
     .then((response) => {
       if (response.data.status === 200) {
         let responseData = response.data.data;
         this.props.userContext.updateUser(responseData.user)
-        this.props.history.push(`/`);
+        this.props.userContext.updateToken(responseData.user.token)
+        if(this.props.history.location.state !== undefined){
+          this.props.history.push(this.props.history.location.state.from)
+        }else{
+          this.props.history.push(`/`);
+        }
+        
       }
     })
     .catch((error) => {
       console.log(error);
-      
+
     });
   }
   render() {

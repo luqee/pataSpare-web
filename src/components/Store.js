@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import {Container, Row, Col, Card, Button} from 'react-bootstrap';
 import urls from '../config/config';
 import {Link} from 'react-router-dom';
@@ -6,9 +6,11 @@ import Rating from 'react-rating';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faStar, faMapMarker, faQuestionCircle, faShoppingBag, faPhone } from '@fortawesome/free-solid-svg-icons';
 import InquiryModal from './InquiryModal';
+import { UserContext } from '../App';
 
 function Store(props){
     let [modalShow, setModalShow] = useState(false)
+    let userContext = useContext(UserContext)
     const shop = props.shop;
     let shopRating = 0
     if(shop.reviews.length > 0 ){
@@ -41,8 +43,16 @@ function Store(props){
                     top: '10px',
                     right: '10px'
                 }}>
-                    <Button size={'sm'} onClick={()=> setModalShow(true)}><FontAwesomeIcon icon={faQuestionCircle}/>{`  Inquire`}</Button>
-                    <span>'  '</span>
+                    {
+                        Object.keys(userContext.user).length > 0 ? <Button size={'sm'} onClick={()=> setModalShow(true)}><FontAwesomeIcon icon={faQuestionCircle}/>{`  Inquire`}</Button>
+                        :<Link to={{
+                            pathname:`/user/login`,
+                            state: {from: props.location.pathname}
+                        }}>
+                            Login to Inquire
+                        </Link>
+                    }
+                    &nbsp;
                     <Link to={{
                         pathname: `/stores/${shop.id}`,
                         state: {shop: shop}

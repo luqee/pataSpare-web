@@ -92,7 +92,10 @@ class UserCart extends React.Component {
                             <UserContext.Consumer>
                                 {props=>{
                                     return Object.keys(props.user).length > 0 ? <Button onClick={()=>{this.placeOrder(props.user)}}>Place Order</Button>
-                                    :<Link to={`/user/login`}>
+                                    :<Link to={{
+                                        pathname: `/user/login`,
+                                        state: {from: this.props.location.pathname}
+                                    }}>
                                         Login to place an order
                                     </Link>
                                 }}

@@ -53,7 +53,7 @@ class Stores extends React.Component {
                         (!this.state.loading && this.state.shops.length > 0) ? (
                             this.state.shops.map((shop, index) => {
                                 while (index < 3) {
-                                    return (<Col key={index} lg={4}><Store key={shop.id} shop={shop} /></Col> )
+                                    return (<Col key={index} lg={4}><Store key={shop.id} shop={shop} location={this.props.location} /></Col> )
                                 }
                             })
                         ):(

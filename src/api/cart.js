@@ -1,6 +1,17 @@
 import autoApi from './api';
 
 class CartService {
+    getCart = (cart, cb)=>{
+        autoApi.get(`/carts/${cart.id}`)
+        .then((response) => {
+            if (response.data.status === 200){
+                cb(response.data.data.cart);
+            }
+        }).catch((error) => {
+            console.log(error);
+            cb(false);
+        });   
+    }
     addToCart = (item, cart, cb) => {
         let requestData = {...item}
         if(cart.id !== undefined){
