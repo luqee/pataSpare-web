@@ -15,7 +15,7 @@ class LandingPage extends Component {
                 <Categories />
                 <Parts />
                 <Promotion />
-                <Stores />
+                <Stores location={this.props.location}/>
                 <Brands />
                 <Contact />
             </div>

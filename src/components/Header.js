@@ -24,7 +24,7 @@ class CartLink extends Component {
         if(Object.keys(cart).length > 0 && cart.items){
             if(cart.items.length > 0){
                 this.setState({cart: cart});
-                let totalItems = cart.items.map((item) => {return item.quantity})
+                let totalItems = cart.items.map((item) => {return parseInt(item.quantity)})
                 let sumOfItems =  totalItems.reduce((prev, next) => {
                     return prev + next
                 })
@@ -35,15 +35,6 @@ class CartLink extends Component {
     render = () => {
         let total = this.state.total
         let cart = this.props.cart
-        if(Object.keys(cart).length > 0 && cart.items){
-            if(cart.items.length > 0){
-                let totalItems = cart.items.map((item) => {return item.quantity})
-                let sumOfItems =  totalItems.reduce((prev, next) => {
-                    return prev + next
-                })
-                total = sumOfItems
-            }
-        }
         return (
             <Nav>
                 <Nav.Link href="/cart"><FontAwesomeIcon icon={faShoppingCart} /><span>{` (${total})`}</span></Nav.Link>

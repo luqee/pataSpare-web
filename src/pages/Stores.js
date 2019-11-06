@@ -70,7 +70,7 @@ class Stores extends React.Component {
                     {
                         (!this.state.loading && this.state.shops.length > 0) ? (
                             this.state.shops.map((shop, index) => {
-                                return (<Col key={index} lg={4}><Store key={index} shop={shop} /></Col> )
+                                return (<Col key={index} lg={4}><Store key={index} shop={shop} location={this.props.location} /></Col> )
                             })
                         ):( <p>NO SHOPS</p>
                         )

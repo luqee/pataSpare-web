@@ -1,20 +1,65 @@
 import React, { Component } from 'react';
-import { BrowserRouter } from 'react-router-dom';
 import Header from './components/Header';
 import Main from './pages/Main';
 import Footer from './components/Footer';
 import { Container } from 'react-bootstrap';
+import GA from './config/GoogleAnalytics';
+import CartService from './api/cart';
+import autoAPI from './api/api';
 
 export const UserContext = React.createContext({})
+export const tokenContext = React.createContext('')
 export const CartContext = React.createContext({})
+
+const cartService = new CartService();
 
 class App extends Component {
   constructor(props){
     super(props)
     this.state = {
         user: localStorage.getItem('user')?JSON.parse(localStorage.getItem('user')):{},
+        token: localStorage.getItem('token')?JSON.parse(localStorage.getItem('token')):{},
         cart: localStorage.getItem('cart')?JSON.parse(localStorage.getItem('cart')):{}
     }
+  }
+
+  componentDidMount = ()=>{
+    if(Object.keys(this.state.cart).length > 0){
+      cartService.getCart(this.state.cart, (cart) => {
+        if(cart){
+          this.updateCart(cart)
+        }else{
+          this.updateCart({})
+        }
+      })
+    }
+    if(Object.keys(this.state.user).length > 0){
+      autoAPI.get('/auth/user', {
+        headers: {'Authorization': 'Bearer '+ this.state.token}
+      })
+      .then((response) => {
+          if (response.data.status === 200){
+              let user = response.data.data.user
+              user['token'] = this.state.token
+              this.updateUser(user)
+          }else{
+            this.updateUser({})
+
+          }
+      })
+      .catch((error) => {
+          this.updateUser({})
+      })
+    }
+
+  }
+  updateToken = (token)=>{
+    if(token !== ''){
+      localStorage.setItem('token', JSON.stringify(token))
+    }else{
+      localStorage.removeItem('token')
+    }
+    this.setState({token: token})
   }
 
   updateUser = (user)=>{
@@ -36,10 +81,10 @@ class App extends Component {
 
   render() {
       let user = this.state.user
+      let token = this.state.token
       let cart = this.state.cart
     return (
-      <BrowserRouter>
-      <UserContext.Provider value={{user: user, updateUser: this.updateUser}} >
+      <UserContext.Provider value={{user: user, updateUser: this.updateUser, updateToken: this.updateToken, token: token}} >
         <CartContext.Provider value={{cart: cart, updateCart: this.updateCart}}>
         <Container fluid className="App" style={{
             padding: '0',
@@ -47,13 +92,13 @@ class App extends Component {
             display: 'flex',
             flexDirection: 'column'
         }}>
+          { GA.init() && <GA.RouteTracker /> }
             <Header />
             <Main />
             <Footer />
         </Container>
         </CartContext.Provider>
       </UserContext.Provider>
-      </BrowserRouter>
     );
   }
 }
