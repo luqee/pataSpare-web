@@ -26,12 +26,12 @@ function PartsTable(props){
                         <td>{part.price}</td>
                         <td>{part.stock}</td>
                         <td>
-                            {/* <Link to={{
+                            <Link to={{
                                 pathname: '/dealer/inventory/'+part.id,
                                 state: {part: part}
                             }}>
                             <Button>View</Button>
-                            </Link> */}
+                            </Link>
                         </td>
                     </tr>
                     })

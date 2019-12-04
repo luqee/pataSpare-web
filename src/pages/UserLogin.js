@@ -10,7 +10,6 @@ class UserLogin extends Component {
                 <Row className="justify-content-md-center">
                     <Col lg={6}>
                     <div className='dealer-login'>
-                        <p>Login to PataSpare</p>
                         <UserContext.Consumer>
                             {value => {
                                 return <UserLoginForm userContext={value} history={this.props.history} />

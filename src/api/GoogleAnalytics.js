@@ -57,6 +57,12 @@ const init = (options = {}) => {
 
     return isGAEnabled
 }
+const recordButton = () =>{
+    ReactGA.event({
+        category: 'Number',
+        action: 'View Phone Number'
+    })
+}
 export default {
     GoogleAnalytics,
     RouteTracker,

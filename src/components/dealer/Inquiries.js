@@ -12,8 +12,6 @@ class Inquiries extends Component {
             inquiries: [],
         }
     }
-    static contextType = UserContext
-    userContext = this.context
 
     componentDidMount = () => {
         autoAPI.get(`${urls.dealerHome}/inquiries`, {

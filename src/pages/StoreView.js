@@ -10,7 +10,6 @@ import urls from '../config/config';
 import Rating from 'react-rating';
 import InquiryModal from '../components/InquiryModal';
 import autoAPI from '../api/api';
-import { UserContext } from '../App';
 
 class StoreView extends React.Component {
     constructor(props){

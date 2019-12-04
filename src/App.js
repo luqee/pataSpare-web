@@ -3,7 +3,7 @@ import Header from './components/Header';
 import Main from './pages/Main';
 import Footer from './components/Footer';
 import { Container } from 'react-bootstrap';
-import GA from './config/GoogleAnalytics';
+import GA from './api/GoogleAnalytics';
 import CartService from './api/cart';
 import autoAPI from './api/api';
 

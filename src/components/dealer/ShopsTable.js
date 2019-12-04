@@ -27,7 +27,13 @@ function ShopsTable(props){
                             pathname: `${props.match.url}/manage/${shop.id}`,
                             state: {shop: shop}
                         }}>
-                                <Button>MANAGE</Button>
+                                <Button>Manage</Button>
+                            </Link>
+                            <Link to={{
+                                pathname: `${props.match.url}/${shop.id}`,
+                                state: {shop: shop}
+                            }}>
+                                <Button>View</Button>
                             </Link>
                         </td>
                     </tr>

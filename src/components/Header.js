@@ -1,12 +1,14 @@
-import React, { Component, useContext } from 'react';
+import { Component, useContext } from 'react';
 import {withRouter} from 'react-router-dom';
 import Navbar from 'react-bootstrap/Navbar';
-import {Nav, NavDropdown, Container, Row, Col}from 'react-bootstrap';
-import autoAPI from '../api/api';
+import {Nav, NavDropdown, Container}from 'react-bootstrap';
+import autoAPI, { Mobile } from '../api/api';
 import SearchBar from './SearchBar';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faShoppingCart, faUser } from '@fortawesome/free-solid-svg-icons';
+import { faShoppingCart, faUser, faSearch } from '@fortawesome/free-solid-svg-icons';
 import {UserContext, CartContext} from '../App'
+/** @jsx jsx */
+import { jsx } from '@emotion/core'
 
 class CartLink extends Component {
     constructor(props){
@@ -34,7 +36,6 @@ class CartLink extends Component {
     }
     render = () => {
         let total = this.state.total
-        let cart = this.props.cart
         return (
             <Nav>
                 <Nav.Link href="/cart"><FontAwesomeIcon icon={faShoppingCart} /><span>{` (${total})`}</span></Nav.Link>
@@ -134,6 +135,7 @@ class Header extends Component {
                     borderBottom: '5px solid #007bff'
                 }}>
                 <Navbar.Brand href="/">PataSpare</Navbar.Brand>
+                <Mobile><FontAwesomeIcon icon={faSearch} /></Mobile>
                 <Navbar.Toggle aria-controls="basic-navbar-nav" />
                 <Navbar.Collapse id="basic-navbar-nav">
                     <Nav className="mr-auto">
