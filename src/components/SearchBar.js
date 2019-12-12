@@ -1,5 +1,5 @@
 import React from 'react';
-import {Container, Row, Col, Form, Button} from 'react-bootstrap';
+import {Container, Col, Form, Button} from 'react-bootstrap';
 import autoAPI from '../api/api';
 import Select from 'react-select';
 /** @jsx jsx */
@@ -110,7 +110,7 @@ class SearchBar extends React.Component {
                 label: year.year
             }
         })
-        return <Container fluid css={css`
+        return <Container id="searchBar" fluid css={css`
             @media (max-width: 768px){
                 display: none;
             }

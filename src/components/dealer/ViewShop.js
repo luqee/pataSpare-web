@@ -1,11 +1,10 @@
 import React, { Component } from 'react';
-// import EditShopForm from '../../forms/EditShopForm';
 import PhoneInput from 'react-phone-input-2';
 import 'react-phone-input-2/dist/style.css'
 import autoAPI from '../../api/api';
 import urls from '../../config/config';
 import { Formik, ErrorMessage } from 'formik';
-import ShopSchema from '../../forms/schemas/ShopSchema'
+import EditShopSchema from '../../forms/schemas/EditShopSchema';
 import {Container,Row, Col, Form, Button, Image} from 'react-bootstrap';
 
 class ViewShop extends Component {
@@ -23,7 +22,7 @@ class ViewShop extends Component {
         if (!window.google) {
             var s = document.createElement('script');
             s.type = 'text/javascript';
-            s.src = `https://maps.googleapis.com/maps/api/js?key=${process.env.REACT_APP_GOOGLE_KEY}&libraries=places&callback=initMap`;
+            s.src = `https://maps.googleapis.com/maps/api/js?key=${process.env.REACT_APP_GOOGLE_KEY}&libraries=places`;
             var x = document.getElementsByTagName('script')[0];
             x.parentNode.insertBefore(s, x);
             s.addEventListener('load', e => {
@@ -32,27 +31,6 @@ class ViewShop extends Component {
         } else {
             this.initMap();
         }
-    }
-    placeChanged = () => {
-        let place = this.state.autoComplete.getPlace();
-        let pos = {
-            lat: place.geometry.location.lat(),
-            lng: place.geometry.location.lng()
-        }
-        this.setState({newLocation: place.name})
-        this.state.map.setCenter(pos)
-        this.state.map.setZoom(15)
-        if(this.state.marker === ''){
-            let defaultMarker = new window.google.maps.Marker({
-                position: pos,
-                map: this.state.map,
-                draggable: true
-            })
-            this.setState({marker: defaultMarker})
-        }else{
-            this.state.marker.setPosition(pos)
-        }
-        
     }
     initMap = () => {
         let locationInput = document.getElementById('location');
@@ -63,13 +41,35 @@ class ViewShop extends Component {
         autocomplete.setFields(['name', 'geometry.location']);
         autocomplete.addListener('place_changed', this.placeChanged);
         this.setState({autoComplete: autocomplete});
-        let mapInput = new window.google.maps.Map(document.getElementById('map'), {
-            center: {lat: this.state.shop.latitude, lng: this.state.shop.longitude},
-            zoom: 15
-        });
-        
+        let mapInput = new window.google.maps.Map(document.getElementById('map'));
+        let shopLocation = {lat: parseFloat(this.state.shop.latitude), lng: parseFloat(this.state.shop.longitude)}
         this.setState({map: mapInput});
+        this.showShopLocation(shopLocation, mapInput)
     }
+    showShopLocation = (pos, map) => {
+        map.setCenter(pos)
+        map.setZoom(15)
+        if(this.state.marker === ''){
+            let defaultMarker = new window.google.maps.Marker({
+                position: pos,
+                map: map,
+                draggable: true
+            })
+            this.setState({marker: defaultMarker})
+        }else{
+            this.state.marker.setPosition(pos)
+        }
+    }
+    placeChanged = () => {
+        let place = this.state.autoComplete.getPlace();
+        let pos = {
+            lat: place.geometry.location.lat(),
+            lng: place.geometry.location.lng()
+        }
+        this.setState({newLocation: place.name})
+        this.showShopLocation(pos, this.state.map)
+    }
+    
     showThumb = (event) =>{
         let thumbImg = document.getElementById(`thumb`);
         let reader = new FileReader();
@@ -105,14 +105,17 @@ class ViewShop extends Component {
             formData.set('shop_image', values.shopImage)
         }
         
-        autoAPI.put(`${urls.dealerHome}/shops/${this.state.shop.id}`, formData, {
+        autoAPI.post(`${urls.dealerHome}/shops/${this.state.shop.id}`, formData, {
             headers: {
                 'Content-Type': 'multipart/form-data',
-                'Authorization': 'Bearer '+ this.props.user.token
+                'Authorization': 'Bearer '+ this.props.userToken
             }
         })
         .then((response) => {
-            if (response.status === 201){
+            console.log('after update');
+            console.log(response);
+            
+            if (response.status === 200){
                 actions.setSubmitting(false);
                 this.props.history.push(`${urls.dealerHome}/shops`);
             }
@@ -137,7 +140,7 @@ class ViewShop extends Component {
                 <Row className="justify-content-md-center">
                     <Col lg={7}>
                     <Formik
-                validationSchema={ShopSchema}
+                validationSchema={EditShopSchema}
                 initialValues={initialValues}
                 onSubmit={this.editShop}
                 render={({
@@ -191,20 +194,12 @@ class ViewShop extends Component {
                         <Form.Label>Shop Image:</Form.Label>
                         <Form.Control type="file" placeholder="Upload shop image" onChange={(event) => {
                             this.showThumb(event)
-                            // let thumbImg = document.getElementById(`thumb`);
-                            // let reader = new FileReader();
-                            // reader.onloadend = () => {
-                            //     thumbImg.src = reader.result;
-                            //     thumbImg.height = 200
-                            //     thumbImg.width = 200
-                            // };
-                            // reader.readAsDataURL(event.currentTarget.files[0]);
                             setFieldValue("shopImage", event.currentTarget.files[0]);
                             
                         }}/>
-                        <a target="_blank" href={shop.shop_image}>
+                        <a target="_blank" href={`${urls.hostRoot}/${shop.shop_image}`} rel="noopener noreferrer">
                         <Image
-                            id={`thumb`} width="200px" height="200px" src={shop.shop_image}/>
+                            id={`thumb`} width="200px" height="200px" src={`${urls.hostRoot}/${shop.shop_image}`}/>
                         </a>
                         <ErrorMessage name="shopImage" render={(msg) => {
                             return <Form.Control.Feedback type="invalid" style={{

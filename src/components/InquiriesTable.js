@@ -1,7 +1,6 @@
 import React from 'react';
 import {Table, Button} from 'react-bootstrap';
 import {Link} from 'react-router-dom';
-import Inquiry from './Inquiry';
 
 function InquiriesTable(props){
     let inquiries = props.inquiries

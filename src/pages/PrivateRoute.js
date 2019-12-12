@@ -4,13 +4,13 @@ import { UserContext } from '../App';
 
 export default function PrivateRoute({ component: Component, userRole, path, ...rest }) {
     let userContext = useContext(UserContext)
+    let userToken = userContext.token
     return (
         <Route
         {...rest}
         render={props =>
             {
-                
-                if(!userContext.user.token){
+                if(!userToken){
                     return (
                         <Redirect
                             to={{pathname: "/user/login", state: { from: props.location }}}
@@ -28,7 +28,7 @@ export default function PrivateRoute({ component: Component, userRole, path, ...
                         />
                     )    
                 }
-                return (<Component {...props} user={userContext.user}/>)
+                return (<Component {...props} userToken={userToken}/>)
             }
         }
         />

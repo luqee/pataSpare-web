@@ -18,7 +18,7 @@ class ViewOrder extends React.Component{
             this.setState({order: this.props.location.state.order})
         }else{
             autoAPI.get(`/orders/${this.props.match.params.id}`, {
-                headers: {'Authorization': 'Bearer '+ this.userContext.user.token}
+                headers: {'Authorization': 'Bearer '+ this.userContext.token}
             })
             .then((response) => {
                 if(response.data.status === 200){

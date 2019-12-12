@@ -86,7 +86,7 @@ class CreatePartForm extends Component {
         autoAPI.post(`${urls.dealerHome}/parts`, formData, {
             headers: {
                 'Content-Type': 'multipart/form-data',
-                'Authorization': 'Bearer '+ this.props.user.token
+                'Authorization': 'Bearer '+ this.props.userToken
             }
         })
         .then((response) => {

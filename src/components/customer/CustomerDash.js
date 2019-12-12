@@ -10,6 +10,9 @@ import InquiryView from '../InquiryView';
 
 
 function CustomerDash(props){
+    console.log('customer dash');
+    console.log(props);
+    
     const sidebarStyle = {
         height: '100%',
         backgroundColor: '#111',
@@ -39,11 +42,11 @@ function CustomerDash(props){
             <Switch>
                 <Route exact path={`${props.match.path}`} component={Dash}/>
                 <Route exact path={`${props.match.path}/orders`} render={routeProps =>{
-                    return <Orders {...routeProps} user={props.user} />
+                    return <Orders {...routeProps} userToken={props.userToken} />
                 }}/>
                 <Route exact path={`${props.match.path}/orders/:id`} component={ViewOrder}/>
                 <Route exact path={`${props.match.path}/inquiries`} render={routeProps =>{
-                    return <Inquiries {...routeProps} user={props.user} />
+                    return <Inquiries {...routeProps} userToken={props.userToken} />
                 }}/>
                 <Route exact path={`${props.match.path}/inquiries/:id`} component={InquiryView}/>
                 <Route exact path={`${props.match.path}/account`} component={Account}/>

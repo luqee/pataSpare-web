@@ -18,7 +18,7 @@ class App extends Component {
     super(props)
     this.state = {
         user: localStorage.getItem('user')?JSON.parse(localStorage.getItem('user')):{},
-        token: localStorage.getItem('token')?JSON.parse(localStorage.getItem('token')):{},
+        token: localStorage.getItem('token')?JSON.parse(localStorage.getItem('token')):'',
         cart: localStorage.getItem('cart')?JSON.parse(localStorage.getItem('cart')):{}
     }
   }
@@ -44,11 +44,13 @@ class App extends Component {
               this.updateUser(user)
           }else{
             this.updateUser({})
+            this.updateToken('')
 
           }
       })
       .catch((error) => {
           this.updateUser({})
+          this.updateToken('')
       })
     }
 

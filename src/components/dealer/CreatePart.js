@@ -9,7 +9,7 @@ class CreatePart extends Component {
                 <Row className="justify-content-md-center">
                     <Col lg={6}>
                     <div className="create-part">
-                    <CreatePartForm history={this.props.history} shop={this.props.shop} user={this.props.user}/>
+                    <CreatePartForm history={this.props.history} shop={this.props.shop} userToken={this.props.userToken}/>
                     </div>
                     </Col>
                 </Row>

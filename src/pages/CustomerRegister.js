@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import {Container, Row, Col, Form, Button} from 'react-bootstrap';
-import withErrorHandling from '../components/withErrorHandlingHoc';
+import DivWithErrorHandling from '../components/withErrorHandlingHoc';
 
 import { Formik, ErrorMessage } from 'formik';
 import autoAPI from '../api/api';
@@ -28,7 +28,6 @@ class CustomerRegister extends Component {
         }
     }
     render(){
-        const DivWithErrorHandling = withErrorHandling(({children}) => <div>{children}</div>)
         return (
             <Container>
             <Row className="justify-content-md-center">
@@ -39,7 +38,7 @@ class CustomerRegister extends Component {
                     validationSchema={SignupSchema}
                     initialValues={this.state.formState}
                     onSubmit={(values, actions) => {
-                        this.state.formState = values
+                        this.setState({formState: values})
                         let postData = {name: values.username, ...values ,role: `customer`};
                         autoAPI.post(urls.userRegister, JSON.stringify(postData))
                         .then(response => {

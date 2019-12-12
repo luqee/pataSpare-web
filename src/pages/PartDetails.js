@@ -33,7 +33,7 @@ class PartDetails extends Component {
             console.log(`fetching part ----no see----`)
             this.fetchPartDetails()
         }
-        const viewer = new Viewer(document.getElementById('partImage'))
+        new Viewer(document.getElementById('partImage'))
     }
     fetchPartDetails = () => {
         autoAPI.get(`/parts/${this.props.match.params.id}`)

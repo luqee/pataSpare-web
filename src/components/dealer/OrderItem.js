@@ -35,7 +35,7 @@ function OrderItem(props){
             status: status.value
         }
         autoAPI.put(`/dealer/orders/${item.id}`, JSON.stringify(postData), {
-            headers: {'Authorization': 'Bearer '+ userContext.user.token}
+            headers: {'Authorization': 'Bearer '+ userContext.token}
         })
         .then((response) => {
             if (response.status === 200){

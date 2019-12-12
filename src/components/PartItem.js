@@ -10,9 +10,11 @@ import { CartContext } from '../App';
 const cartService = new CartService();
 
 function PartItem(props){
-    let [part, setPart] = useState(props.part)
-    let [adding, setAdding] = useState(false)
     let cartContext = useContext(CartContext)
+    let [part] = useState(props.part)
+    let [adding, setAdding] = useState(false)
+    let [inCart, setInCart] = useState(0)
+    
     const addToCart = () => {
         setAdding(true)
         let item_to_add  = {
@@ -23,9 +25,23 @@ function PartItem(props){
             if(cart){
                 setAdding(false)
                 cartContext.updateCart(cart)
+                let count = countInCart(part.id, cart)
+                setInCart(count)
             }
         });
     }
+    const countInCart = (prodId, cart) => {
+        let count = 0
+        if(Object.keys(cart) > 0){
+            cart.items.forEach((item) => {
+                if(item.part_id === parseInt(prodId)){
+                    count = item.quantity
+                }
+            })
+        }
+        return count
+    }
+    // const inCart = countInCart(part.id, cartContext.cart)
     return (
         <Container style={{
             width: '80%',
@@ -45,7 +61,14 @@ function PartItem(props){
                     <Card.Text>
                     Price: {part.price}
                     </Card.Text>
-                    <Button onClick={addToCart}><FontAwesomeIcon icon={faShoppingCart} /> {adding?'Adding':'Add to cart'} </Button>
+                    <Button onClick={addToCart}>
+                    <FontAwesomeIcon icon={faShoppingCart} /> {adding?'Adding...':'Add'}
+                    <br />
+                    {
+                        (inCart === 0) ? null:
+                        <span>{`(${inCart})`}</span>
+                    }
+                    </Button>
                 </Card.Body>
                 </Card>
                 </Col>

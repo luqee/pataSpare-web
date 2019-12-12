@@ -8,10 +8,10 @@ function DealerPage(props){
     return (
         <Switch>
             <Route path={`${props.match.path}/shops/manage/:id`} render={routeProps => {
-                return <ManageShop {...routeProps} user={props.user} />
+                return <ManageShop {...routeProps} userToken={props.userToken} />
             }}/>
             <Route path={`${props.match.path}`} render={routeProps => {
-                return <DealerDash {...routeProps} user={props.user} />
+                return <DealerDash {...routeProps} userToken={props.userToken} />
             }}/>
         </Switch>
     );

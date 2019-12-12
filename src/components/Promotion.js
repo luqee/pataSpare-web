@@ -1,11 +1,11 @@
 import React from 'react';
 import {Container, Row, Col, Card } from 'react-bootstrap';
-import carouselBack from '../images/corouselBack.png';
+import banner1 from '../images/banner1.jpg';
 
 function Promotion(props){
     return (
         <Container fluid className='promo' style={{
-            backgroundImage: `url(${carouselBack})`,
+            backgroundImage: `url(${banner1})`,
             height: '400px',
             backgroundAttachment: 'fixed',
             backgroundRepeat: 'no-repeat',

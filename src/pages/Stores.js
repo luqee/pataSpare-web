@@ -18,12 +18,12 @@ class Stores extends React.Component {
             zoom: 10
         });
         if(this.state.shops.length > 0){
-            this.state.shops.map((shop) => {
-                new window.google.maps.Marker({
+            let allMarkers = this.state.shops.map((shop) => {
+                return new window.google.maps.Marker({
                     position: {lat: parseFloat(shop.latitude), lng: parseFloat(shop.longitude)},
                     map: map,
                 })
-            })
+            })   
         }
     }
     componentDidMount = () => {
@@ -40,7 +40,7 @@ class Stores extends React.Component {
         if (!window.google) {
             var s = document.createElement('script');
             s.type = 'text/javascript';
-            s.src = 'https://maps.googleapis.com/maps/api/js?key=AIzaSyC29r00wR6YbOeK8BL4QacVO1j2gMdzp5g';
+            s.src = `https://maps.googleapis.com/maps/api/js?key=${process.env.REACT_APP_GOOGLE_KEY}`;
             var x = document.getElementsByTagName('script')[0];
             x.parentNode.insertBefore(s, x);
             s.addEventListener('load', e => {

@@ -45,8 +45,24 @@ class UserCart extends React.Component {
             }
         });
     }
+    getTotal = (cart) => {
+        let total = 0
+        if(Object.keys(cart).length > 0 && cart.items){
+            if(cart.items.length > 0){
+                let totalItems = cart.items.map((item) => {
+                    return parseInt(item.quantity) * parseInt(item.part.price)
+                })
+                total =  totalItems.reduce((prev, next) => {
+                    return prev + next
+                })
+            }
+        }
+        return total
+        //get grand total
+    }
     render = () => {
         let cart = this.state.cart
+        let grandTotal = this.getTotal(cart)
         if (this.state.order_placed){
             return <Redirect to={{
                 pathname: `/customer/orders/${this.state.order.id}`,
@@ -86,6 +102,10 @@ class UserCart extends React.Component {
                                     )
                                 })
                             }
+                            <tr>
+                                <td colSpan={4}>Grand Total</td>
+                                <td>{grandTotal}</td>
+                            </tr>
                             </tbody>
                         </Table>
                         <Row>

@@ -92,7 +92,7 @@ class CreateShopForm extends Component {
         autoAPI.post(`${urls.dealerHome}/shops`, formData, {
             headers: {
                 'Content-Type': 'multipart/form-data',
-                'Authorization': 'Bearer '+ this.props.user.token
+                'Authorization': 'Bearer '+ this.props.userToken
             }
         })
         .then((response) => {
