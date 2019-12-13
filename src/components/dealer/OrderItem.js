@@ -59,12 +59,17 @@ function OrderItem(props){
                 <div style={{
                     display: 'flex'
                 }}>
-                <Select
-                    placeholder={`Status`}
-                    options={statusOptions}
-                    onChange={handleStatus}
-                    value={status}
-                /><span>{`  `}</span>
+                    <div style={{
+                        width: `125px`
+                    }}>
+                        <Select
+                            placeholder={`Status`}
+                            options={statusOptions}
+                            onChange={handleStatus}
+                            value={status}
+                        />
+                    </div>
+                <span>{`  `}</span>
                 <Button size={"sm"} onClick={changeStatus} disabled={(!statusChanged)? true: false}>{updating?'Updating':'Update'}</Button>
                 </div>
             </td>

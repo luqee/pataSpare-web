@@ -12,6 +12,7 @@ import autoAPI from '../api/api';
 import Viewer from 'viewerjs'
 import 'viewerjs/dist/viewer.css';
 import { CartContext } from '../App';
+import recordNumberView from '../api/GoogleAnalytics';
 
 const cartService = new CartService();
 
@@ -64,6 +65,13 @@ class PartDetails extends Component {
             }
         });
         
+    }
+    showNumber = () =>{
+        recordNumberView()
+        let numberButton = document.getElementById('numberBtn')
+        let numberTxt = document.getElementById('numberTxt')
+        numberButton.style.display = 'none'
+        numberTxt.style.display = 'block'
     }
     render() {
         
@@ -133,7 +141,10 @@ class PartDetails extends Component {
                                 readonly
                             />
                             <p><FontAwesomeIcon icon={faMapMarker} />{`  ${shop.location}`}</p>
-                            <p><FontAwesomeIcon icon={faPhone} />{`  ${shop.number}`}</p>
+                            <Button id={`numberBtn`} onClick={this.showNumber}> View Number</Button>
+                            <p id={`numberTxt`} style={{
+                                display: `none`
+                            }}><FontAwesomeIcon icon={faPhone} />{`  ${shop.number}`}</p>
                             </Col>
                             <Col style={{
                                 paddingBottom: `15px`

@@ -43,37 +43,31 @@ function PartItem(props){
     }
     // const inCart = countInCart(part.id, cartContext.cart)
     return (
-        <Container style={{
-            width: '80%',
+        <Card style={{ 
+            width: '85%',
             borderBottom: '3px solid #007bff',
         }}>
-            <Row>
-                <Col>
-                <Card style={{ width: '100%' }}>
-                <Link to={{
-                    pathname: `/parts/${part.id}`,
-                    state: {part: part, shop: part.shop}
-                }}>
-                <Card.Img variant="top" src={`${urls.hostRoot}/${part.part_image}`}/>
-                </Link>
-                <Card.Body>
-                    <Card.Title>{part.title}</Card.Title>
-                    <Card.Text>
-                    Price: {part.price}
-                    </Card.Text>
-                    <Button onClick={addToCart}>
-                    <FontAwesomeIcon icon={faShoppingCart} /> {adding?'Adding...':'Add'}
-                    <br />
-                    {
-                        (inCart === 0) ? null:
-                        <span>{`(${inCart})`}</span>
-                    }
-                    </Button>
-                </Card.Body>
-                </Card>
-                </Col>
-            </Row>
-        </Container>
+            <Link to={{
+                pathname: `/parts/${part.id}`,
+                state: {part: part, shop: part.shop}
+            }}>
+            <Card.Img variant="top" src={`${urls.hostRoot}/${part.part_image}`} width={250} height={250}/>
+            </Link>
+            <Card.Body>
+                <Card.Title>{part.title}</Card.Title>
+                <Card.Text>
+                Price: {part.price}
+                </Card.Text>
+                <Button onClick={addToCart}>
+                <FontAwesomeIcon icon={faShoppingCart} /> {adding?'Adding...':'Add'}
+                <br />
+                {
+                    (inCart === 0) ? null:
+                    <span>{`(${inCart})`}</span>
+                }
+                </Button>
+            </Card.Body>
+        </Card>
     );
 
 }

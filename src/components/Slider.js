@@ -1,8 +1,8 @@
 import React from 'react';
 import {Container, Row, Col, Carousel} from 'react-bootstrap';
-import spanner from '../images/spanner.jpg';
-import carEngine from '../images/car-engine.jpg';
-import car from '../images/car.jpg';
+import slider1 from '../images/slider1.jpg';
+import slider2 from '../images/slider2.jpg';
+import slider3 from '../images/slider3.jpg';
 
 function ImageSlider(props){
     // const settings = {
@@ -33,7 +33,7 @@ function ImageSlider(props){
                 }}>
                     <img
                     className="d-block w-100"
-                    src={spanner}
+                    src={slider1}
                     height='inherit'
                     alt="First slide"
                     />
@@ -46,7 +46,7 @@ function ImageSlider(props){
                 }}>
                     <img
                     className="d-block w-100"
-                    src={carEngine}
+                    src={slider2}
                     height='inherit'
                     alt="Third slide"
                     />
@@ -60,7 +60,7 @@ function ImageSlider(props){
                 }}>
                     <img
                     className="d-block w-100"
-                    src={car}
+                    src={slider3}
                     height='inherit'
                     alt="Third slide"
                     />

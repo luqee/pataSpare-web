@@ -4,6 +4,8 @@ import {Link} from 'react-router-dom';
 import logo from '../images/cropped-temp_logo.png';
 import  axios from '../api/api';
 import Loader from './Loader'
+import urls from '../config/config'
+
 class Categories extends React.Component{
     constructor(props){
         super(props);
@@ -49,12 +51,21 @@ class Categories extends React.Component{
                                         alignItems: 'center',
                                         minHeight: '300px'
                                     }}>
-                                        <div style={colStyle}>
-                                        <Link to={`/part-category/${cat.id}`} >
+                                        <div style={{
+                                            backgroundImage: `url(${urls.hostRoot}/${cat.category_image})`,
+                                            display: 'flex',
+                                            justifyContent: 'center',
+                                            alignItems: 'center',
+                                            width: '90%',
+                                            height: '80%'
+                                        }}>
+                                        <Link to={`/part-category/${cat.id}`} style={{
+                                            textDecoration: 'none'
+                                        }}>
                                         <div style={{
                                             color: '#ff6200',
                                             fontSize: '2em',
-                                            fontWeight: 'bold'
+                                            fontWeight: 'bold',
                                         }}>
                                             {cat.name}
                                         </div>

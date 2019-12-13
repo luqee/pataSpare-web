@@ -12,7 +12,7 @@ function OrderItemsTable(props){
                 <th>Item</th>
                 <th>Shop</th>
                 <th>Cost</th>
-                <th>Quantity</th>
+                <th>Qty</th>
                 <th>Total</th>
                 <th>Action</th>
                 </tr>

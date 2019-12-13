@@ -87,7 +87,7 @@ class App extends Component {
       let cart = this.state.cart
     return (
       <UserContext.Provider value={{user: user, updateUser: this.updateUser, updateToken: this.updateToken, token: token}} >
-        <CartContext.Provider value={{cart: cart, updateCart: this.updateCart}}>
+        <CartContext.Provider value={{cart: this.state.cart, updateCart: this.updateCart}}>
         <Container fluid className="App" style={{
             padding: '0',
             height: '100%',

@@ -14,17 +14,16 @@ function CartLink(props){
     let cartContext = useContext(CartContext)
     let [cart, setCart] = useState(cartContext.cart)
     const countItems = (cart) =>{
+        let totalItems = 0
         if(Object.keys(cart).length > 0 && cart.items){
             if(cart.items.length > 0){
                 let quantities = cart.items.map((item) => {return parseInt(item.quantity)})
-                let totalItems =  quantities.reduce((prev, next) => {
+                totalItems =  quantities.reduce((prev, next) => {
                     return prev + next
                 })
-                return totalItems
             }
-        }else{
-            return 0
         }
+        return totalItems
     }
     const total = countItems(cart)
     return (
