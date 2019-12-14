@@ -26,13 +26,16 @@ function PartItem(props){
                 setAdding(false)
                 cartContext.updateCart(cart)
                 let count = countInCart(part.id, cart)
+                console.log('setting cart');
+                console.log(count, cart);
+                
                 setInCart(count)
             }
         });
     }
     const countInCart = (prodId, cart) => {
         let count = 0
-        if(Object.keys(cart) > 0){
+        if(Object.keys(cart).length > 0){
             cart.items.forEach((item) => {
                 if(item.part_id === parseInt(prodId)){
                     count = item.quantity
@@ -41,7 +44,7 @@ function PartItem(props){
         }
         return count
     }
-    // const inCart = countInCart(part.id, cartContext.cart)
+    inCart = countInCart(part.id, cartContext.cart)
     return (
         <Card style={{ 
             width: '85%',

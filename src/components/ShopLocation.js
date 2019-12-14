@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {Button} from 'react-bootstrap';
-import recordDirectionsView from '../api/GoogleAnalytics';
+import GA from '../api/GoogleAnalytics';
 
 class ShopLocation extends Component {
     constructor(props){
@@ -32,7 +32,10 @@ class ShopLocation extends Component {
         infoWindow.open(this.state.map);
     }
     showDirection = () => {
-        recordDirectionsView()
+        if(GA.init()){
+            GA.recordDirectionsView()
+        }
+        
         let infoWindow = new window.google.maps.InfoWindow();
         // Try HTML5 geolocation.
         if (navigator.geolocation) {

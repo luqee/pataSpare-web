@@ -81,6 +81,10 @@ class ViewShop extends Component {
         reader.readAsDataURL(event.currentTarget.files[0]);
     }
     editShop = (values, actions) => {
+        console.log('edit shop');
+        console.log(values);
+        console.log('edit shop location');
+        console.log(this.state.newLocation);
         let data = {}
         if(values.name !== this.state.shop.name){
             data['name'] = values.name
@@ -91,8 +95,8 @@ class ViewShop extends Component {
         if(values.description !== this.state.shop.description){
             data['description'] = values.description
         }
-        if(values.location !== this.state.shop.location){
-            data['location'] = values.location
+        if(this.state.newLocation !== this.state.shop.location){
+            data['location'] = this.state.newLocation
             data['latitude'] = this.state.marker.getPosition().lat()
             data['longitude'] = this.state.marker.getPosition().lng()
         }
@@ -128,12 +132,15 @@ class ViewShop extends Component {
     }
     render = () => {
         let shop = this.state.shop
+        console.log('shop is');
+        console.log(shop);
+        let loc = shop.location
         let initialValues = {
             name: shop.name,
             number: shop.number,
             description: shop.description,
             shopImage: null,
-            location: shop.location,
+            location: loc,
         }
         return (
             <Container>
@@ -211,7 +218,7 @@ class ViewShop extends Component {
                         </Form.Group>
                         <Form.Group controlId="location">
                         <Form.Label>Location:</Form.Label>
-                        <Form.Control type={`text`} value={values.location} onChange={handleChange} />
+                        <Form.Control type={`text`} placeholder="Where is your business?" onChange={handleChange} />
                         <ErrorMessage name="location" render={(msg) => {
                             return <Form.Control.Feedback type="invalid" style={{
                                 display: `block`

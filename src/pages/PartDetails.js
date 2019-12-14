@@ -11,9 +11,8 @@ import Rating from 'react-rating';
 import autoAPI from '../api/api';
 import Viewer from 'viewerjs'
 import 'viewerjs/dist/viewer.css';
-import { CartContext } from '../App';
-import recordNumberView from '../api/GoogleAnalytics';
-
+import  CartContext  from '../App';
+import GA from '../api/GoogleAnalytics'
 const cartService = new CartService();
 
 class PartDetails extends Component {
@@ -67,7 +66,9 @@ class PartDetails extends Component {
         
     }
     showNumber = () =>{
-        recordNumberView()
+        if(GA.init()){
+            GA.recordNumberView()
+        }
         let numberButton = document.getElementById('numberBtn')
         let numberTxt = document.getElementById('numberTxt')
         numberButton.style.display = 'none'

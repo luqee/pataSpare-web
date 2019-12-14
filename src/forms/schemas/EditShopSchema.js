@@ -21,10 +21,10 @@ const EditShopSchema = Yup.object().shape({
       .required('Required field'),
     location: Yup.string()
       .required('Required field'),
-    shopImage: Yup.mixed()
-      .test('fileFormat', 'Unsupported file format', (value) => value && SUPPORTED_FORMATS.includes(value.type))
-    //   .test('fileSize', 'File too large', (value) => value && value.size <= FILE_SIZE)
-      .nullable(),
+    // shopImage: Yup.mixed()
+    //   .test('fileFormat', 'Unsupported file format', (value) => value && SUPPORTED_FORMATS.includes(value.type))
+    // //   .test('fileSize', 'File too large', (value) => value && value.size <= FILE_SIZE)
+    //   .notRequired(),
   });
 
 export default EditShopSchema;
