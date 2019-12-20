@@ -4,7 +4,6 @@ import urls from '../../config/config';
 import {Container, Row, Col, Button} from 'react-bootstrap';
 import {Link} from 'react-router-dom';
 import ShopsTable from './ShopsTable';
-import { UserContext } from '../../App';
 
 class Shops extends Component {
     constructor(props){
@@ -16,7 +15,7 @@ class Shops extends Component {
 
     componentDidMount = () => {
         autoAPI.get(`${urls.dealerHome}/shops`, {
-            headers: {'Authorization': 'Bearer '+ this.props.user.token}
+            headers: {'Authorization': 'Bearer '+ this.props.userToken}
         })
         .then((response) => {
             

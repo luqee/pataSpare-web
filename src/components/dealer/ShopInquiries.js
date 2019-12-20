@@ -3,7 +3,6 @@ import {Container, Row, Col} from 'react-bootstrap';
 import autoAPI from '../../api/api';
 import urls from '../../config/config';
 import InquiriesTable from '../InquiriesTable';
-import { UserContext } from '../../App';
 
 class ShopInquiries extends Component {
     constructor(props){
@@ -15,7 +14,7 @@ class ShopInquiries extends Component {
 
     componentDidMount = () => {
         autoAPI.get(`${urls.dealerHome}/inquiries/shop/${this.props.match.params.id}`, {
-            headers: {'Authorization': 'Bearer '+ this.props.user.token}
+            headers: {'Authorization': 'Bearer '+ this.props.userToken}
         })
         .then((response) => {
             

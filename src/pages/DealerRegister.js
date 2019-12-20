@@ -9,7 +9,6 @@ class DealerRegister extends Component {
             <Row className="justify-content-md-center">
                 <Col lg={6}>
                 <div className='dealer-register'>
-                    <p>Auto part Dealer Registration.</p>
                     <DealerRegisterForm history={this.props.history} />
                 </div>
                 </Col>

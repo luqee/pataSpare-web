@@ -7,7 +7,7 @@ import urls from '../config/config';
 import { Formik, ErrorMessage } from 'formik';
 import ShopSchema from './schemas/ShopSchema';
 
-class CreateShopForm extends Component {
+class EditShopForm extends Component {
     constructor(props){
         super(props);
         this.state = {
@@ -21,60 +21,7 @@ class CreateShopForm extends Component {
             autoComplete: ''
         }
     }
-
-    placeChanged = () => {
-        let place = this.state.autoComplete.getPlace();
-        let pos = {
-            lat: place.geometry.location.lat(),
-            lng: place.geometry.location.lng()
-        }
-        this.setState({location: place.name})
-        this.state.map.setCenter(pos)
-        this.state.map.setZoom(15)
-        if(this.state.marker === ''){
-            let defaultMarker = new window.google.maps.Marker({
-                position: pos,
-                map: this.state.map,
-                draggable: true
-            })
-            this.setState({marker: defaultMarker})
-        }else{
-            this.state.marker.setPosition(pos)
-        }
-        
-    }
-    initMap = () => {
-        let locationInput = document.getElementById('location');
-        let options = {
-            componentRestrictions: {country: 'ke'}
-          };
-        let autocomplete = new window.google.maps.places.Autocomplete(locationInput, options);
-        autocomplete.setFields(['name', 'geometry.location']);
-        autocomplete.addListener('place_changed', this.placeChanged);
-        this.setState({autoComplete: autocomplete});
-        let mapInput = new window.google.maps.Map(document.getElementById('map'), {
-            center: {lat: -1.308, lng: 36.825},
-            zoom:10
-        });
-        
-        this.setState({map: mapInput});
-    }
-    
-    componentDidMount = () => {
-        if (!window.google) {
-            var s = document.createElement('script');
-            s.type = 'text/javascript';
-            s.src = `https://maps.googleapis.com/maps/api/js?key=${process.env.REACT_APP_GOOGLE_KEY}&libraries=places&callback=initMap`;
-            var x = document.getElementsByTagName('script')[0];
-            x.parentNode.insertBefore(s, x);
-            s.addEventListener('load', e => {
-                this.initMap();
-            })
-        } else {
-            this.initMap();
-        }
-    }
-    createShop = (values, actions) => {
+    editShop = (values, actions) => {
         let shopData = {
             name: values.name,
             number: values.number,
@@ -92,7 +39,7 @@ class CreateShopForm extends Component {
         autoAPI.post(`${urls.dealerHome}/shops`, formData, {
             headers: {
                 'Content-Type': 'multipart/form-data',
-                'Authorization': 'Bearer '+ this.props.userToken
+                'Authorization': 'Bearer '+ this.props.user.token
             }
         })
         .then((response) => {
@@ -109,6 +56,13 @@ class CreateShopForm extends Component {
         })
     }
     render = () => {
+        let initialValues = {
+            name: this.state.shop,
+            number: '',
+            description: '',
+            shopImage: null,
+            location: this.state.location,
+        }
         return (
             <Formik
                 validationSchema={ShopSchema}
@@ -208,7 +162,7 @@ class CreateShopForm extends Component {
                         <div style={{ width: 400, height: 400 }} className="map" id="map"></div>
                         </Form.Group>
                         <Button variant="primary" type="submit" disabled={isSubmitting || errors.length > 0 || !dirty}>
-                        CREATE SHOP
+                        UPDATE SHOP
                         </Button>
                     </Form>
                 )}
@@ -217,4 +171,4 @@ class CreateShopForm extends Component {
     }
 }
 
-export default CreateShopForm;
+export default EditShopForm;

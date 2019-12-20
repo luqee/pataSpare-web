@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import {Button} from 'react-bootstrap';
+import GA from '../api/GoogleAnalytics';
 
 class ShopLocation extends Component {
     constructor(props){
@@ -31,6 +32,10 @@ class ShopLocation extends Component {
         infoWindow.open(this.state.map);
     }
     showDirection = () => {
+        if(GA.init()){
+            GA.recordDirectionsView()
+        }
+        
         let infoWindow = new window.google.maps.InfoWindow();
         // Try HTML5 geolocation.
         if (navigator.geolocation) {
@@ -78,7 +83,7 @@ class ShopLocation extends Component {
         if (!window.google) {
             var s = document.createElement('script');
             s.type = 'text/javascript';
-            s.src = 'https://maps.googleapis.com/maps/api/js?key=AIzaSyC29r00wR6YbOeK8BL4QacVO1j2gMdzp5g';
+            s.src = `https://maps.googleapis.com/maps/api/js?key=${process.env.REACT_APP_GOOGLE_KEY}`;
             var x = document.getElementsByTagName('script')[0];
             x.parentNode.insertBefore(s, x);
             s.addEventListener('load', e => {

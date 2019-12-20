@@ -37,7 +37,7 @@ class Main extends Component {
     }
     render() {
         let height = this.state.headerHeight
-        
+
         return (
         <main style={{
             marginTop: `${height}px`,
@@ -81,4 +81,3 @@ class Main extends Component {
 }
 
 export default Main;
-  

@@ -18,14 +18,14 @@ class SearchResults extends React.Component {
         if(results.type === `searchables`){
             if(results.results.parts !== undefined && results.results.parts.length > 0){
                 let parts = []
-                results.results.parts.map((item) => {
+                results.results.parts.forEach((item) => {
                     parts.push(item.searchable)
                 })
                 this.setState({parts: parts});
             }
             if(results.results.categories !== undefined && results.results.categories.length > 0){
                 let categories = []
-                results.results.categories.map((item) => {
+                results.results.categories.forEach((item) => {
                     categories.push(item.searchable)
                 })
                 this.setState({categories: categories});

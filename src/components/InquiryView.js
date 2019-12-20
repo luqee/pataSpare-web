@@ -19,7 +19,7 @@ function InquiryView(props){
         event.preventDefault()
         setSubmitting(true)
         autoAPI.post(`/inquiries/${inquiry.id}/replies`, JSON.stringify({reply: reply}), {
-            headers: {'Authorization': 'Bearer '+ userContext.user.token}
+            headers: {'Authorization': 'Bearer '+ userContext.token}
         })
         .then((response) => {
             if(response.status === 201){

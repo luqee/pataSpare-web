@@ -8,7 +8,7 @@ class CreateShop extends Component {
             <Container>
                 <Row className="justify-content-md-center">
                     <Col lg={7}>
-                    <CreateShopForm history={this.props.history} user={this.props.user}/>
+                    <CreateShopForm history={this.props.history} userToken={this.props.userToken}/>
                     </Col>
                 </Row>
             </Container>

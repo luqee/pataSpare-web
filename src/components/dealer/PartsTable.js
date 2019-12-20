@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React from 'react';
 import {Link} from 'react-router-dom';
 import {Image, Button, Table} from 'react-bootstrap';
 import urls from '../../config/config';
@@ -26,12 +26,12 @@ function PartsTable(props){
                         <td>{part.price}</td>
                         <td>{part.stock}</td>
                         <td>
-                            {/* <Link to={{
+                            <Link to={{
                                 pathname: '/dealer/inventory/'+part.id,
                                 state: {part: part}
                             }}>
                             <Button>View</Button>
-                            </Link> */}
+                            </Link>
                         </td>
                     </tr>
                     })

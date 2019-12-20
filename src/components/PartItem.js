@@ -10,9 +10,11 @@ import { CartContext } from '../App';
 const cartService = new CartService();
 
 function PartItem(props){
-    let [part, setPart] = useState(props.part)
-    let [adding, setAdding] = useState(false)
     let cartContext = useContext(CartContext)
+    let [part] = useState(props.part)
+    let [adding, setAdding] = useState(false)
+    let [inCart, setInCart] = useState(0)
+    
     const addToCart = () => {
         setAdding(true)
         let item_to_add  = {
@@ -23,34 +25,52 @@ function PartItem(props){
             if(cart){
                 setAdding(false)
                 cartContext.updateCart(cart)
+                let count = countInCart(part.id, cart)
+                console.log('setting cart');
+                console.log(count, cart);
+                
+                setInCart(count)
             }
         });
     }
+    const countInCart = (prodId, cart) => {
+        let count = 0
+        if(Object.keys(cart).length > 0){
+            cart.items.forEach((item) => {
+                if(item.part_id === parseInt(prodId)){
+                    count = item.quantity
+                }
+            })
+        }
+        return count
+    }
+    inCart = countInCart(part.id, cartContext.cart)
     return (
-        <Container style={{
-            width: '80%',
+        <Card style={{ 
+            width: '85%',
             borderBottom: '3px solid #007bff',
         }}>
-            <Row>
-                <Col>
-                <Card style={{ width: '100%' }}>
-                <Link to={{
-                    pathname: `/parts/${part.id}`,
-                    state: {part: part, shop: part.shop}
-                }}>
-                <Card.Img variant="top" src={`${urls.hostRoot}/${part.part_image}`}/>
-                </Link>
-                <Card.Body>
-                    <Card.Title>{part.title}</Card.Title>
-                    <Card.Text>
-                    Price: {part.price}
-                    </Card.Text>
-                    <Button onClick={addToCart}><FontAwesomeIcon icon={faShoppingCart} /> {adding?'Adding':'Add to cart'} </Button>
-                </Card.Body>
-                </Card>
-                </Col>
-            </Row>
-        </Container>
+            <Link to={{
+                pathname: `/parts/${part.id}`,
+                state: {part: part, shop: part.shop}
+            }}>
+            <Card.Img variant="top" src={`${urls.hostRoot}/${part.part_image}`} width={250} height={250}/>
+            </Link>
+            <Card.Body>
+                <Card.Title>{part.title}</Card.Title>
+                <Card.Text>
+                Price: {part.price}
+                </Card.Text>
+                <Button onClick={addToCart}>
+                <FontAwesomeIcon icon={faShoppingCart} /> {adding?'Adding...':'Add'}
+                <br />
+                {
+                    (inCart === 0) ? null:
+                    <span>{`(${inCart})`}</span>
+                }
+                </Button>
+            </Card.Body>
+        </Card>
     );
 
 }

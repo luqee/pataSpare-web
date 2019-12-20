@@ -7,6 +7,7 @@ import ShopOrders from './ShopOrders';
 import ShopInquiries from './ShopInquiries';
 import CreatePart from './CreatePart';
 import InquiryView from '../InquiryView';
+import InventoryItem from './InventoryItem'
 
 function ManageShop(props){
     const sidebarStyle = {
@@ -51,18 +52,19 @@ function ManageShop(props){
                 <Switch>
                     <Route exact path={`${props.match.path}`} component={ShopDash}/>
                     <Route exact path={`${props.match.path}/parts`} render={(routeProps)=>{
-                        return <ShopInventory shop={shop} {...routeProps} user={props.user} />
+                        return <ShopInventory shop={shop} {...routeProps} userToken={props.userToken} />
                     }}/>
                     <Route exact path={`${props.match.path}/orders`} render={(routeProps)=>{
-                        return <ShopOrders shop={shop} {...routeProps} user={props.user} />
+                        return <ShopOrders shop={shop} {...routeProps} userToken={props.userToken} />
                     }}/>
                     <Route exact path={`${props.match.path}/inquiries`} render={(routeProps)=>{
-                        return <ShopInquiries shop={shop} {...routeProps} user={props.user} />
+                        return <ShopInquiries shop={shop} {...routeProps} userToken={props.userToken} />
                     }}/>
                     <Route exact path={`${props.match.path}/inquiries/:id`} component={InquiryView}/>
                     <Route exact path={`${props.match.path}/parts/create`} render={(routeProps)=>{
-                        return <CreatePart shop={shop} {...routeProps} user={props.user}/>
+                        return <CreatePart shop={shop} {...routeProps} userToken={props.userToken}/>
                     }}/>
+                    {/* <Route exact path={`${props.match.path}/inventory/:id`} component={InventoryItem}/> */}
                 </Switch>
                 </div>
                 </Col>

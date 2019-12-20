@@ -17,17 +17,17 @@ function InquiryModal(props){
         }
         autoAPI.post('/inquiries', JSON.stringify(req), {
             headers: {
-                'Authorization': 'Bearer '+ userContext.user.token
+                'Authorization': 'Bearer '+ userContext.token
             }
         })
         .then((response) => {
             if (response.data.status === 201) {
-                let responseData = response.data.data;
                 props.onHide();
             }
         })
         .catch((error) => {
             console.log(error);
+            props.onHide();
         
         });
     }

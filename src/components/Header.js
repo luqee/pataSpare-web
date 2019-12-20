@@ -1,47 +1,36 @@
-import React, { Component, useContext } from 'react';
+import { Component, useContext, useState } from 'react';
 import {withRouter} from 'react-router-dom';
 import Navbar from 'react-bootstrap/Navbar';
-import {Nav, NavDropdown, Container, Row, Col}from 'react-bootstrap';
-import autoAPI from '../api/api';
+import {Nav, NavDropdown, Container}from 'react-bootstrap';
+import autoAPI, { Mobile } from '../api/api';
 import SearchBar from './SearchBar';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faShoppingCart, faUser } from '@fortawesome/free-solid-svg-icons';
+import { faShoppingCart, faUser, faSearch } from '@fortawesome/free-solid-svg-icons';
 import {UserContext, CartContext} from '../App'
+/** @jsx jsx */
+import { jsx } from '@emotion/core'
 
-class CartLink extends Component {
-    constructor(props){
-        super(props);
-        this.state = {
-            cart: {},
-            total: 0,
-            unlisten: ''
-        }
-    }
-    componentDidMount = () => {
-        this.setCart(this.props.cart)
-    }
-    setCart = (cart) =>{
+function CartLink(props){
+    let cartContext = useContext(CartContext)
+    let [cart, setCart] = useState(cartContext.cart)
+    const countItems = (cart) =>{
+        let totalItems = 0
         if(Object.keys(cart).length > 0 && cart.items){
             if(cart.items.length > 0){
-                this.setState({cart: cart});
-                let totalItems = cart.items.map((item) => {return parseInt(item.quantity)})
-                let sumOfItems =  totalItems.reduce((prev, next) => {
+                let quantities = cart.items.map((item) => {return parseInt(item.quantity)})
+                totalItems =  quantities.reduce((prev, next) => {
                     return prev + next
                 })
-                this.setState({total: sumOfItems})
             }
         }
+        return totalItems
     }
-    render = () => {
-        let total = this.state.total
-        let cart = this.props.cart
-        return (
-            <Nav>
-                <Nav.Link href="/cart"><FontAwesomeIcon icon={faShoppingCart} /><span>{` (${total})`}</span></Nav.Link>
-            </Nav>
-            
-        )
-    }
+    const total = countItems(cart)
+    return (
+        <Nav>
+            <Nav.Link href="/cart"><FontAwesomeIcon icon={faShoppingCart} /><span>{` (${total})`}</span></Nav.Link>
+        </Nav>
+    )
 }
 
 function AuthButton(props) {
@@ -57,12 +46,13 @@ function AuthButton(props) {
     const signOut = ()=>{
         autoAPI.post(`/auth/logout`,{},{
             headers: {
-                'Authorization': 'Bearer '+ currentUser.token
+                'Authorization': 'Bearer '+ userContext.token
             }
         })
         .then((response) => {
             if (response.status === 200){
                 userContext.updateUser({})
+                userContext.updateToken('')
                 props.history.push("/")
             }
         })
@@ -122,6 +112,10 @@ class Header extends Component {
 
         })
     }
+    toggleSearchBar = (event) =>{
+        let searchBar = document.getElementById('searchBar')
+        searchBar.style.display = searchBar.style.display == 'block'? 'none': 'block';
+    }
     render() {
         return (
             <Container id={`Header`} fluid  style={{
@@ -134,6 +128,7 @@ class Header extends Component {
                     borderBottom: '5px solid #007bff'
                 }}>
                 <Navbar.Brand href="/">PataSpare</Navbar.Brand>
+                <Mobile><FontAwesomeIcon icon={faSearch} onClick={this.toggleSearchBar}/></Mobile>
                 <Navbar.Toggle aria-controls="basic-navbar-nav" />
                 <Navbar.Collapse id="basic-navbar-nav">
                     <Nav className="mr-auto">
@@ -151,12 +146,12 @@ class Header extends Component {
                     <Nav>
                     <Nav.Link href='/dealer/register'>Sell on PataSpare</Nav.Link>
                     </Nav>
-                    <CartContext.Consumer>
+                    {/* <CartContext.Consumer>
                         {value => {
-                            return <CartLink history={this.props.history} cart={value.cart}/>
+                            return 
                         }}
-                    </CartContext.Consumer>
-                    
+                    </CartContext.Consumer> */}
+                    <CartLink history={this.props.history} />
                     <AuthButton history={this.props.history} />
                 </Navbar.Collapse>
                 </Navbar>

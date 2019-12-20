@@ -57,8 +57,22 @@ const init = (options = {}) => {
 
     return isGAEnabled
 }
+const recordNumberView = () =>{
+    ReactGA.event({
+        category: 'Number',
+        action: 'View Phone Number'
+    })
+}
+const recordDirectionsView = () =>{
+    ReactGA.event({
+        category: 'Directions',
+        action: 'View Directions'
+    })
+}
 export default {
     GoogleAnalytics,
     RouteTracker,
-    init
+    init,
+    recordNumberView,
+    recordDirectionsView
 }

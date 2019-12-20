@@ -11,7 +11,7 @@ function CustomerPage(props){
             <Route path={`${props.match.path}`} render={
                 roteProps =>{
                     return (
-                        <CustomerDash user={props.user} {...roteProps}/>
+                        <CustomerDash userToken={props.userToken} {...roteProps}/>
                     )
                 }
             }/>

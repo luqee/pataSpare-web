@@ -8,6 +8,7 @@ import Inquiries from './Inquiries';
 import Inventory from './Inventory';
 import CreateShop from './CreateShop';
 import InquiryView from '../InquiryView';
+import ViewShop from './ViewShop'
 import InventoryItem from './InventoryItem'
 
 const sidebarStyle = {
@@ -42,22 +43,27 @@ function  DealerDash(props){
                 <Switch>
                     <Route exact path={`${props.match.path}`} component={Dash}/>
                     <Route exact path={`${props.match.path}/shops`} render={routeProps =>{
-                    return <Shops {...routeProps} user={props.user} />
-                }}/>
+                        return <Shops {...routeProps} userToken={props.userToken} />
+                    }}/>
                     <Route exact path={`${props.match.path}/orders`} render={routeProps =>{
-                    return <Orders {...routeProps} user={props.user} />
-                }}/>
+                        return <Orders {...routeProps} userToken={props.userToken} />
+                    }}/>
                     <Route exact path={`${props.match.path}/inventory`} render={routeProps =>{
-                    return <Inventory {...routeProps} user={props.user} />
-                }}/>
-                    <Route exact path={`${props.match.path}/inventory/:id`} component={InventoryItem}/>
+                        return <Inventory {...routeProps} userToken={props.userToken} />
+                    }}/>
                     <Route exact path={`${props.match.path}/inquiries`} render={routeProps =>{
-                    return <Inquiries {...routeProps} user={props.user} />
-                }}/>
+                        return <Inquiries {...routeProps} userToken={props.userToken} />
+                    }}/>
                     <Route exact path={`${props.match.path}/inquiries/:id`} component={InquiryView}/>
                     <Route exact path={`${props.match.path}/shops/create`} render={routeProps =>{
-                    return <CreateShop {...routeProps} user={props.user} />
-                }}/>
+                        return <CreateShop {...routeProps} userToken={props.userToken} />
+                    }}/>
+                    <Route exact path={`${props.match.path}/shops/:id`} render={routeProps =>{
+                        return <ViewShop {...routeProps} userToken={props.userToken} />
+                    }}/>
+                    <Route exact path={`${props.match.path}/inventory/:id`} render={routeProps => {
+                        return <InventoryItem {...routeProps} userToken={props.userToken} />
+                    }}/>
                 </Switch>
                 </div>
                 </Col>

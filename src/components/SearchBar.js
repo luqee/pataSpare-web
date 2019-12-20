@@ -1,7 +1,9 @@
 import React from 'react';
-import {Container, Row, Col, Form, Button} from 'react-bootstrap';
+import {Container, Col, Form, Button} from 'react-bootstrap';
 import autoAPI from '../api/api';
 import Select from 'react-select';
+/** @jsx jsx */
+import { jsx, css } from '@emotion/core'
 
 class SearchBar extends React.Component {
     constructor(props){
@@ -108,7 +110,11 @@ class SearchBar extends React.Component {
                 label: year.year
             }
         })
-        return <Container fluid>
+        return <Container id="searchBar" fluid css={css`
+            @media (max-width: 768px){
+                display: none;
+            }
+        `}>
             <Form inline style={{
                     justifyContent: 'center',
                     paddingTop: '5px ' 

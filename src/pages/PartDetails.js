@@ -11,8 +11,8 @@ import Rating from 'react-rating';
 import autoAPI from '../api/api';
 import Viewer from 'viewerjs'
 import 'viewerjs/dist/viewer.css';
-import { CartContext } from '../App';
-
+import  CartContext  from '../App';
+import GA from '../api/GoogleAnalytics'
 const cartService = new CartService();
 
 class PartDetails extends Component {
@@ -33,7 +33,7 @@ class PartDetails extends Component {
             console.log(`fetching part ----no see----`)
             this.fetchPartDetails()
         }
-        const viewer = new Viewer(document.getElementById('partImage'))
+        new Viewer(document.getElementById('partImage'))
     }
     fetchPartDetails = () => {
         autoAPI.get(`/parts/${this.props.match.params.id}`)
@@ -64,6 +64,15 @@ class PartDetails extends Component {
             }
         });
         
+    }
+    showNumber = () =>{
+        if(GA.init()){
+            GA.recordNumberView()
+        }
+        let numberButton = document.getElementById('numberBtn')
+        let numberTxt = document.getElementById('numberTxt')
+        numberButton.style.display = 'none'
+        numberTxt.style.display = 'block'
     }
     render() {
         
@@ -133,7 +142,10 @@ class PartDetails extends Component {
                                 readonly
                             />
                             <p><FontAwesomeIcon icon={faMapMarker} />{`  ${shop.location}`}</p>
-                            <p><FontAwesomeIcon icon={faPhone} />{`  ${shop.number}`}</p>
+                            <Button id={`numberBtn`} onClick={this.showNumber}> View Number</Button>
+                            <p id={`numberTxt`} style={{
+                                display: `none`
+                            }}><FontAwesomeIcon icon={faPhone} />{`  ${shop.number}`}</p>
                             </Col>
                             <Col style={{
                                 paddingBottom: `15px`
