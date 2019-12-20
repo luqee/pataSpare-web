@@ -7,12 +7,24 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faStar, faMapMarker, faQuestionCircle, faShoppingBag, faPhone } from '@fortawesome/free-solid-svg-icons';
 import InquiryModal from './InquiryModal';
 import { UserContext } from '../App';
+import GA from '../api/GoogleAnalytics';
 
 function Store(props){
     let [modalShow, setModalShow] = useState(false)
     let userContext = useContext(UserContext)
     const shop = props.shop;
     let shopRating = 0
+    const showNumber = () =>{
+        if(GA.init()){
+            GA.recordNumberView()
+        }
+        let numberBtn = `numberBtn${shop.id}`
+        let numberTxt = `numberTxt${shop.id}`
+        let numberButton = document.getElementById(numberBtn)
+        let numberText = document.getElementById(numberTxt)
+        numberButton.style.display = 'none'
+        numberText.style.display = 'block'
+    }
     if(shop.reviews.length > 0 ){
         let shopRatings = shop.reviews.map((review) => {
             if(review.rating === undefined){
@@ -72,7 +84,11 @@ function Store(props){
                     readonly
                 /></Card.Text>
                 <Card.Text><FontAwesomeIcon icon={faMapMarker} />  {shop.location}</Card.Text>
-                <Card.Text><FontAwesomeIcon icon={faPhone} />  {shop.number}</Card.Text>
+                <Card.Text>
+                <Button id={`numberBtn${shop.id}`} onClick={showNumber}> View Number</Button>
+                <p id={`numberTxt${shop.id}`} style={{
+                    display: `none`
+                }}><FontAwesomeIcon icon={faPhone} />{`  ${shop.number}`}</p></Card.Text>
                 </div>
                 </Card>
                 </Col>

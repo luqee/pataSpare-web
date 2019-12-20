@@ -3,6 +3,9 @@ import {Container, Row, Col, Card } from 'react-bootstrap';
 import banner1 from '../images/banner1.jpg';
 
 function Promotion(props){
+    const cardStyle = {
+        height: '130px'
+    }
     return (
         <Container fluid className='promo' style={{
             backgroundImage: `url(${banner1})`,
@@ -13,7 +16,7 @@ function Promotion(props){
             }}>
             <Row style={{alignItems: 'center', height: 'inherit'}}>
                 <Col lg={4}>
-                <Card>
+                <Card style={cardStyle}>
                 <Card.Body>
                     <Card.Title>OUTSTANDING SERVICE</Card.Title>
                     <Card.Text>
@@ -25,7 +28,7 @@ function Promotion(props){
                 </Card>
                 </Col>
                 <Col lg={4}>
-                <Card>
+                <Card  style={cardStyle}>
                 <Card.Body>
                     <Card.Title>COMPETITIVE PRICES</Card.Title>
                     <Card.Text>
@@ -36,7 +39,7 @@ function Promotion(props){
                 </Card>
                 </Col>
                 <Col lg={4}>
-                <Card>
+                <Card  style={cardStyle}>
                 <Card.Body>
                     <Card.Title>HUGE ASSORTMENT</Card.Title>
                     <Card.Text>

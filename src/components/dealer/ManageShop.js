@@ -7,6 +7,7 @@ import ShopOrders from './ShopOrders';
 import ShopInquiries from './ShopInquiries';
 import CreatePart from './CreatePart';
 import InquiryView from '../InquiryView';
+import InventoryItem from './InventoryItem'
 
 function ManageShop(props){
     const sidebarStyle = {
@@ -63,6 +64,7 @@ function ManageShop(props){
                     <Route exact path={`${props.match.path}/parts/create`} render={(routeProps)=>{
                         return <CreatePart shop={shop} {...routeProps} userToken={props.userToken}/>
                     }}/>
+                    {/* <Route exact path={`${props.match.path}/inventory/:id`} component={InventoryItem}/> */}
                 </Switch>
                 </div>
                 </Col>

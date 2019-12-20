@@ -4,7 +4,7 @@ import 'react-phone-input-2/dist/style.css'
 import autoAPI from '../../api/api';
 import urls from '../../config/config';
 import { Formik, ErrorMessage } from 'formik';
-import EditShopSchema from '../../forms/schemas/EditShopSchema';
+import EditShopSchema from '../../forms/schemas/EditShopSchema'
 import {Container,Row, Col, Form, Button, Image} from 'react-bootstrap';
 
 class ViewShop extends Component {
@@ -12,7 +12,7 @@ class ViewShop extends Component {
         super(props)
         this.state = {
             shop: this.props.location.state.shop,
-            newLocation: '',
+            newLocation: this.props.location.state.shop.location,
             map: '',
             marker: '',
             autoComplete: ''
@@ -31,6 +31,27 @@ class ViewShop extends Component {
         } else {
             this.initMap();
         }
+    }
+    placeChanged = () => {
+        let place = this.state.autoComplete.getPlace();
+        let pos = {
+            lat: place.geometry.location.lat(),
+            lng: place.geometry.location.lng()
+        }
+        this.setState({newLocation: place.name})
+        this.state.map.setCenter(pos)
+        this.state.map.setZoom(15)
+        if(this.state.marker === ''){
+            let defaultMarker = new window.google.maps.Marker({
+                position: pos,
+                map: this.state.map,
+                draggable: true
+            })
+            this.setState({marker: defaultMarker})
+        }else{
+            this.state.marker.setPosition(pos)
+        }
+        
     }
     initMap = () => {
         let locationInput = document.getElementById('location');
@@ -60,16 +81,6 @@ class ViewShop extends Component {
             this.state.marker.setPosition(pos)
         }
     }
-    placeChanged = () => {
-        let place = this.state.autoComplete.getPlace();
-        let pos = {
-            lat: place.geometry.location.lat(),
-            lng: place.geometry.location.lng()
-        }
-        this.setState({newLocation: place.name})
-        this.showShopLocation(pos, this.state.map)
-    }
-    
     showThumb = (event) =>{
         let thumbImg = document.getElementById(`thumb`);
         let reader = new FileReader();
@@ -81,10 +92,6 @@ class ViewShop extends Component {
         reader.readAsDataURL(event.currentTarget.files[0]);
     }
     editShop = (values, actions) => {
-        console.log('edit shop');
-        console.log(values);
-        console.log('edit shop location');
-        console.log(this.state.newLocation);
         let data = {}
         if(values.name !== this.state.shop.name){
             data['name'] = values.name
@@ -95,8 +102,8 @@ class ViewShop extends Component {
         if(values.description !== this.state.shop.description){
             data['description'] = values.description
         }
-        if(this.state.newLocation !== this.state.shop.location){
-            data['location'] = this.state.newLocation
+        if(values.location !== this.state.shop.location){
+            data['location'] = values.location
             data['latitude'] = this.state.marker.getPosition().lat()
             data['longitude'] = this.state.marker.getPosition().lng()
         }
@@ -108,7 +115,6 @@ class ViewShop extends Component {
         if(values.shopImage !== null){
             formData.set('shop_image', values.shopImage)
         }
-        
         autoAPI.post(`${urls.dealerHome}/shops/${this.state.shop.id}`, formData, {
             headers: {
                 'Content-Type': 'multipart/form-data',
@@ -116,9 +122,6 @@ class ViewShop extends Component {
             }
         })
         .then((response) => {
-            console.log('after update');
-            console.log(response);
-            
             if (response.status === 200){
                 actions.setSubmitting(false);
                 this.props.history.push(`${urls.dealerHome}/shops`);
@@ -132,15 +135,12 @@ class ViewShop extends Component {
     }
     render = () => {
         let shop = this.state.shop
-        console.log('shop is');
-        console.log(shop);
-        let loc = shop.location
         let initialValues = {
             name: shop.name,
             number: shop.number,
             description: shop.description,
             shopImage: null,
-            location: loc,
+            location: this.state.newLocation,
         }
         return (
             <Container>
@@ -173,11 +173,13 @@ class ViewShop extends Component {
                         </Form.Group>
                         <Form.Group controlId="number">
                         <Form.Label>Business Number:</Form.Label>
-                        <PhoneInput style={{
+                        <div style={{
                             width: '100%'
-                        }} defaultCountry={'ke'} value={values.number} onChange={(value) => {
-                            setFieldValue('number', value)
-                        }} />
+                        }}>
+                            <PhoneInput defaultCountry={'ke'} value={values.number} onChange={(value) => {
+                                setFieldValue('number', value)
+                            }} />
+                        </div>
                         <ErrorMessage name="number" render={(msg) => {
                             return <Form.Control.Feedback type="invalid" style={{
                                 display: `block`
@@ -218,7 +220,10 @@ class ViewShop extends Component {
                         </Form.Group>
                         <Form.Group controlId="location">
                         <Form.Label>Location:</Form.Label>
-                        <Form.Control type={`text`} placeholder="Where is your business?" onChange={handleChange} />
+                        <Form.Control type={`text`} value={values.location} onChange={(event)=>{
+                            // setFieldValue('location',event.value)
+                            handleChange(event)
+                        }} />
                         <ErrorMessage name="location" render={(msg) => {
                             return <Form.Control.Feedback type="invalid" style={{
                                 display: `block`
@@ -232,7 +237,7 @@ class ViewShop extends Component {
                         <div style={{ width: 400, height: 400 }} className="map" id="map"></div>
                         </Form.Group>
                         <Button variant="primary" type="submit" disabled={isSubmitting || errors.length > 0 || !dirty}>
-                        UPDATE SHOP
+                        UPDATE
                         </Button>
                     </Form>
                 )}

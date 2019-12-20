@@ -17,7 +17,7 @@ class LandingPage extends Component {
                 <Promotion />
                 <Stores location={this.props.location}/>
                 <Brands />
-                <Contact />
+                <Contact history={this.props.history} />
             </div>
         );
     }

@@ -8,8 +8,9 @@ import Inquiries from './Inquiries';
 import Inventory from './Inventory';
 import CreateShop from './CreateShop';
 import InquiryView from '../InquiryView';
-import InventoryItem from './InventoryItem'
 import ViewShop from './ViewShop'
+import InventoryItem from './InventoryItem'
+
 const sidebarStyle = {
     height: '100%',
     backgroundColor: '#111',
@@ -50,7 +51,6 @@ function  DealerDash(props){
                     <Route exact path={`${props.match.path}/inventory`} render={routeProps =>{
                         return <Inventory {...routeProps} userToken={props.userToken} />
                     }}/>
-                    <Route exact path={`${props.match.path}/inventory/:id`} component={InventoryItem}/>
                     <Route exact path={`${props.match.path}/inquiries`} render={routeProps =>{
                         return <Inquiries {...routeProps} userToken={props.userToken} />
                     }}/>
@@ -60,6 +60,9 @@ function  DealerDash(props){
                     }}/>
                     <Route exact path={`${props.match.path}/shops/:id`} render={routeProps =>{
                         return <ViewShop {...routeProps} userToken={props.userToken} />
+                    }}/>
+                    <Route exact path={`${props.match.path}/inventory/:id`} render={routeProps => {
+                        return <InventoryItem {...routeProps} userToken={props.userToken} />
                     }}/>
                 </Switch>
                 </div>

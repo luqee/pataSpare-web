@@ -1,7 +1,7 @@
 
 const urls = {
-    hostRoot: `http://localhost:8000`,
-    baseURL: `http://localhost:8000/api/v1`,
+    hostRoot: `http://api.pataspare.com`,
+    baseURL: `http://api.pataspare.com/api/v1`,
     userRegister: `/auth/register`,
     userLogin: `/auth/login`,
     dealerHome: `/dealer`,
