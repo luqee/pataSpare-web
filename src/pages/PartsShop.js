@@ -47,7 +47,7 @@ class PartsShop extends Component {
                             </Col>
                             )
                         })
-                    ):( <p>CURRENTLY THERE ARE NO PARTS.</p>
+                    ):( !this.state.loading && <p>CURRENTLY THERE ARE NO PARTS.</p>
                     )
                 }
                 </Row>

@@ -42,9 +42,6 @@ class Orders extends React.Component {
                     justifyContent: 'center'
                 }}>
                     <Col lg={12}>
-                        <Loader loading={this.state.loading} />
-                    {
-                        this.state.orders.length > 0 ?
                         <Table>
                             <thead>
                                 <tr>
@@ -57,16 +54,17 @@ class Orders extends React.Component {
                                 </tr>
                             </thead>
                             <tbody>
+                            <Loader loading={this.state.loading} />
                             {
+                                this.state.orders.length > 0 ?
                                 this.state.orders.map((order, indx) => {
                                     return <Order match={this.props.match} key={indx} order={order} />
                                     })
+                                :
+                                !this.state.loading && <p>NO ORDERS CURRENTLY</p>
                             }
                             </tbody>
                         </Table>
-                        :
-                        <p>NO ORDERS CURRENTLY</p>
-                    }
                     </Col>
                 </Row>
             </Container>

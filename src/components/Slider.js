@@ -19,7 +19,11 @@ function ImageSlider(props){
     // }
     const sliderPStyle = {
         color: '#ffffff',
-        fontSize: '2.5em'
+        fontSize: '2.5em',
+        backgroundColor: '#007bff',
+        opacity: '0.5',
+        width: 'fit-content',
+        margin: '0 auto'
     }
     return (
         <Container fluid style={{

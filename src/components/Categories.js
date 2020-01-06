@@ -17,7 +17,7 @@ class Categories extends React.Component{
     componentDidMount = () => {
         axios.get(`/categories?preview=true`)
         .then((response) => {
-            
+
             if (response.data.status === 200){
                 this.setState({categories: response.data.data.categories})
                 this.setState({loading: false})
@@ -57,7 +57,8 @@ class Categories extends React.Component{
                                             justifyContent: 'center',
                                             alignItems: 'center',
                                             width: '90%',
-                                            height: '80%'
+                                            height: '80%',
+                                            borderRadius: '5%'
                                         }}>
                                         <Link to={`/part-category/${cat.id}`} style={{
                                             textDecoration: 'none'
@@ -71,12 +72,12 @@ class Categories extends React.Component{
                                         </div>
                                         </Link>
                                         </div>
-                                        
+
                                     </Col>
                                 );
                             })
                         ):(
-                            <div>Could not fetch categories</div>
+                            <div></div>
                         )
                     }
                 </Row>

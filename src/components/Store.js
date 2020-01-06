@@ -85,7 +85,7 @@ function Store(props){
                 /></Card.Text>
                 <Card.Text><FontAwesomeIcon icon={faMapMarker} />  {shop.location}</Card.Text>
                 <Card.Text>
-                <Button id={`numberBtn${shop.id}`} onClick={showNumber}> View Number</Button>
+                <Button size={'sm'} id={`numberBtn${shop.id}`} onClick={showNumber}> View Number</Button>
                 <p id={`numberTxt${shop.id}`} style={{
                     display: `none`
                 }}><FontAwesomeIcon icon={faPhone} />{`  ${shop.number}`}</p></Card.Text>
