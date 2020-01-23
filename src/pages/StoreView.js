@@ -15,9 +15,7 @@ class StoreView extends React.Component {
     constructor(props){
         super(props)
         this.state = {
-            shop: {
-                reviews: []
-            },
+            shop: {},
             review: '',
             rating: 0,
             modalShow: false,
@@ -29,6 +27,8 @@ class StoreView extends React.Component {
             console.log('shoul never happen');
             this.fetchShopDetails()
         }else{
+            console.log('StoreView');
+            console.log(this.props);
             this.setState({shop: this.props.location.state.shop})
         }
     }
@@ -53,7 +53,7 @@ class StoreView extends React.Component {
         });
     }
 
-    
+
     sendReview = () => {
         this.setState({sending: true})
         let newReview = {
@@ -76,13 +76,13 @@ class StoreView extends React.Component {
         })
         .catch((error) => {
             console.log(error);
-        
+
         });
     }
     render = () => {
         let shop = this.state.shop
         let shopRating = 0
-        if(shop.reviews.length > 0 ){
+        if(shop.reviews && shop.reviews.length > 0 ){
             let shopRatings = shop.reviews.map((review) => {
                 if(review.rating === undefined){
                     return 0
@@ -123,7 +123,7 @@ class StoreView extends React.Component {
                                     Login to Inquire
                                 </Link>
                             }
-                        
+
                     </div>
                     </Col>
                     <Col style={{
@@ -162,13 +162,13 @@ class StoreView extends React.Component {
                         <Nav.Item>
                         <Nav.Link eventKey="location">Location</Nav.Link>
                         </Nav.Item>
-                        
+
                     </Nav>
                     </Col>
                     <Col lg={8}>
                     <Tab.Content>
                         <Tab.Pane eventKey="products">
-                        <ShopProducts history={this.props.history} shop={shop} />
+                        <ShopProducts history={this.props.history} shop={this.state.shop} />
                         </Tab.Pane>
                         <Tab.Pane eventKey="location">
                         <ShopLocation shop={shop} />

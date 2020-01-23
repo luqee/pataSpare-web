@@ -11,6 +11,8 @@ class InventoryItem extends Component{
         super(props)
         this.state = {
             part: props.location.state? props.location.state.part: {},
+            selectedBrand: null,
+            brandOptions: [],
             brandSelectOptions: [],
             yearSelectOptions: [],
             modelSelectOptions: [],
@@ -24,6 +26,29 @@ class InventoryItem extends Component{
         .then((response) => {
             if (response.status === 200){
                 this.setState({brandSelectOptions: response.data.data.brands})
+                let brandOptions = response.data.data.brands.map((brand) => {
+                    return {
+                        value: brand.id,
+                        label: brand.name
+                    }
+                })
+                this.setState({brandOptions: brandOptions})
+                let anyOption = {
+                    value: 0,
+                    label: 'any'
+                }
+                brandOptions.unshift(anyOption)
+                let selectedBrand = null
+                if(this.state.part.brand_id === null){
+                    selectedBrand = anyOption
+                }else{
+                    brandOptions.forEach((brand)=>{
+                        if(brand.value === this.state.part.brand_id){
+                            selectedBrand = brand
+                        }
+                    })
+                }
+                this.setState({selectedBrand: selectedBrand})
             }
 
         })
@@ -96,6 +121,9 @@ class InventoryItem extends Component{
             console.log(years);
             formData.set('years', years)
         }
+        if(values.partImage !=null){
+            formData.set('part_image', values.partImage)
+        }
         console.log('final form data is ');
         console.log(formData);
 
@@ -124,33 +152,7 @@ class InventoryItem extends Component{
     }
     render = ()=>{
         let part = this.state.part
-        let brandOptions = this.state.brandSelectOptions.map((brand) => {
-            return {
-                value: brand.id,
-                label: brand.name
-            }
-        })
-        let anyOption = {
-            value: 0,
-            label: 'any'
-        }
-        brandOptions.unshift(anyOption)
-        let selectedBrand = null
-        if(part.brand_id === null){
-            console.log('part....');
-            console.log(part);
-            selectedBrand = anyOption
-        }else{
-            brandOptions.forEach((brand)=>{
-                console.log('part....');
-                console.log(part);
-                if(brand.value === part.brand_id){
-                    selectedBrand = brand
-                }
-            })
-        }
-        console.log('selected brand....');
-        console.log(selectedBrand);
+        
         let modelOptions = this.state.modelSelectOptions.map((model) => {
             return {
                 value: model.id,
@@ -205,7 +207,7 @@ class InventoryItem extends Component{
             })
         }
         let initialState = {
-            brand: selectedBrand,
+            brand: this.state.selectedBrand,
             models: selectedModels,
             years: selectedYears,
             tags: selectedCategories,
@@ -215,6 +217,8 @@ class InventoryItem extends Component{
             price: part.price,
             stock: part.stock,
         }
+        console.log('initail state');
+        console.log(initialState);
         
         return(
             <Container>
@@ -249,7 +253,7 @@ class InventoryItem extends Component{
                             <Form.Group controlId="brand">
                             <Form.Label>Brand:</Form.Label>
                             <Select
-                                options={brandOptions}
+                                options={this.state.brandOptions}
                                 onChange={(selected) => {
                                     setFieldValue('brand', selected);
                                     setFieldValue('models', null);

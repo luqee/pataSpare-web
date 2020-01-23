@@ -3,13 +3,15 @@ import {Container, Row, Col} from 'react-bootstrap';
 import Store from '../components/Store';
 import autoAPI from '../api/api';
 import Loader from '../components/Loader';
+import { all } from 'q';
 
 class Stores extends React.Component {
     constructor(props){
         super(props);
         this.state = {
             shops: [],
-            loading: true
+            loading: true,
+            allMarkers: []
         }
     }
     initMap = () => {
@@ -23,9 +25,13 @@ class Stores extends React.Component {
                     position: {lat: parseFloat(shop.latitude), lng: parseFloat(shop.longitude)},
                     map: map,
                 })
-            })   
+            })
+            this.setState({allMarkers: allMarkers})
         }
     }
+    // setMarkers = (markers) => {
+
+    // }
     componentDidMount = () => {
         autoAPI.get('/shops')
         .then((response) => {
@@ -63,6 +69,7 @@ class Stores extends React.Component {
                 <div className='map' id='map' style={{ width: '100%', height: '450px' }}></div>
                 </Row>
                 <Row style={{
+                    padding:'50px 0',
                     minHeight: `50px`,
                     justifyContent: 'center'
                 }}>
@@ -72,7 +79,7 @@ class Stores extends React.Component {
                             this.state.shops.map((shop, index) => {
                                 return (<Col key={index} lg={4}><Store key={index} shop={shop} location={this.props.location} /></Col> )
                             })
-                        ):( <p>NO SHOPS</p>
+                        ):( !this.state.loading && <p>NO SHOPS</p>
                         )
                     }
                 </Row>

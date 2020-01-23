@@ -1,7 +1,7 @@
 
 const urls = {
-    hostRoot: `http://api.pataspare.com`,
-    baseURL: `http://api.pataspare.com/api/v1`,
+    hostRoot: `http://pataspare.lynsbusinesscollege.co.ke`,
+    baseURL: `http://pataspare.lynsbusinesscollege.co.ke/api/v1`,
     userRegister: `/auth/register`,
     userLogin: `/auth/login`,
     dealerHome: `/dealer`,

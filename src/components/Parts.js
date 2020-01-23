@@ -66,7 +66,7 @@ class Parts extends React.Component{
                                 )
                             })
                         ):(
-                            <div>No parts</div>
+                            <div></div>
                         )
                     }
                 </Row>
@@ -92,7 +92,7 @@ class Parts extends React.Component{
                                 )
                             })
                         ):(
-                            <div>No parts</div>
+                            <div></div>
                         )
                     }
                 </Row>

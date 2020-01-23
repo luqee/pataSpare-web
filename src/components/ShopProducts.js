@@ -8,10 +8,12 @@ class ShopProducts extends Component {
         super(props);
         this.state = {
             parts: null,
-            
+
         }
     }
     componentDidMount = () => {
+        console.log('did mount');
+        console.log(this.props);
         autoAPI.get(`/parts?shop_id=${this.props.shop.id}`)
         .then((response) => {
             if (response.data.status === 200){
@@ -20,7 +22,7 @@ class ShopProducts extends Component {
         })
         .catch((error) => {
             console.log(error);
-            
+
         });
     }
     render() {
@@ -37,9 +39,7 @@ class ShopProducts extends Component {
                             )
                         })
                     ):(
-                        <Col lg={12}>
-                            <p>CURRENTLY THERE ARE NO PARTS</p>
-                        </Col>
+                        !this.state.parts && <p>CURRENTLY THERE ARE NO PARTS</p>
                     )
                 }
                 </Row>
@@ -49,4 +49,3 @@ class ShopProducts extends Component {
 }
 
 export default ShopProducts;
-  

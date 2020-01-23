@@ -39,8 +39,7 @@ class Stores extends React.Component {
                         flexDirection: 'column',
                         alignItems: 'center'
                     }}>
-                        <h3>Stores Selling Auto parts</h3>
-                        <p>Auto Parts Sellers Thriving on PataSpare</p>
+                        <h3>Vendors Thriving on PataSpare</h3>
                     </Col>
                 </Row>
                 <Row style={{
@@ -57,7 +56,7 @@ class Stores extends React.Component {
                                 }
                             })
                         ):(
-                            <p>No Shops</p>
+                            <p></p>
                         )
                     }
                 </Row>

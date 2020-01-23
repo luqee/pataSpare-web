@@ -18,10 +18,10 @@ export default function PrivateRoute({ component: Component, userRole, path, ...
                     )
                 }else{
                     const currentUser = userContext.user
-                    let roles = currentUser.roles.map((role) => {
+                    let roles = Object.keys(currentUser).length > 0 && currentUser.roles.map((role) => {
                         return role.name;
                     });
-                    if(userRole && roles.indexOf(userRole) === -1){
+                    if(userRole && roles.length > 0 && roles.indexOf(userRole) === -1){
                         return (
                             <Redirect
                                 to={{pathname: "/", state: { from: props.location }}}

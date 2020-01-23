@@ -51,9 +51,7 @@ class PartCategory extends Component {
                             )
                         })
                     ):(
-                        <Col lg={12}>
-                            <p>CURRENTLY THERE ARE NO PARTS UNDER {this.state.category}</p>
-                        </Col>
+                        !this.state.loading && <p>CURRENTLY THERE ARE NO PARTS UNDER {this.state.category}</p>
                     )
                 }
                 </Row>

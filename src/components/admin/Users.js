@@ -1,28 +1,25 @@
 import React from 'react';
-import {Container, Row, Col, Table} from 'react-bootstrap';
-import autoAPI from '../../api/api';
-import Order from './Order';
+import {Container, Row, Col, Table, Button} from 'react-bootstrap';
 import Loader from '../Loader';
+import autoAPI from '../../api/api'
+import {Link} from 'react-router-dom';
 
-class Orders extends React.Component {
+class Users extends React.Component{
     constructor(props){
         super(props)
         this.state = {
-            orders: [],
+            users: [],
             loading: true
         }
     }
     componentDidMount = () => {
-        console.log('did mont');
-        console.log(this.props);
-        
-        autoAPI.get(`/orders`, {
+        autoAPI.get(`admin/users`, {
             headers: {'Authorization': 'Bearer '+ this.props.userToken}
         })
         .then((response) => {
             if(response.data.status === 200){
                 this.setState({loading: false})
-                this.setState({orders: response.data.data.orders});
+                this.setState({users: response.data.data.users});
             }
         })
         .catch((error) => {
@@ -30,11 +27,13 @@ class Orders extends React.Component {
         })
     }
     render = () => {
+        const users = this.state.users
+
         return (
             <Container>
                 <Row>
                     <Col>
-                    <p>My Orders</p>
+                    <p>Users Management</p>
                     </Col>
                 </Row>
                 <Row style={{
@@ -45,23 +44,29 @@ class Orders extends React.Component {
                         <Table>
                             <thead>
                                 <tr>
-                                <th>Order</th>
-                                <th>Status</th>
-                                <th>Purchased</th>
-                                <th>Gross Sales</th>
-                                <th>Date</th>
+                                <th>Username</th>
                                 <th>Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
                             <Loader loading={this.state.loading} />
                             {
-                                this.state.orders.length > 0 ?
-                                this.state.orders.map((order, indx) => {
-                                    return <Order match={this.props.match} key={indx} order={order} />
+                                users.length > 0 ?
+                                users.map((user, indx) => {
+                                    return <tr key={indx}>
+                                        <td>{user.name}</td>
+                                        <td>
+                                        <Link to={{
+                                            pathname: `${this.props.match.url}/${user.id}`,
+                                            state: {user: user }
+                                        }}>
+                                        <Button>Manage</Button>
+                                        </Link>
+                                        </td>
+                                    </tr>
                                     })
                                 :
-                                !this.state.loading && <p>NO ORDERS CURRENTLY</p>
+                                !this.state.loading && <p>NO USERS CURRENTLY</p>
                             }
                             </tbody>
                         </Table>
@@ -71,4 +76,5 @@ class Orders extends React.Component {
         )
     }
 }
-export default Orders;
+
+export default Users;
