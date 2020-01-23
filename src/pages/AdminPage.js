@@ -5,6 +5,9 @@ import Dash from '../components/admin/Dash';
 import Categories from '../components/admin/Categories';
 import Brands from '../components/admin/Brands';
 import Users from '../components/admin/Users';
+import Category from '../components/admin/Category';
+import ManageUser from '../components/admin/ManageUser';
+import Brand from '../components/admin/Brand';
 
 const sidebarStyle = {
     height: '100%',
@@ -35,9 +38,24 @@ function AdminPage(props){
             <Col md={9}>
             <Switch>
                 <Route exact path={`${props.match.path}`} component={Dash}/>
-                <Route exact path={`${props.match.path}/users`} component={Users}/>
-                <Route exact path={`${props.match.path}/categories`} component={Categories}/>
-                <Route exact path={`${props.match.path}/brands`} component={Brands}/>
+                <Route exact path={`${props.match.path}/users`} render={routeProps => {
+                    return <Users {...routeProps} userToken={props.userToken} />
+                }}/>
+                <Route exact path={`${props.match.path}/categories`} render={routeProps => {
+                    return <Categories {...routeProps} userToken={props.userToken} />
+                }}/>
+                <Route exact path={`${props.match.path}/brands`} render={routeProps => {
+                    return <Brands {...routeProps} userToken={props.userToken} />
+                }}/>
+                <Route exact path={`${props.match.path}/categories/:id`} render={routeProps => {
+                    return <Category {...routeProps} userToken={props.userToken} />
+                }}/>
+                <Route exact path={`${props.match.path}/users/:id`} render={routeProps => {
+                    return <ManageUser {...routeProps} userToken={props.userToken} />
+                }}/>
+                <Route exact path={`${props.match.path}/brands/:id`} render={routeProps => {
+                    return <Brand {...routeProps} userToken={props.userToken} />
+                }}/>
             </Switch>
             </Col>
             </Row>

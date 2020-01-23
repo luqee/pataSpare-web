@@ -121,6 +121,9 @@ class InventoryItem extends Component{
             console.log(years);
             formData.set('years', years)
         }
+        if(values.partImage !=null){
+            formData.set('part_image', values.partImage)
+        }
         console.log('final form data is ');
         console.log(formData);
 

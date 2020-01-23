@@ -39,7 +39,7 @@ class UserLoginForm extends Component {
 				if(this.props.history.location.state !== undefined){
 					this.props.history.push(this.props.history.location.state.from)
 				}else{
-					this.props.history.push(`/`);
+					this.props.history.push(`/customer`);
 				}
 			}
 			

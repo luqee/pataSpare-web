@@ -2,7 +2,6 @@ import React, {Component} from 'react';
 import {Container, Row, Col, Table, Button} from 'react-bootstrap';
 import autoAPI from '../../api/api';
 import urls from '../../config/config';
-import InquiriesTable from '../InquiriesTable';
 import Loader from '../Loader';
 import {Link} from 'react-router-dom';
 class Inquiries extends Component {
