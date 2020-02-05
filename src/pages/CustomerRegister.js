@@ -6,6 +6,7 @@ import { Formik, ErrorMessage } from 'formik';
 import autoAPI from '../api/api';
 import urls from '../config/config';
 import SignupSchema from '../forms/schemas/SignupSchema'
+import {Helmet} from 'react-helmet';
 
 class CustomerRegister extends Component {
     constructor(props){
@@ -30,6 +31,10 @@ class CustomerRegister extends Component {
     render(){
         return (
             <Container>
+                <Helmet>
+                <title>PataSpare - User Registration</title>
+                <meta name="description" content="Register on Pataspare and access the best service there is." />
+                </Helmet>
             <Row className="justify-content-md-center">
                 <Col lg={6}>
                 <div className='dealer-register'>

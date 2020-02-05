@@ -9,11 +9,24 @@ import { faShoppingCart, faUser, faSearch } from '@fortawesome/free-solid-svg-ic
 import {UserContext, CartContext} from '../App'
 /** @jsx jsx */
 import { jsx } from '@emotion/core'
+import './MainHeader.css';
 
-function CartLink(props){
-    let cartContext = useContext(CartContext)
-    let [cart, setCart] = useState(cartContext.cart)
-    const countItems = (cart) =>{
+class CartLink extends Component {
+    constructor(props){
+        super(props)
+        this.state = {
+            cart: props.cart
+        }
+    }
+    static getDerivedStateFromProps = (props, state) => {
+        if(props.cart !== state.cart){
+            return {cart: props.cart}
+        }
+        return null
+    }
+    // let cartContext = useContext(CartContext)
+    // let [cart, setCart] = useState(cartContext.cart)
+    countItems = (cart) =>{
         let totalItems = 0
         if(Object.keys(cart).length > 0 && cart.items){
             if(cart.items.length > 0){
@@ -25,12 +38,15 @@ function CartLink(props){
         }
         return totalItems
     }
-    const total = countItems(cart)
-    return (
-        <Nav>
-            <Nav.Link href="/cart"><FontAwesomeIcon icon={faShoppingCart} /><span>{` (${total})`}</span></Nav.Link>
-        </Nav>
-    )
+    render = () =>{
+        let cart = this.state.cart
+        let total = this.countItems(cart)
+        return (
+            <Nav>
+                <Nav.Link href="/cart"><FontAwesomeIcon icon={faShoppingCart} /><span>{` (${total})`}</span></Nav.Link>
+            </Nav>
+        )
+    }
 }
 
 function AuthButton(props) {
@@ -122,10 +138,11 @@ class Header extends Component {
                 padding: '0',
                 position: 'fixed',
                 top: '0',
-                zIndex: '12'
+                zIndex: '12',
             }}>
-                <Navbar bg="dark" variant='dark' expand="lg" style={{
-                    borderBottom: '5px solid #007bff'
+                <Navbar expand="lg" style={{
+                    borderBottom: '5px solid #343a40',
+                    backgroundColor: '#007bff',
                 }}>
                 <Navbar.Brand href="/">PataSpare</Navbar.Brand>
                 <Mobile><FontAwesomeIcon icon={faSearch} onClick={this.toggleSearchBar}/></Mobile>
@@ -146,12 +163,12 @@ class Header extends Component {
                     <Nav>
                     <Nav.Link href='/dealer/register'>Sell on PataSpare</Nav.Link>
                     </Nav>
-                    {/* <CartContext.Consumer>
+                    <CartContext.Consumer>
                         {value => {
-                            return 
+                            return <CartLink history={this.props.history} cart={value.cart} />
                         }}
-                    </CartContext.Consumer> */}
-                    <CartLink history={this.props.history} />
+                    </CartContext.Consumer>
+                    {/* <CartLink history={this.props.history} /> */}
                     <AuthButton history={this.props.history} />
                 </Navbar.Collapse>
                 </Navbar>

@@ -37,13 +37,13 @@ class UserCart extends React.Component {
         });
     }
     placeOrder = (user) => {
-        cartService.placeOrder(user, this.state.cart, (order) => {
-            if(order){
-                this.props.cartContext.updateCart({})
-                this.setState({order: order})
-                this.setState({order_placed: true})
-            }
-        });
+        console.log('user placing order.... \n');
+        console.log(user);
+        let path = {
+            pathname: `/customer/orders/create`,
+            state: {cart: this.state.cart, user: user}
+        }
+        this.props.history.push(path)
     }
     getTotal = (cart) => {
         let total = 0
@@ -58,80 +58,72 @@ class UserCart extends React.Component {
             }
         }
         return total
-        //get grand total
     }
     render = () => {
         let cart = this.state.cart
         let grandTotal = this.getTotal(cart)
-        if (this.state.order_placed){
-            return <Redirect to={{
-                pathname: `/customer/orders/${this.state.order.id}`,
-                state: {order: this.state.order}
-            }} />
-        }else{
-            return  (cart.items === undefined) ? <p>NO ITEMS IN CART</p> :(
-                <Container className='items' id='items'>
-                <Row style={{
-                    justifyContent: 'center'
-                }}>
-                    <Col>
-                        <h3>Cart</h3>
-                    </Col>
-                </Row>
-                <Row>
-                <Col lg={12}>
-                {
-                    (cart.items.length > 0) ? (
-                        <div>
-                            <Table>
-                            <thead>
-                                <tr>
-                                <th></th>
-                                <th>Product</th>
-                                <th>Price</th>
-                                <th>Quantity</th>
-                                <th>Total</th>
-                                <th></th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                            {
-                                cart.items.map((item, index) => {
-                                    return (
-                                        <CartItem key={index} item={item} updateCart={this.updateCart} removeFromCart={this.removeFromCart} />
-                                    )
-                                })
-                            }
-                            <tr>
-                                <td colSpan={4}>Grand Total</td>
-                                <td>{grandTotal}</td>
-                            </tr>
-                            </tbody>
-                        </Table>
-                        <Row>
-                            <UserContext.Consumer>
-                                {props=>{
-                                    return Object.keys(props.user).length > 0 ? <Button onClick={()=>{this.placeOrder(props.user)}}>Place Order</Button>
-                                    :<Link to={{
-                                        pathname: `/user/login`,
-                                        state: {from: this.props.location.pathname}
-                                    }}>
-                                        Login to place an order
-                                    </Link>
-                                }}
-                            </UserContext.Consumer>
-                            
-                        </Row>
-                        </div>
-                    ):(
-                        <p>NO ITEMS IN CART</p>
-                    )
-                }
+        return (
+            <Container className='items' id='items'>
+            <Row style={{
+                justifyContent: 'center'
+            }}>
+                <Col>
+                    <h3>Cart</h3>
                 </Col>
-                </Row>
-            </Container>
-            )
-        }
+            </Row>
+            <Row>
+            <Col lg={12}>
+            {
+                (cart.items !== undefined && cart.items.length > 0) ? (
+                    <div>
+                        <Table>
+                        <thead>
+                            <tr>
+                            <th></th>
+                            <th>Product</th>
+                            <th>Price</th>
+                            <th>Quantity</th>
+                            <th>Total</th>
+                            <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        {
+                            cart.items.map((item, index) => {
+                                return (
+                                    <CartItem key={index} item={item} updateCart={this.updateCart} removeFromCart={this.removeFromCart} />
+                                )
+                            })
+                        }
+                        <tr>
+                            <td colSpan={4}>Grand Total</td>
+                            <td>{grandTotal}</td>
+                        </tr>
+                        </tbody>
+                    </Table>
+                    <Row>
+                        <UserContext.Consumer>
+                            {props=>{
+                                return Object.keys(props.user).length > 0 ? <Button onClick={()=>{this.placeOrder(props.user)}}>Place Order</Button>
+                                :<Link to={{
+                                    pathname: `/user/login`,
+                                    state: {from: this.props.location.pathname}
+                                }}>
+                                    Login to place an order
+                                </Link>
+                            }}
+                        </UserContext.Consumer>
+                        
+                    </Row>
+                    </div>
+                ):(
+                    <p>NO ITEMS IN CART</p>
+                )
+            }
+            </Col>
+            </Row>
+        </Container>
+        )
     }
 }
 

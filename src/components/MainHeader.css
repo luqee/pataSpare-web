@@ -2,3 +2,10 @@
     background-image: url('../images/header-back.jpg');
     height: 250px;
 }
+
+.nav-link{
+    color: #ffffff;
+}
+a.navbar-brand{
+    color: #ffffff !important;
+}

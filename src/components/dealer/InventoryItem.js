@@ -106,26 +106,18 @@ class InventoryItem extends Component{
             let models = []
             values.models.map((item) => models.push(item.value))
             formData.set('models', models)
-            console.log('models are');
-            console.log(models);
         }
         if(values.tags != null){
             let tags = Array.from(values.tags, (tag) => parseInt(tag.value))
-            console.log('tags are');
-            console.log(tags);
             formData.set('categories', tags)
         }
         if(values.years != null){
             let years = Array.from(values.years, (year) => parseInt(year.value))
-            console.log('years are');
-            console.log(years);
             formData.set('years', years)
         }
         if(values.partImage !=null){
             formData.set('part_image', values.partImage)
         }
-        console.log('final form data is ');
-        console.log(formData);
 
         autoAPI.post(`${urls.dealerHome}/parts/${this.state.part.id}`, formData, {
             headers: {
@@ -137,8 +129,7 @@ class InventoryItem extends Component{
             if (response.status === 200){
                 actions.setSubmitting(false);
                 let location ={
-                    pathname: `/dealer/shops/manage/${this.state.part.shop_id}`,
-                    state: {shop: this.props.shop}
+                    pathname: this.props.location.state.from
                 }
                 this.props.history.push(location);
             }

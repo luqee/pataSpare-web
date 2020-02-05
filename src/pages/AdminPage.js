@@ -11,16 +11,16 @@ import Brand from '../components/admin/Brand';
 
 const sidebarStyle = {
     height: '100%',
-    backgroundColor: '#111',
     overflowX: 'hidden',
     paddingTop: '20px'
 }
 const sideLinkStyle = {
     padding: '6px 8px 6px 16px',
     textDecoration: 'none',
-    fontSize: '25px',
-    color: '#818181',
+    fontSize: '20px',
+    color: '#343a40',
     display: 'block',
+    borderBottom: '3px solid #343a40',
 }
 
 function AdminPage(props){

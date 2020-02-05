@@ -61,7 +61,7 @@ function PartItem(props){
                 <Card.Text>
                 Price: {part.price}
                 </Card.Text>
-                <Button onClick={addToCart}>
+                <Button size={'sm'} onClick={addToCart}>
                 <FontAwesomeIcon icon={faShoppingCart} /> {adding?'Adding...':'Add'}
                 <br />
                 {
