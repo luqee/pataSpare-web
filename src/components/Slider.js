@@ -20,8 +20,6 @@ function ImageSlider(props){
     const sliderPStyle = {
         color: '#ffffff',
         fontSize: '2.5em',
-        backgroundColor: '#007bff',
-        opacity: '0.5',
         width: 'fit-content',
         margin: '0 auto'
     }
@@ -41,9 +39,9 @@ function ImageSlider(props){
                     height='inherit'
                     alt="First slide"
                     />
-                    <Carousel.Caption>
+                    {/* <Carousel.Caption>
                     <p style={sliderPStyle}>Welcome to Pata Spare Market Place</p>
-                    </Carousel.Caption>
+                    </Carousel.Caption> */}
                 </Carousel.Item>
                 <Carousel.Item style={{
                     maxHeight: '400px'
@@ -52,12 +50,13 @@ function ImageSlider(props){
                     className="d-block w-100"
                     src={slider2}
                     height='inherit'
+                    objectFit={'fill'}
                     alt="Third slide"
                     />
 
-                    <Carousel.Caption>
+                    {/* <Carousel.Caption>
                     <p style={sliderPStyle}>Your Brilliant One Stop Spare Community</p>
-                    </Carousel.Caption>
+                    </Carousel.Caption> */}
                 </Carousel.Item>
                 <Carousel.Item style={{
                     maxHeight: '400px'
@@ -69,9 +68,9 @@ function ImageSlider(props){
                     alt="Third slide"
                     />
 
-                    <Carousel.Caption>
+                    {/* <Carousel.Caption>
                     <p style={sliderPStyle}>For Your Ultimate Vehicle Maintenance.</p>
-                    </Carousel.Caption>
+                    </Carousel.Caption> */}
                 </Carousel.Item>
                 </Carousel>
                 </Col>

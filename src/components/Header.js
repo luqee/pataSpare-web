@@ -1,4 +1,4 @@
-import { Component, useContext, useState } from 'react';
+import React, { Component, useContext, useState } from 'react';
 import {withRouter} from 'react-router-dom';
 import Navbar from 'react-bootstrap/Navbar';
 import {Nav, NavDropdown, Container}from 'react-bootstrap';
@@ -7,9 +7,8 @@ import SearchBar from './SearchBar';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faShoppingCart, faUser, faSearch } from '@fortawesome/free-solid-svg-icons';
 import {UserContext, CartContext} from '../App'
-/** @jsx jsx */
-import { jsx } from '@emotion/core'
 import './MainHeader.css';
+import logo from '../images/pataspare-logo.png'
 
 class CartLink extends Component {
     constructor(props){
@@ -89,6 +88,7 @@ function AuthButton(props) {
                     display: `block`,
                     color: '#000000',
                 }}>
+                    {/* <Nav.Link eventKey='logout'>Log Out</Nav.Link> */}
                     <a href="/#" onClick={(e) => {
                         e.preventDefault();
                         signOut()
@@ -132,19 +132,43 @@ class Header extends Component {
         let searchBar = document.getElementById('searchBar')
         searchBar.style.display = searchBar.style.display == 'block'? 'none': 'block';
     }
+    onSelect = (event)=>{
+        let currentUser = this.props.user
+        let roles = [];
+        if(currentUser !== {} && currentUser.roles){
+            roles = currentUser.roles.map((role) => {
+                return role.name;
+            });
+        }
+        if(roles.indexOf('dealer') > -1){
+            this.props.history.push('/dealer')    
+        }else if(roles.indexOf('customer') > -1){
+            this.props.history.push('/customer/account')
+        }else{
+            this.props.history.push('/dealer/register')
+        } 
+    }
     render() {
         return (
             <Container id={`Header`} fluid  style={{
                 padding: '0',
                 position: 'fixed',
                 top: '0',
-                zIndex: '12',
+                zIndex: '20',
             }}>
                 <Navbar expand="lg" style={{
                     borderBottom: '5px solid #343a40',
                     backgroundColor: '#007bff',
                 }}>
-                <Navbar.Brand href="/">PataSpare</Navbar.Brand>
+                <Navbar.Brand href="/">
+                <img
+                    src={logo}
+                    width="100"
+                    height="40"
+                    className="d-inline-block align-top"
+                    alt="Pataspare logo"
+                />
+                </Navbar.Brand>
                 <Mobile><FontAwesomeIcon icon={faSearch} onClick={this.toggleSearchBar}/></Mobile>
                 <Navbar.Toggle aria-controls="basic-navbar-nav" />
                 <Navbar.Collapse id="basic-navbar-nav">
@@ -160,8 +184,10 @@ class Header extends Component {
                     <Nav.Link href='/shop'>Shop</Nav.Link>
                     <Nav.Link href='/stores'>Store List</Nav.Link>
                     </Nav>
-                    <Nav>
-                    <Nav.Link href='/dealer/register'>Sell on PataSpare</Nav.Link>
+                    <Nav onSelect={this.onSelect}>
+                        <Nav.Item>
+                        <Nav.Link eventKey='register'>Sell on PataSpare</Nav.Link>
+                        </Nav.Item>
                     </Nav>
                     <CartContext.Consumer>
                         {value => {

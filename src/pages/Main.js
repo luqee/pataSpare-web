@@ -48,7 +48,13 @@ class Main extends Component {
             <Switch>
                 <Route exact path='/' component={LangingPage}/>
                 <Route exact path='/part-category/:category' component={PartCategory}/>
-                <Route exact path='/parts/:id' component={PartDetails}/>
+                <Route exact path='/parts/:id' render={(routeProps)=>{
+                    return <CartContext.Consumer>
+                        {value => {
+                            return <PartDetails {...routeProps} cartContext={value}/>
+                        }}
+                    </CartContext.Consumer>
+                }}/>
                 <Route exact path='/shop' component={PartsShop}/>
                 <Route exact path='/stores' component={Stores}/>
                 <Route exact path='/stores/:id' render={routeProps => {

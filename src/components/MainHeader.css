@@ -3,9 +3,9 @@
     height: 250px;
 }
 
-.nav-link{
+#Header .nav-link{
     color: #ffffff;
 }
-a.navbar-brand{
+#Header a.navbar-brand{
     color: #ffffff !important;
 }

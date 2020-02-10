@@ -32,7 +32,7 @@ class CustomerRegister extends Component {
         return (
             <Container>
                 <Helmet>
-                <title>PataSpare - User Registration</title>
+                <title>User Registration | PataSpare</title>
                 <meta name="description" content="Register on Pataspare and access the best service there is." />
                 </Helmet>
             <Row className="justify-content-md-center">

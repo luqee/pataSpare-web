@@ -13,8 +13,8 @@ class LandingPage extends Component {
         return (
             <div className='landing'>
                 <Helmet>
-                <title>PataSpare - Home</title>
-                <meta name="description" content="Your one stop store for your auto parts needs" />
+                <title>PataSpare | Your one stop solution for your auto parts needs </title>
+                <meta name="description" content="Source for your spareparts from a wide selection of auto part dealers. Quality parts, timely delivery and overall top service are our top priority." />
                 </Helmet>
                 <Slider />
                 <Categories />

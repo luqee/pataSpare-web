@@ -33,8 +33,8 @@ class PartsShop extends Component {
         return (
             <Container>
                 <Helmet>
-                <title>PataSpare - Browse Parts</title>
-                <meta name="description" content="Browse selection of parts on offer" />
+                <title>Browse Parts | PataSpare</title>
+                <meta name="description" content="Browse selection of quality parts on offer" />
                 </Helmet>
                 <Row style={{
                     justifyContent: 'center'

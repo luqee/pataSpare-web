@@ -94,7 +94,7 @@ class CreatePartForm extends Component {
             if (response.status === 201){
                 actions.setSubmitting(false);
                 let location ={
-                    pathname: `/dealer/shops/manage/${this.state.shop_id}`,
+                    pathname: `/dealer/shops/manage/${this.state.shop_id}/parts`,
                     state: {shop: this.props.shop}
                 }
                 this.props.history.push(location);

@@ -3,12 +3,10 @@ import {Container, Row, Col} from 'react-bootstrap';
 import {Link, Switch, Route} from 'react-router-dom';
 import Dash from './Dash';
 import Orders from './Orders';
-import CreateOrder from './CreateOrder';
 import Inquiries from './Inquiries';
 import Account from './Account';
 import ViewOrder from './ViewOrder';
 import InquiryView from '../InquiryView';
-import { CartContext } from '../../App';
 import {Helmet} from 'react-helmet';
 
 function CustomerDash(props){
@@ -25,6 +23,13 @@ function CustomerDash(props){
         display: 'block',
         borderBottom: '3px solid #343a40',
     }
+    let roles = []
+    const currentUser = props.user
+    roles = Object.keys(currentUser).length > 0 && currentUser.roles.map((role) => {
+        return role.name;
+    });
+    
+    
     return (
         <Container id='customer-dash'>
             <Helmet>
@@ -34,6 +39,9 @@ function CustomerDash(props){
             <Row>
             <Col md={3}>
             <div id={`sidebar`} className={`sidebar`} style={sidebarStyle}>
+                {
+                    (roles.indexOf('dealer') > -1) && <Link to={`/dealer`} style={sideLinkStyle}> Dealer Home</Link>
+                }
                 <Link to={`${props.match.url}`} style={sideLinkStyle}> Dashboard</Link>
                 <Link to={`${props.match.url}/orders`} style={sideLinkStyle}>Orders</Link>
                 <Link to={`${props.match.url}/inquiries`} style={sideLinkStyle}>Inquiries</Link>
@@ -47,11 +55,7 @@ function CustomerDash(props){
                 <Route exact path={`${props.match.path}/orders`} render={routeProps =>{
                     return <Orders {...routeProps} userToken={props.userToken} />
                 }}/>
-                <Route exact path={`${props.match.path}/orders/create`} render={routeProps =>{
-                    return <CartContext.Consumer>
-                        {value => {return <CreateOrder {...routeProps} userToken={props.userToken} cartContext={value} />}}
-                    </CartContext.Consumer>
-                }}/>
+                
                 <Route exact path={`${props.match.path}/orders/:id`} component={ViewOrder}/>
                 <Route exact path={`${props.match.path}/inquiries`} render={routeProps =>{
                     return <Inquiries {...routeProps} userToken={props.userToken} />

@@ -8,7 +8,7 @@ class DealerRegister extends Component {
         return (
             <Container>
                 <Helmet>
-                <title>PataSpare - Dealer Registration</title>
+                <title>Dealer Registration | PataSpare</title>
                 <meta name="description" content="Join Pataspare as on of our partner stores" />
                 </Helmet>
             <Row className="justify-content-md-center">

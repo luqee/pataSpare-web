@@ -26,9 +26,6 @@ function PartItem(props){
                 setAdding(false)
                 cartContext.updateCart(cart)
                 let count = countInCart(part.id, cart)
-                console.log('setting cart');
-                console.log(count, cart);
-                
                 setInCart(count)
             }
         });

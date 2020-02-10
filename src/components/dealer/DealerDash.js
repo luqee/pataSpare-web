@@ -29,13 +29,14 @@ function  DealerDash(props){
     return (
         <Container>
             <Helmet>
-                <title>PataSpare - Auto Dealer dashboard</title>
+                <title>Auto Dealer dashboard | PataSpare</title>
                 <meta name="description" content="Manage Your shops conviniently." />
                 </Helmet>
             <Row>
                 <Col md={3}>
                 <div id={`sidebar`} className={`sidebar`} style={sidebarStyle}>
-                    <Link to={`${props.match.url}`} style={sideLinkStyle}>Dashboard</Link>
+                    <Link to={`/customer`} style={sideLinkStyle}> Dashboard</Link>
+                    <Link to={`${props.match.url}`} style={sideLinkStyle}>Dealer Home</Link>
                     <Link to={`${props.match.url}/shops`} style={sideLinkStyle}>Shops</Link>
                     <Link to={`${props.match.url}/inventory`} style={sideLinkStyle}>Inventory</Link>
                     <Link to={`${props.match.url}/orders`} style={sideLinkStyle}>Orders</Link>

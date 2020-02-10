@@ -3,7 +3,6 @@ import {Container, Row, Col} from 'react-bootstrap';
 import Store from '../components/Store';
 import autoAPI from '../api/api';
 import Loader from '../components/Loader';
-import { all } from 'q';
 import {Helmet} from 'react-helmet';
 
 class Stores extends React.Component {
@@ -58,23 +57,11 @@ class Stores extends React.Component {
         }
     }
     render = () => {
-        if (!window.google) {
-            var s = document.createElement('script');
-            s.type = 'text/javascript';
-            s.src = `https://maps.googleapis.com/maps/api/js?key=${process.env.REACT_APP_GOOGLE_KEY}`;
-            var x = document.getElementsByTagName('script')[0];
-            x.parentNode.insertBefore(s, x);
-            s.addEventListener('load', e => {
-                this.initMap();
-            })
-        } else {
-            this.initMap();
-        }
         return (
             <Container className='stores' id='stores'>
                 <Helmet>
-                <title>PataSpare - Stores</title>
-                <meta name="description" content="Our partner stores" />
+                <title>Vendor partners | PataSpare</title>
+                <meta name="description" content="Our partner stores stock parts of highest quality" />
                 </Helmet>
                 <Row style={{
                     justifyContent: 'center'
