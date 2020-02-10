@@ -95,7 +95,12 @@ class App extends Component {
             flexDirection: 'column'
         }}>
           { GA.init() && <GA.RouteTracker /> }
-            <Header />
+          <UserContext.Consumer>
+            {props => {
+              return <Header user={props.user}/>
+            }}
+          </UserContext.Consumer>
+            
             <Main />
             <Footer />
         </Container>

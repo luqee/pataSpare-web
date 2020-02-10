@@ -26,9 +26,6 @@ function PartItem(props){
                 setAdding(false)
                 cartContext.updateCart(cart)
                 let count = countInCart(part.id, cart)
-                console.log('setting cart');
-                console.log(count, cart);
-                
                 setInCart(count)
             }
         });
@@ -61,7 +58,7 @@ function PartItem(props){
                 <Card.Text>
                 Price: {part.price}
                 </Card.Text>
-                <Button onClick={addToCart}>
+                <Button size={'sm'} onClick={addToCart}>
                 <FontAwesomeIcon icon={faShoppingCart} /> {adding?'Adding...':'Add'}
                 <br />
                 {

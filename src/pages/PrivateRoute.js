@@ -28,7 +28,11 @@ export default function PrivateRoute({ component: Component, userRole, path, ...
                             />
                         )    
                     }
-                    return (<Component {...props} userToken={userToken}/>)
+                    console.log('returning private component');
+                    console.log(currentUser);
+                    console.log(roles);
+                    
+                    return (<Component {...props} userToken={userToken} user={currentUser} />)
                 }
                 
             }

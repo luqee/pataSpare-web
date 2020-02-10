@@ -64,9 +64,11 @@ class Categories extends React.Component{
                                             textDecoration: 'none'
                                         }}>
                                         <div style={{
-                                            color: '#ff6200',
-                                            fontSize: '2em',
+                                            color: '#ffffff',
+                                            fontSize: '1.5em',
                                             fontWeight: 'bold',
+                                            backgroundColor: '#007bff',
+                                            padding: '0 5px'
                                         }}>
                                             {cat.name}
                                         </div>

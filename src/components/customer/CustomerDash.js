@@ -7,30 +7,41 @@ import Inquiries from './Inquiries';
 import Account from './Account';
 import ViewOrder from './ViewOrder';
 import InquiryView from '../InquiryView';
-
+import {Helmet} from 'react-helmet';
 
 function CustomerDash(props){
-    console.log('customer dash');
-    console.log(props);
-    
     const sidebarStyle = {
         height: '100%',
-        backgroundColor: '#111',
         overflowX: 'hidden',
         paddingTop: '20px'
     }
     const sideLinkStyle = {
         padding: '6px 8px 6px 16px',
         textDecoration: 'none',
-        fontSize: '25px',
-        color: '#818181',
+        fontSize: '20px',
+        color: '#343a40',
         display: 'block',
+        borderBottom: '3px solid #343a40',
     }
+    let roles = []
+    const currentUser = props.user
+    roles = Object.keys(currentUser).length > 0 && currentUser.roles.map((role) => {
+        return role.name;
+    });
+    
+    
     return (
         <Container id='customer-dash'>
+            <Helmet>
+            <title>PataSpare - User dashboard</title>
+            <meta name="description" content="Keep track of your orders and enquiries." />
+            </Helmet>
             <Row>
             <Col md={3}>
             <div id={`sidebar`} className={`sidebar`} style={sidebarStyle}>
+                {
+                    (roles.indexOf('dealer') > -1) && <Link to={`/dealer`} style={sideLinkStyle}> Dealer Home</Link>
+                }
                 <Link to={`${props.match.url}`} style={sideLinkStyle}> Dashboard</Link>
                 <Link to={`${props.match.url}/orders`} style={sideLinkStyle}>Orders</Link>
                 <Link to={`${props.match.url}/inquiries`} style={sideLinkStyle}>Inquiries</Link>
@@ -44,6 +55,7 @@ function CustomerDash(props){
                 <Route exact path={`${props.match.path}/orders`} render={routeProps =>{
                     return <Orders {...routeProps} userToken={props.userToken} />
                 }}/>
+                
                 <Route exact path={`${props.match.path}/orders/:id`} component={ViewOrder}/>
                 <Route exact path={`${props.match.path}/inquiries`} render={routeProps =>{
                     return <Inquiries {...routeProps} userToken={props.userToken} />

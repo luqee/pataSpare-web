@@ -29,21 +29,18 @@ class ContactForm extends Component {
     autoAPI.post('/contact', JSON.stringify(postData))
     .then((response) => {
       if (response.data.status === 201) {
-		this.setState({loading: false})
 		actions.setSubmitting(false);
-        this.setState({email: ''})
-		this.setState({ message: ''})
-		this.setState({ subject: ''})
+        this.setState({email: '', loading: false, message: '',subject: ''})
 		this.props.history.push('')
+		this.props.history.push('/')
         // contactForm.disabled = false
         alert(`Thank you for contacting us`)
       }
     })
     .catch((error) => {
-	  this.setState({loading: false})
 	  actions.setSubmitting(false);
+	  this.setState({loading: false})
       console.log(error);
-      
     });
   }
   render() {

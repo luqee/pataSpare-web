@@ -28,7 +28,7 @@ function PartsTable(props){
                         <td>
                             <Link to={{
                                 pathname: '/dealer/inventory/'+part.id,
-                                state: {part: part}
+                                state: {part: part, from: props.match.url}
                             }}>
                             <Button>View</Button>
                             </Link>

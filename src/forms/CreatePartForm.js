@@ -73,6 +73,7 @@ class CreatePartForm extends Component {
             years: years,
             price: values.price,
             stock: values.stock,
+            part_number: values.part_number,
             description: values.description,
             categories: tags,
             shop_id: this.state.shop_id
@@ -93,7 +94,7 @@ class CreatePartForm extends Component {
             if (response.status === 201){
                 actions.setSubmitting(false);
                 let location ={
-                    pathname: `/dealer/shops/manage/${this.state.shop_id}`,
+                    pathname: `/dealer/shops/manage/${this.state.shop_id}/parts`,
                     state: {shop: this.props.shop}
                 }
                 this.props.history.push(location);
@@ -149,6 +150,7 @@ class CreatePartForm extends Component {
                     name: '',
                     description: '',
                     partImage: null,
+                    part_number: '',
                     price: '',
                     stock: '',
                 }}
@@ -167,6 +169,17 @@ class CreatePartForm extends Component {
                         <Form.Label>Name:</Form.Label>
                         <Form.Control placeholder="Title" onChange={handleChange}/>
                         <ErrorMessage name="name" render={(msg) => {
+                            return <Form.Control.Feedback type="invalid" style={{
+                                display: `block`
+                              }}>
+                            {msg}
+                            </Form.Control.Feedback>
+                        }}/>
+                        </Form.Group>
+                        <Form.Group controlId="part_number">
+                        <Form.Label>Part Number:</Form.Label>
+                        <Form.Control placeholder="SKU" onChange={handleChange}/>
+                        <ErrorMessage name="part_number" render={(msg) => {
                             return <Form.Control.Feedback type="invalid" style={{
                                 display: `block`
                               }}>

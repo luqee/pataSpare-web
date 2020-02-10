@@ -11,16 +11,21 @@ function Account(props){
     
     
     let userContext = useContext(UserContext)
-    let roles = userContext.user.roles.map((role) => {
-        return role.name;
-    });
-    console.log('user is');
-    console.log(userContext.user);
-    const intialState = {
-        username: userContext.user.name,
-        email: userContext.user.email,
-        number: userContext.user.number ? userContext.user.number: '',
+    let intialState = {}
+    let roles = []
+    if(Object.keys(userContext.user).length > 0){
+        roles = userContext.user.roles.map((role) => {
+            return role.name;
+        });
+        console.log('user is');
+        console.log(userContext.user);
+        intialState = {
+            username: userContext.user.name,
+            email: userContext.user.email,
+            number: userContext.user.number ? userContext.user.number: '',
+        }
     }
+    
     const becomeVendor = (values, actions) =>{
         let postData = {number: values.number};
         autoAPI.post(`/auth/upgrade`, JSON.stringify(postData), {
@@ -32,7 +37,7 @@ function Account(props){
         if (response.data.status === 201) {
             actions.setSubmitting(false);
             userContext.updateUser(response.data.data.user)
-            // props.history.push(`/customer`);
+            props.history.push(``);
             props.history.push(props.location.pathname);
         }
         })

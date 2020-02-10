@@ -3,7 +3,7 @@ import {Container, Row, Col} from 'react-bootstrap';
 import Store from '../components/Store';
 import autoAPI from '../api/api';
 import Loader from '../components/Loader';
-import { all } from 'q';
+import {Helmet} from 'react-helmet';
 
 class Stores extends React.Component {
     constructor(props){
@@ -26,7 +26,7 @@ class Stores extends React.Component {
                     map: map,
                 })
             })
-            this.setState({allMarkers: allMarkers})
+            // this.setState({allMarkers: allMarkers})
         }
     }
     // setMarkers = (markers) => {
@@ -57,9 +57,12 @@ class Stores extends React.Component {
         }
     }
     render = () => {
-        
         return (
             <Container className='stores' id='stores'>
+                <Helmet>
+                <title>Vendor partners | PataSpare</title>
+                <meta name="description" content="Our partner stores stock parts of highest quality" />
+                </Helmet>
                 <Row style={{
                     justifyContent: 'center'
                 }}>

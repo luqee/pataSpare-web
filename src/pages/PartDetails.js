@@ -26,6 +26,7 @@ class PartDetails extends Component {
         
     }
     static contextType = CartContext
+
     componentDidMount = () => {
         if(this.props.location.state){
             this.setState({part: this.props.location.state.part})
@@ -57,10 +58,9 @@ class PartDetails extends Component {
             part_id: this.state.part.id,
             quantity: parseInt(this.state.quantity)
         }
-        cartService.addToCart(item_to_add, this.context.cart, (cart)=> {
+        cartService.addToCart(item_to_add, this.props.cartContext.cart, (cart)=> {
             if(cart){
-                let cartContext = this.context
-                cartContext.updateCart(cart)
+                this.props.cartContext.updateCart(cart)
             }
         });
         

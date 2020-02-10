@@ -10,28 +10,33 @@ import CreateShop from './CreateShop';
 import InquiryView from '../InquiryView';
 import ViewShop from './ViewShop'
 import InventoryItem from './InventoryItem'
+import {Helmet} from 'react-helmet';
 
 const sidebarStyle = {
     height: '100%',
-    backgroundColor: '#111',
     overflowX: 'hidden',
     paddingTop: '20px'
 }
 const sideLinkStyle = {
     padding: '6px 8px 6px 16px',
     textDecoration: 'none',
-    fontSize: '25px',
-    color: '#818181',
+    fontSize: '20px',
+    color: '#343a40',
     display: 'block',
+    borderBottom: '3px solid #343a40',
 }
-
 function  DealerDash(props){
     return (
         <Container>
+            <Helmet>
+                <title>Auto Dealer dashboard | PataSpare</title>
+                <meta name="description" content="Manage Your shops conviniently." />
+                </Helmet>
             <Row>
                 <Col md={3}>
                 <div id={`sidebar`} className={`sidebar`} style={sidebarStyle}>
-                    <Link to={`${props.match.url}`} style={sideLinkStyle}>Dashboard</Link>
+                    <Link to={`/customer`} style={sideLinkStyle}> Dashboard</Link>
+                    <Link to={`${props.match.url}`} style={sideLinkStyle}>Dealer Home</Link>
                     <Link to={`${props.match.url}/shops`} style={sideLinkStyle}>Shops</Link>
                     <Link to={`${props.match.url}/inventory`} style={sideLinkStyle}>Inventory</Link>
                     <Link to={`${props.match.url}/orders`} style={sideLinkStyle}>Orders</Link>

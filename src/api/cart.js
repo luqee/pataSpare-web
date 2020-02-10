@@ -50,9 +50,10 @@ class CartService {
             cb(false);
         });
     }
-    placeOrder = (user, cart, cb) => {
+    placeOrder = (user, cart, details, cb) => {
         let postData = {
-            cart: cart
+            cart: cart,
+            details: details
         }
         autoApi.post(`/orders`, JSON.stringify(postData), {
             headers: {'Authorization': 'Bearer '+ user.token}

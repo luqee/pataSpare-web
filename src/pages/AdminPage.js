@@ -8,21 +8,21 @@ import Users from '../components/admin/Users';
 import Category from '../components/admin/Category';
 import ManageUser from '../components/admin/ManageUser';
 import Brand from '../components/admin/Brand';
+import Messages from '../components/admin/Messages';
 
 const sidebarStyle = {
     height: '100%',
-    backgroundColor: '#111',
     overflowX: 'hidden',
     paddingTop: '20px'
 }
 const sideLinkStyle = {
     padding: '6px 8px 6px 16px',
     textDecoration: 'none',
-    fontSize: '25px',
-    color: '#818181',
+    fontSize: '20px',
+    color: '#343a40',
     display: 'block',
+    borderBottom: '3px solid #343a40',
 }
-
 function AdminPage(props){
     return (
         <Container>
@@ -33,6 +33,7 @@ function AdminPage(props){
             <Link to={`${props.match.url}/users`} style={sideLinkStyle}>Users</Link>
             <Link to={`${props.match.url}/categories`} style={sideLinkStyle}>Categories</Link>
             <Link to={`${props.match.url}/brands`} style={sideLinkStyle}>Brands</Link>
+            <Link to={`${props.match.url}/messages`} style={sideLinkStyle}>Messages</Link>
             </div>
             </Col>
             <Col md={9}>
@@ -46,6 +47,9 @@ function AdminPage(props){
                 }}/>
                 <Route exact path={`${props.match.path}/brands`} render={routeProps => {
                     return <Brands {...routeProps} userToken={props.userToken} />
+                }}/>
+                <Route exact path={`${props.match.path}/messages`} render={routeProps => {
+                    return <Messages {...routeProps} userToken={props.userToken} />
                 }}/>
                 <Route exact path={`${props.match.path}/categories/:id`} render={routeProps => {
                     return <Category {...routeProps} userToken={props.userToken} />

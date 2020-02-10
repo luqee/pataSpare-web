@@ -60,6 +60,11 @@ class SearchBar extends React.Component {
     search = (event) => {
         event.preventDefault();
         let queryString = `term=${this.state.searchTerm}`
+        if(this.state.searchTerm !== ''){
+            queryString = `term=${this.state.searchTerm}`
+        }else{
+            queryString = `term=none`
+        }
         if(this.state.brand){
             queryString = queryString.concat(`&brand=${this.state.brand.value}`)
         }

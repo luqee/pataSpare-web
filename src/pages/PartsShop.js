@@ -3,6 +3,7 @@ import {Container, Row, Col} from 'react-bootstrap';
 import PartItem from '../components/PartItem';
 import autoAPI from '../api/api';
 import Loader from '../components/Loader';
+import {Helmet} from 'react-helmet';
 
 class PartsShop extends Component {
     constructor(props){
@@ -31,6 +32,10 @@ class PartsShop extends Component {
     render() {
         return (
             <Container>
+                <Helmet>
+                <title>Browse Parts | PataSpare</title>
+                <meta name="description" content="Browse selection of quality parts on offer" />
+                </Helmet>
                 <Row style={{
                     justifyContent: 'center'
                 }}>

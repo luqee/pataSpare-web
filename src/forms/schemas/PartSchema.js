@@ -20,6 +20,9 @@ const PartSchema = Yup.object().shape({
     description: Yup.string()
       .min(3, 'Too Short!')
       .required('Required field'),
+    part_number: Yup.string()
+      .min(3, 'Too Short!')
+      .nullable(),
     brand: Yup.object()
         .nullable()
         .shape({
