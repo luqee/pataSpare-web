@@ -50,7 +50,6 @@ function ImageSlider(props){
                     className="d-block w-100"
                     src={slider2}
                     height='inherit'
-                    objectFit={'fill'}
                     alt="Third slide"
                     />
 
