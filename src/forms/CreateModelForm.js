@@ -29,12 +29,12 @@ class CreateModelForm extends Component {
                 this.props.history.push(``);
                 this.props.history.push(location);
             }
-            
+
         })
         .catch((error) => {
             actions.setSubmitting(false);
             console.log(error);
-            
+
         })
     }
     render = () => {
@@ -42,7 +42,7 @@ class CreateModelForm extends Component {
             <Formik
                 validationSchema={Yup.object().shape({
                     name: Yup.string()
-                        .min(2, 'Too Short!')
+                        .min(1, 'Too Short!')
                         .required('Required field'),
                 })}
                 initialValues={{
@@ -52,7 +52,7 @@ class CreateModelForm extends Component {
                 render={({
                     values,
                     setFieldValue,
-                    errors, 
+                    errors,
                     dirty,
                     isSubmitting,
                     handleChange,

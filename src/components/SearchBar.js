@@ -74,7 +74,7 @@ class SearchBar extends React.Component {
         if(this.state.year){
             queryString = queryString.concat(`&year=${this.state.year.value}`)
         }
-        
+
         autoAPI.get(`/search?${queryString}`)
         .then((response) => {
             if (response.data.status === 200){
@@ -92,7 +92,7 @@ class SearchBar extends React.Component {
         })
         .catch((error) => {
             console.log(error);
-            
+
         });
     }
     render = () => {
@@ -102,12 +102,33 @@ class SearchBar extends React.Component {
                 label: brand.name
             }
         })
-
+        brandOptions.sort((a, b) =>{
+            let aLabel = a.label.toUpperCase()
+            let bLabel = b.label.toUpperCase()
+            if(aLabel < bLabel){
+                return -1
+            }
+            if(aLabel > bLabel){
+                return 1
+            }
+            return 0
+        })
         let modelOptions = this.state.modelOptions.map((model) => {
             return {
                 value: model.id,
                 label: model.name
             }
+        })
+        modelOptions.sort((a, b) =>{
+            let aLabel = a.label.toUpperCase()
+            let bLabel = b.label.toUpperCase()
+            if(aLabel < bLabel){
+                return -1
+            }
+            if(aLabel > bLabel){
+                return 1
+            }
+            return 0
         })
         let yearOptions = this.state.yearOptions.map((year) => {
             return {
@@ -122,7 +143,7 @@ class SearchBar extends React.Component {
         `}>
             <Form inline style={{
                     justifyContent: 'center',
-                    paddingTop: '5px ' 
+                    paddingTop: '5px '
                 }}>
                 <Form.Row style={{
                     width: '80%',
@@ -159,13 +180,13 @@ class SearchBar extends React.Component {
                         <Form.Control type="text" placeholder="Search" value={this.state.searchTerm} className=" mr-sm-2" onChange={this.handleSearchInput} />
                         <Button type="submit" onClick={this.search}>Search</Button>
                     </Form.Group>
-                    
+
                     </Col>
                 </Form.Row>
             </Form>
         </Container>
-            
-        
+
+
     }
 }
 
