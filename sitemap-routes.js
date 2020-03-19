@@ -6,6 +6,9 @@ export default (
 		<Route path='/' />
 		<Route path='/shop' />
 		<Route path='/stores' />
+		<Route path='/contact' />
+		<Route path='/privacy' />
+		<Route path='/terms' />
 		<Route path='/dealer/register' />
 		<Route path='/customer/register' />
         <Route path='/user/login' />

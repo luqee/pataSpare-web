@@ -7,6 +7,6 @@ const Sitemap = require("react-router-sitemap").default;
 
 (
 	new Sitemap(router)
-		.build('http://pataspare.com')
+		.build('https://pataspare.com')
 		.save('./public/sitemap.xml')
 );

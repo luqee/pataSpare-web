@@ -1,4 +1,5 @@
 import React from 'react';
+import {Link} from 'react-router-dom';
 import {Container, Row, Col} from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faFacebook, faTwitter, faYoutube, faInstagram } from '@fortawesome/free-brands-svg-icons'
@@ -27,7 +28,18 @@ function Footer(props){
                 flexBasis: '30%'
             }}>
                 <div>LEGAL</div>
-                Privacy Policy
+                <Link style={{
+                    color: '#ffffff',
+                    textDecoration: 'none'
+                }} to={`/privacy`}>
+                    Privacy Policy
+                </Link><br/>
+                <Link style={{
+                    color: '#ffffff',
+                    textDecoration: 'none'
+                }} to={`/terms`}>
+                    Terms &amp; Conditions
+                </Link>
             </Col>
             <Col lg={4} style={{
                 flexBasis: '30%'

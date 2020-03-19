@@ -58,23 +58,6 @@ function AuthButton(props) {
             return role.name;
         });
     }
-    const signOut = ()=>{
-        autoAPI.post(`/auth/logout`,{},{
-            headers: {
-                'Authorization': 'Bearer '+ userContext.token
-            }
-        })
-        .then((response) => {
-            if (response.status === 200){
-                userContext.updateUser({})
-                userContext.updateToken('')
-                props.history.push("/")
-            }
-        })
-        .catch((error) => {
-            console.log(error);
-        })
-    }
     return currentUser.id ? (
         <Nav>
             <NavDropdown title={<FontAwesomeIcon icon={faUser} />} id="basic-nav-dropdown">
@@ -91,7 +74,7 @@ function AuthButton(props) {
                     {/* <Nav.Link eventKey='logout'>Log Out</Nav.Link> */}
                     <a href="/#" onClick={(e) => {
                         e.preventDefault();
-                        signOut()
+                        userContext.logoutUser(currentUser, props.history)
                     }} style={{
                         color: '#212529',
                         display: `block`,
@@ -183,6 +166,7 @@ class Header extends Component {
                     </NavDropdown>
                     <Nav.Link href='/shop'>Shop</Nav.Link>
                     <Nav.Link href='/stores'>Store List</Nav.Link>
+                    <Nav.Link href='/contact'>Contact</Nav.Link>
                     </Nav>
                     <Nav onSelect={this.onSelect}>
                         <Nav.Item>
@@ -194,7 +178,6 @@ class Header extends Component {
                             return <CartLink history={this.props.history} cart={value.cart} />
                         }}
                     </CartContext.Consumer>
-                    {/* <CartLink history={this.props.history} /> */}
                     <AuthButton history={this.props.history} />
                 </Navbar.Collapse>
                 </Navbar>

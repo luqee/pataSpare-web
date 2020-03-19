@@ -1,5 +1,5 @@
 import React from 'react';
-import {Redirect, Link} from 'react-router-dom';
+import {Link} from 'react-router-dom';
 import {Container, Row, Col, Table, Button} from 'react-bootstrap';
 import CartService from '../api/cart';
 import CartItem from '../components/CartItem';

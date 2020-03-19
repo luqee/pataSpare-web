@@ -16,6 +16,9 @@ import PartDetails from './PartDetails';
 import UserCart from './UserCart';
 import StoreView from './StoreView';
 import { CartContext, UserContext } from '../App';
+import Privacy from './Privacy';
+import Terms from './Terms';
+import ContactPage from './ContactPage';
 
 class Main extends Component {
     constructor(props){
@@ -56,6 +59,7 @@ class Main extends Component {
                     </CartContext.Consumer>
                 }}/>
                 <Route exact path='/shop' component={PartsShop}/>
+                <Route exact path='/contact' component={ContactPage}/>
                 <Route exact path='/stores' component={Stores}/>
                 <Route exact path='/stores/:id' render={routeProps => {
                     return <UserContext.Consumer>
@@ -75,8 +79,22 @@ class Main extends Component {
                 }}/>
                 <Route exact path='/results' component={SearchResults}/>
                 <Route exact path='/dealer/register' component={DealerRegister}/>
-                <Route exact path='/customer/register' component={CustomerRegister}/>
-                <Route exact path='/user/login' component={UserLogin}/>
+                <Route exact path='/customer/register' render={(routeProps)=>{
+                    return <UserContext.Consumer>
+                        {value => {
+                            return <CustomerRegister {...routeProps} userContext={value} />
+                        }}
+                    </UserContext.Consumer>
+                }}/>
+                <Route exact path='/user/login' render={(routeProps)=>{
+                    return <UserContext.Consumer>
+                        {value => {
+                            return <UserLogin {...routeProps} userContext={value} />
+                        }}
+                    </UserContext.Consumer>
+                }}/>
+                <Route exact path='/privacy' component={Privacy}/>
+                <Route exact path='/terms' component={Terms}/>
                 <PrivateRoute path='/dealer' userRole='dealer' component={DealerPage}/>
                 <PrivateRoute path='/customer' userRole='customer' component={CustomerPage}/>
                 <PrivateRoute path='/admin' userRole='admin' component={AdminPage}/>

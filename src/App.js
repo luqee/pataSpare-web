@@ -14,16 +14,18 @@ export const CartContext = React.createContext({})
 const cartService = new CartService();
 
 class App extends Component {
-  constructor(props){
-    super(props)
-    this.state = {
-        user: localStorage.getItem('user')?JSON.parse(localStorage.getItem('user')):{},
-        token: localStorage.getItem('token')?JSON.parse(localStorage.getItem('token')):'',
-        cart: localStorage.getItem('cart')?JSON.parse(localStorage.getItem('cart')):{}
+    constructor(props){
+        super(props)
+        this.state = {
+            user: localStorage.getItem('user')?JSON.parse(localStorage.getItem('user')):{},
+            token: localStorage.getItem('token')?JSON.parse(localStorage.getItem('token')):'',
+            cart: localStorage.getItem('cart')?JSON.parse(localStorage.getItem('cart')):{},
+            googleApi: '',
+            googleAuth: ''
+        }
     }
-  }
 
-  componentDidMount = ()=>{
+componentDidMount = ()=>{
     if(Object.keys(this.state.cart).length > 0){
       cartService.getCart(this.state.cart, (cart) => {
         if(cart){
@@ -49,44 +51,93 @@ class App extends Component {
           }
       })
       .catch((error) => {
+        console.log('Error getting user');
+        console.log(error);
           this.updateUser({})
           this.updateToken('')
       })
     }
-
-  }
-  updateToken = (token)=>{
-    if(token !== ''){
-      localStorage.setItem('token', JSON.stringify(token))
+    if(!window.gapi){
+        var s = document.createElement('script');
+        s.type = 'text/javascript';
+        s.src = `https://apis.google.com/js/platform.js`;
+        var x = document.getElementsByTagName('script')[0];
+        x.parentNode.insertBefore(s, x);
+        s.addEventListener('load', e => {
+            this.initGoogleAuth();
+        })
     }else{
-      localStorage.removeItem('token')
+        this.initGoogleAuth();
+    }
+}
+initGoogleAuth = ()=>{
+    window.gapi.load('auth2', ()=>{
+        let googleAuth = window.gapi.auth2.init({
+            client_id: process.env.REACT_APP_CLIENT_ID
+        })
+        this.setState({googleApi: window.gapi})
+        this.setState({googleAuth: window.gapi.auth2})
+        console.log('initgoogleAuth');
+        console.log(window.gapi);
+        console.log(window.gapi.auth2);
+        
+    })
+}
+updateToken = (token)=>{
+    if(token !== ''){
+        localStorage.setItem('token', JSON.stringify(token))
+    }else{
+        localStorage.removeItem('token')
     }
     this.setState({token: token})
-  }
+}
 
-  updateUser = (user)=>{
+updateUser = (user)=>{
     if(Object.keys(user).length > 0){
-      localStorage.setItem('user', JSON.stringify(user))
+        localStorage.setItem('user', JSON.stringify(user))
     }else{
-      localStorage.removeItem('user')
+        localStorage.removeItem('user')
     }
     this.setState({user: user})
-  }
-  updateCart = (cart)=>{
+}
+updateCart = (cart)=>{
     if(Object.keys(cart).length > 0){
-      localStorage.setItem('cart', JSON.stringify(cart))
+        localStorage.setItem('cart', JSON.stringify(cart))
     }else{
-      localStorage.removeItem('cart')
+        localStorage.removeItem('cart')
     }
     this.setState({cart: cart})
-  }
+}
 
-  render() {
-      let user = this.state.user
-      let token = this.state.token
-      let cart = this.state.cart
+logoutUser = (currentUser, history)=>{
+    let auth2 = this.state.googleAuth.getAuthInstance()
+    auth2.signOut().then(()=>{
+        autoAPI.post(`/auth/logout`,{},{
+            headers: {
+                'Authorization': 'Bearer '+ this.state.token
+            }
+        })
+        .then((response) => {
+            if (response.status === 200){
+                this.updateUser({})
+                this.updateToken('')
+                history.push("/")
+            }
+        })
+        .catch((error) => {
+            console.log(error);
+        })
+    })
+    //logout from google then from app.
+}
+
+render() {
+    let user = this.state.user
+    let token = this.state.token
+    let cart = this.state.cart
+    let gAuth = this.state.googleAuth
     return (
-      <UserContext.Provider value={{user: user, updateUser: this.updateUser, updateToken: this.updateToken, token: token}} >
+        <UserContext.Provider value={{user: user, logoutUser: this.logoutUser, gAuth: gAuth, updateUser: this.updateUser, updateToken: this.updateToken, token: token}} >
         <CartContext.Provider value={{cart: this.state.cart, updateCart: this.updateCart}}>
         <Container fluid className="App" style={{
             padding: '0',
@@ -94,20 +145,20 @@ class App extends Component {
             display: 'flex',
             flexDirection: 'column'
         }}>
-          { GA.init() && <GA.RouteTracker /> }
-          <UserContext.Consumer>
+            { GA.init() && <GA.RouteTracker /> }
+            <UserContext.Consumer>
             {props => {
-              return <Header user={props.user}/>
+                return <Header user={props.user}/>
             }}
-          </UserContext.Consumer>
+            </UserContext.Consumer>
             
             <Main />
             <Footer />
         </Container>
         </CartContext.Provider>
-      </UserContext.Provider>
+        </UserContext.Provider>
     );
-  }
+    }
 }
 
 export default App;

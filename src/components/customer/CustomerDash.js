@@ -40,7 +40,7 @@ function CustomerDash(props){
             <Col md={3}>
             <div id={`sidebar`} className={`sidebar`} style={sidebarStyle}>
                 {
-                    (roles.indexOf('dealer') > -1) && <Link to={`/dealer`} style={sideLinkStyle}> Dealer Home</Link>
+                    (roles && roles.indexOf('dealer') > -1) && <Link to={`/dealer`} style={sideLinkStyle}> Dealer Home</Link>
                 }
                 <Link to={`${props.match.url}`} style={sideLinkStyle}> Dashboard</Link>
                 <Link to={`${props.match.url}/orders`} style={sideLinkStyle}>Orders</Link>

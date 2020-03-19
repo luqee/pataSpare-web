@@ -4,7 +4,6 @@ import Promotion from '../components/Promotion';
 import Brands from '../components/Brands';
 import Stores from '../components/Stores';
 import Categories from '../components/Categories';
-import Contact from '../components/Contact';
 import Slider from '../components/Slider';
 import {Helmet} from 'react-helmet';
 
@@ -22,7 +21,6 @@ class LandingPage extends Component {
                 <Promotion />
                 <Stores location={this.props.location}/>
                 <Brands />
-                <Contact history={this.props.history} />
             </div>
         );
     }
