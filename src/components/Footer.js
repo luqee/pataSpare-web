@@ -22,7 +22,7 @@ function Footer(props){
                 <a style={{
                     color: '#ffffff',
                     textDecoration: 'none'
-                }} href={'/#contact'}>Contact Us</a>
+                }} href={'/contact'}>Contact Us</a>
             </Col>
             <Col lg={4} style={{
                 flexBasis: '30%'

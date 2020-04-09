@@ -51,7 +51,7 @@ class CartLink extends Component {
 function AuthButton(props) {
     const userContext = useContext(UserContext)
     let currentUser = userContext.user
-    
+
     let roles = [];
     if(currentUser !== {} && currentUser.roles){
         roles = currentUser.roles.map((role) => {
@@ -124,12 +124,12 @@ class Header extends Component {
             });
         }
         if(roles.indexOf('dealer') > -1){
-            this.props.history.push('/dealer')    
+            this.props.history.push('/dealer')
         }else if(roles.indexOf('customer') > -1){
             this.props.history.push('/customer/account')
         }else{
             this.props.history.push('/dealer/register')
-        } 
+        }
     }
     render() {
         return (
@@ -166,7 +166,7 @@ class Header extends Component {
                     </NavDropdown>
                     <Nav.Link href='/shop'>Shop</Nav.Link>
                     <Nav.Link href='/stores'>Store List</Nav.Link>
-                    <Nav.Link href='/contact'>Contact</Nav.Link>
+                    <Nav.Link href='/contact'>Contact Us</Nav.Link>
                     </Nav>
                     <Nav onSelect={this.onSelect}>
                         <Nav.Item>

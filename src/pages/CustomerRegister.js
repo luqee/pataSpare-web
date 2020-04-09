@@ -8,13 +8,15 @@ import urls from '../config/config';
 import SignupSchema from '../forms/schemas/SignupSchema'
 import {Helmet} from 'react-helmet';
 import {Link} from 'react-router-dom';
+import GoogleButton from '../components/GoogleButton';
+import formStyles from '../styles/Form.module.scss';
 
 class CustomerRegister extends Component {
     constructor(props){
         super(props)
         console.log('constructor');
         console.log(props);
-        
+
         this.state = {
             showError: false,
             errors: '',
@@ -26,66 +28,14 @@ class CustomerRegister extends Component {
             },
         }
     }
-    componentDidMount = () => {
-        window['onSignIn'] = this.onSignIn;
-        if(!window.gapi){
-            var s = document.createElement('script');
-            s.type = 'text/javascript';
-            s.src = `https://apis.google.com/js/platform.js`;
-            var x = document.getElementsByTagName('script')[0];
-            x.parentNode.insertBefore(s, x);
-            s.addEventListener('load', e => {
-                this.renderGoogleButton();
-            })
-        }else{
-            this.renderGoogleButton();
-        }
-        
-    }
-    componentWillUnmount = () => {
-        delete window['onSignIn'];
-    }
-    // init = () => {
-    //     window.gapi.load('auth2', ()=>{
-    //         this.setState({googleApi: window.gapi})
-            
-    //     })
-    // }
-    renderGoogleButton = () => {
-        window.gapi.signin2.render('g-signin2', {
-            'longtitle': true,
-            'theme': 'dark',
-            'onsuccess': this.onSignIn,
-        })
-    }
+
     setShowError = (showError, errors='') => {
         this.setState({showError: showError})
         if(showError){
             this.setState({errors: errors})
         }
     }
-    onSignIn = (googleUser) => {
-        let profile = googleUser.getBasicProfile()
-        let info = {
-            'username': profile.getName(),
-            'email': profile.getEmail(),
-            'id_token': googleUser.getAuthResponse().id_token
-        }
-        autoAPI.post(`${urls.baseURL}/auth/social/google`, JSON.stringify(info))
-        .then(response => {
-            if (response.data.status === 200) {
-                let responseData = response.data.data;
-				this.props.userContext.updateUser(responseData.user)
-                this.props.userContext.updateToken(responseData.token)
-                this.props.history.push(`/customer`);
-            }
-        })
-        .catch((error) => {
-            console.log('An Error while authenticating');
-            console.log(error);
-            
-        });
-    }
+
     render(){
         return (
             <Container>
@@ -96,8 +46,8 @@ class CustomerRegister extends Component {
                 </Helmet>
             <Row className="justify-content-md-center">
                 <Col lg={4}>
-                <div className="g-signin2" data-onsuccess='onSignIn' data-width='inherit' data-longtitle='true'></div>
-                <div className='dealer-register'>
+                    <GoogleButton history={this.props.history} userContext={this.props.userContext}/>
+                <div className={`dealer-register ${formStyles.Form}`} >
                     <DivWithErrorHandling showError={this.state.showError} errors={this.state.errors}>
                     <Formik
                     validationSchema={SignupSchema}
@@ -109,7 +59,7 @@ class CustomerRegister extends Component {
                         .then(response => {
                             console.log('logging resp');
                             console.log(response);
-                            
+
                             if (response.data.status === 201) {
                                 actions.setSubmitting(false);
                                 this.props.history.push(`/user/login`);
@@ -127,13 +77,13 @@ class CustomerRegister extends Component {
                             if(errors){
                                 this.setShowError(true, errors)
                             }
-                            
+
                         });
                     }}
                     render={({
                         values,
                         touched,
-                        errors, 
+                        errors,
                         dirty,
                         isSubmitting,
                         handleChange,
@@ -165,7 +115,7 @@ class CustomerRegister extends Component {
                             {msg}
                             </Form.Control.Feedback>
                             }} />
-                            
+
                         </Form.Group>
                         <Form.Group controlId="password">
                             <Form.Label>Password</Form.Label>
@@ -196,7 +146,7 @@ class CustomerRegister extends Component {
                     )}
                     />
                     </DivWithErrorHandling>
-                    <p>By Signing up, you agree to our <Link to={`/terms`}>terms of service</Link> and <Link to={`/privacy`}>privacy policy</Link></p>
+                    <p className={`${formStyles.FormText}`}>By Signing up, you agree to our <Link to={`/terms`}>terms of service</Link> and <Link to={`/privacy`}>privacy policy</Link></p>
                 </div>
                 <p>Already have an account? <Link to={`/user/login`}>Log in</Link></p>
                 </Col>
