@@ -40,6 +40,8 @@ class GoogleButton extends React.Component {
                 let responseData = response.data.data;
 				this.props.userContext.updateUser(responseData.user)
                 this.props.userContext.updateToken(responseData.token)
+                console.log('match prop in auth');
+                console.log(this.props.match);
                 this.props.history.push(`/customer`);
             }
         })

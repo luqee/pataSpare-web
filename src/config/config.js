@@ -1,7 +1,7 @@
 
 const urls = {
-    hostRoot: `https://api.pataspare.com`,
-    baseURL: `https://api.pataspare.com/api/v1`,
+    hostRoot: `https://8d032ba8.ngrok.io`,
+    baseURL: `https://8d032ba8.ngrok.io/api/v1`,
     userRegister: `/auth/register`,
     userLogin: `/auth/login`,
     dealerHome: `/dealer`,

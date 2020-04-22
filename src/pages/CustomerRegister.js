@@ -46,7 +46,7 @@ class CustomerRegister extends Component {
                 </Helmet>
             <Row className="justify-content-md-center">
                 <Col lg={4}>
-                    <GoogleButton history={this.props.history} userContext={this.props.userContext}/>
+                    <GoogleButton history={this.props.history} userContext={this.props.userContext} match={this.props.match}/>
                 <div className={`dealer-register ${formStyles.Form}`} >
                     <DivWithErrorHandling showError={this.state.showError} errors={this.state.errors}>
                     <Formik

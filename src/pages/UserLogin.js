@@ -19,7 +19,7 @@ class UserLogin extends Component {
                 </Helmet>
                 <Row className="justify-content-md-center">
                     <Col lg={4}>
-                    <GoogleButton history={this.props.history} />
+                    <GoogleButton history={this.props.history} userContext={this.props.userContext} match={this.props.match} />
                     <div className={`user-login ${formStyles.Form}`}>
                         <UserLoginForm userContext={this.props.userContext} history={this.props.history} />
                     </div>
