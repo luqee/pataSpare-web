@@ -41,7 +41,7 @@ class CustomerRegister extends Component {
             <Container>
                 <Helmet>
                 <title>User Registration | PataSpare</title>
-                <meta name="description" content="Register on Pataspare and access the best service there is." />
+                <meta name="description" content="Register on Pataspare and access the best auto service there is." />
                 <meta name="google-signin-client_id" content={process.env.REACT_APP_CLIENT_ID} />
                 </Helmet>
             <Row className="justify-content-md-center">
@@ -57,12 +57,9 @@ class CustomerRegister extends Component {
                         let postData = {name: values.username, ...values ,role: `customer`};
                         autoAPI.post(urls.userRegister, JSON.stringify(postData))
                         .then(response => {
-                            console.log('logging resp');
-                            console.log(response);
-
                             if (response.data.status === 201) {
                                 actions.setSubmitting(false);
-                                this.props.history.push(`/user/login`);
+                                this.props.history.push(`/auth/email`);
                             }
                             // if(response.data.status === 422){
                             //     console.log('a 422 error');
@@ -72,7 +69,6 @@ class CustomerRegister extends Component {
                         })
                         .catch((error) => {
                             actions.setSubmitting(false);
-                            console.log('An reeeroe frefrg');
                             let errors = error.response.data.errors
                             if(errors){
                                 this.setShowError(true, errors)

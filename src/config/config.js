@@ -1,7 +1,7 @@
 
 const urls = {
-    hostRoot: `https://8d032ba8.ngrok.io`,
-    baseURL: `https://8d032ba8.ngrok.io/api/v1`,
+    hostRoot: `${process.env.REACT_APP_BACKEND_URL}`,
+    baseURL: `${process.env.REACT_APP_BACKEND_URL}/api/v1`,
     userRegister: `/auth/register`,
     userLogin: `/auth/login`,
     dealerHome: `/dealer`,

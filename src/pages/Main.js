@@ -19,6 +19,8 @@ import { CartContext, UserContext } from '../App';
 import Privacy from './Privacy';
 import Terms from './Terms';
 import ContactPage from './ContactPage';
+import Activate from './Activate';
+import EmailSent from './EmailSent';
 
 class Main extends Component {
     constructor(props){
@@ -93,6 +95,8 @@ class Main extends Component {
                         }}
                     </UserContext.Consumer>
                 }}/>
+                <Route exact path='/auth/activate' component={Activate}/>
+                <Route exact path='/auth/email' component={EmailSent}/>
                 <Route exact path='/privacy' component={Privacy}/>
                 <Route exact path='/terms' component={Terms}/>
                 <PrivateRoute path='/dealer' userRole='dealer' component={DealerPage}/>
