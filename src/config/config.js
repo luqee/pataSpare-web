@@ -5,6 +5,7 @@ const urls = {
     userRegister: `/auth/register`,
     userLogin: `/auth/login`,
     dealerHome: `/dealer`,
+    emailResend: `/auth/email/resend`
 }
 
 export default urls;

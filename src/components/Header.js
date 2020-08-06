@@ -166,7 +166,6 @@ class Header extends Component {
                     </NavDropdown>
                     <Nav.Link href='/shop'>Shop</Nav.Link>
                     <Nav.Link href='/stores'>Store List</Nav.Link>
-                    <Nav.Link href='/contact'>Contact Us</Nav.Link>
                     </Nav>
                     <Nav onSelect={this.onSelect}>
                         <Nav.Item>

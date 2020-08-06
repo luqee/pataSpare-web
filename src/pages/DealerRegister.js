@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import DealerRegisterForm from '../forms/DealerRegisterForm';
 import {Container, Row, Col} from 'react-bootstrap';
 import {Helmet} from 'react-helmet';
+import formStyles from '../styles/Form.module.scss';
 
 class DealerRegister extends Component {
     render(){
@@ -13,7 +14,7 @@ class DealerRegister extends Component {
                 </Helmet>
             <Row className="justify-content-md-center">
                 <Col lg={6}>
-                <div className='dealer-register'>
+                <div className={`dealer-register ${formStyles.Form}`}>
                     <DealerRegisterForm history={this.props.history} />
                 </div>
                 </Col>
