@@ -59,7 +59,9 @@ class CustomerRegister extends Component {
                         .then(response => {
                             if (response.data.status === 201) {
                                 actions.setSubmitting(false);
-                                this.props.history.push(`/auth/email`);
+                                let loc = {pathname: '/auth/email',state: {email: response.data.data.mail}}
+                                // this.props.history.push('');
+                                this.props.history.push(loc);
                             }
                             // if(response.data.status === 422){
                             //     console.log('a 422 error');
@@ -102,7 +104,7 @@ class CustomerRegister extends Component {
                             <Form.Label>Email address</Form.Label>
                             <Form.Control type="email" placeholder="Enter email" value={values.email} onChange={handleChange} />
                             <Form.Text className="text-muted">
-                            We'll never share your email with anyone else.
+                            We'll always maintain your privacy
                             </Form.Text>
                             <ErrorMessage name="email" render={(msg) => {
                             return  <Form.Control.Feedback type="invalid" style={{
@@ -144,7 +146,7 @@ class CustomerRegister extends Component {
                     </DivWithErrorHandling>
                     <p className={`${formStyles.FormText}`}>By Signing up, you agree to our <Link to={`/terms`}>terms of service</Link> and <Link to={`/privacy`}>privacy policy</Link></p>
                 </div>
-                <p>Already have an account? <Link to={`/user/login`}>Log in</Link></p>
+                <p>Already have an account? <Link to='/user/login'>Log in</Link></p>
                 </Col>
             </Row>
             </Container>

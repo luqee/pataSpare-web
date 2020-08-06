@@ -23,6 +23,7 @@ class UserLogin extends Component {
                     <div className={`user-login ${formStyles.Form}`}>
                         <UserLoginForm userContext={this.props.userContext} history={this.props.history} />
                     </div>
+                    <p>Forgot password? <Link to={`/auth/recovery`}>Reset here</Link></p>
                     <p>Don't have an account? <Link to={`/customer/register`}>Sign up</Link></p>
                     </Col>
                 </Row>

@@ -110,8 +110,26 @@ updateCart = (cart)=>{
 }
 
 logoutUser = (currentUser, history)=>{
-    let auth2 = this.state.googleAuth.getAuthInstance()
-    auth2.signOut().then(()=>{
+    if(currentUser.auth_provider == 'google'){
+        let auth2 = this.state.googleAuth.getAuthInstance()
+        auth2.signOut().then(()=>{
+            autoAPI.post(`/auth/logout`,{},{
+                headers: {
+                    'Authorization': 'Bearer '+ this.state.token
+                }
+            })
+            .then((response) => {
+                if (response.status === 200){
+                    this.updateUser({})
+                    this.updateToken('')
+                    history.push("/")
+                }
+            })
+            .catch((error) => {
+                console.log(error);
+            })
+        })
+    }else{
         autoAPI.post(`/auth/logout`,{},{
             headers: {
                 'Authorization': 'Bearer '+ this.state.token
@@ -127,7 +145,9 @@ logoutUser = (currentUser, history)=>{
         .catch((error) => {
             console.log(error);
         })
-    })
+    }
+    
+    
     //logout from google then from app.
 }
 

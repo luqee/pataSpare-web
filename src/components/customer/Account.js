@@ -37,8 +37,7 @@ function Account(props){
         if (response.data.status === 201) {
             actions.setSubmitting(false);
             userContext.updateUser(response.data.data.user)
-            props.history.push(``);
-            props.history.push(props.location.pathname);
+            props.history.push(`/dealer`);
         }
         })
         .catch((error) => {
