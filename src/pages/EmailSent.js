@@ -21,11 +21,6 @@ function EmailSent(props) {
 	})
 	.catch((error) => {
 		setLoading(false);
-		let errors = error.response.data.errors
-		if(errors){
-			// this.setShowError(true, errors)
-		}
-
 	});
   }
     return (

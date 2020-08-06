@@ -1,5 +1,5 @@
-import React from 'react'
-import { Container, Col, Row, Form, Button } from 'react-bootstrap';
+import React, {useState} from 'react'
+import { Container, Col, Row, Form, Button, Alert } from 'react-bootstrap';
 import Loader from '../components/Loader';
 import RecoverySchema from '../forms/schemas/RecoverySchema';
 import { Formik, ErrorMessage } from 'formik';
@@ -7,9 +7,10 @@ import autoAPI from '../api/api';
 import formStyles from '../styles/Form.module.scss';
 
 function Recovery(props) {
-    var loading = false;
+    const [isLoading, setLoading] = useState(false);
+    const [info, setInfo] = useState('');
     const requestReset = (values, actions) => {
-        loading = true
+        setLoading(true)
         let postData = {
             email: values.email,
         };
@@ -17,13 +18,13 @@ function Recovery(props) {
         .then((response) => {
           if (response.data.status === 200) {
             actions.setSubmitting(false);
-            loading = false
-            alert(`Password reset email sent`)
+            setLoading(false)
+            setInfo('Password reset email sent.')
           }
         })
         .catch((error) => {
           actions.setSubmitting(false);
-          loading = false
+          setLoading(false)
           console.log(error);
         });
     }
@@ -32,7 +33,10 @@ function Recovery(props) {
             <Row className="justify-content-md-center">
                 <Col lg={4}>
                 <div className={`recovery ${formStyles.Form}`}>
-                <Loader loading={loading} />
+                <Loader loading={isLoading} />
+                {info !== '' && <Alert variant='info'>
+                    {info}
+                </Alert>}
                 <Formik
                     validationSchema={RecoverySchema}
                     onSubmit={requestReset}

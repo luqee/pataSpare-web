@@ -146,7 +146,7 @@ class CustomerRegister extends Component {
                     </DivWithErrorHandling>
                     <p className={`${formStyles.FormText}`}>By Signing up, you agree to our <Link to={`/terms`}>terms of service</Link> and <Link to={`/privacy`}>privacy policy</Link></p>
                 </div>
-                <p>Already have an account? <Link to='/user/login'>Log in</Link></p>
+                <p>Already have an account? <a href='/user/login'>Log in</a></p>
                 </Col>
             </Row>
             </Container>
