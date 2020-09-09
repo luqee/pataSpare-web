@@ -85,8 +85,12 @@ initGoogleAuth = ()=>{
 }
 updateToken = (token)=>{
     if(token !== ''){
+        console.log('setting token');
+        
         localStorage.setItem('token', JSON.stringify(token))
     }else{
+        console.log('removing token');
+        
         localStorage.removeItem('token')
     }
     this.setState({token: token})
@@ -94,8 +98,12 @@ updateToken = (token)=>{
 
 updateUser = (user)=>{
     if(Object.keys(user).length > 0){
+        console.log('setting user');
+        
         localStorage.setItem('user', JSON.stringify(user))
     }else{
+        console.log('removing user');
+        
         localStorage.removeItem('user')
     }
     this.setState({user: user})
@@ -119,15 +127,16 @@ logoutUser = (currentUser, history)=>{
                 }
             })
             .then((response) => {
-                if (response.status === 200){
-                    this.updateUser({})
-                    this.updateToken('')
+                if (response.data.status === 200){
+                    history.push("")
                     history.push("/")
+                    this.updateToken('')
+                    this.updateUser({})
                 }
             })
             .catch((error) => {
                 console.log(error);
-            })
+            })  
         })
     }else{
         autoAPI.post(`/auth/logout`,{},{
@@ -139,6 +148,7 @@ logoutUser = (currentUser, history)=>{
             if (response.status === 200){
                 this.updateUser({})
                 this.updateToken('')
+                history.push("")
                 history.push("/")
             }
         })

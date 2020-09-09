@@ -70,11 +70,13 @@ class CustomerRegister extends Component {
                             // }
                         })
                         .catch((error) => {
-                            actions.setSubmitting(false);
-                            let errors = error.response.data.errors
-                            if(errors){
-                                this.setShowError(true, errors)
-                            }
+                            console.log(error);
+                            
+                            // actions.setSubmitting(false);
+                            // let errors = error.response.data.errors
+                            // if(errors){
+                            //     this.setShowError(true, errors)
+                            // }
 
                         });
                     }}
