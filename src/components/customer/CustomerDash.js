@@ -8,6 +8,7 @@ import Account from './Account';
 import ViewOrder from './ViewOrder';
 import InquiryView from '../InquiryView';
 import {Helmet} from 'react-helmet';
+import {slide as Menu} from 'react-burger-menu';
 
 function CustomerDash(props){
     const sidebarStyle = {
@@ -65,6 +66,7 @@ function CustomerDash(props){
             </Switch>
             </div>
             </Col>
+            
             </Row>
         </Container>
     );

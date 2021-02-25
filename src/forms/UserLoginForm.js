@@ -48,10 +48,10 @@ class UserLoginForm extends Component {
 			actions.setSubmitting(false);
 			let responseData = error.response.data
 			let errors = []
-			if(responseData.status === 422){
+			if(responseData.status === 422 || responseData.status === 403){
 				errors[0] = responseData.data.message
 			}else{
-				errors = responseData.errors
+				errors[0] = responseData.message
 			}
 			if(errors){
 				this.setShowError(true, errors)

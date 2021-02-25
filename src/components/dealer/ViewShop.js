@@ -6,6 +6,7 @@ import urls from '../../config/config';
 import { Formik, ErrorMessage } from 'formik';
 import EditShopSchema from '../../forms/schemas/EditShopSchema'
 import {Container,Row, Col, Form, Button, Image} from 'react-bootstrap';
+import DeleteShopModal from './DeleteShopModal'
 
 class ViewShop extends Component {
     constructor(props){
@@ -15,7 +16,8 @@ class ViewShop extends Component {
             newLocation: this.props.location.state.shop.location,
             map: '',
             marker: '',
-            autoComplete: ''
+            autoComplete: '',
+            showDialog: false
         }
     }
     componentDidMount = () => {
@@ -133,6 +135,27 @@ class ViewShop extends Component {
             console.log(error);
         })
     }
+    handleShow = () => {
+        this.setState({showDialog: true})
+    }
+    handleHide = () => {
+        this.setState({showDialog: false})
+    }
+    handleConfirmDelete = () => {
+        console.log('deleteng shop');
+        autoAPI.delete(`${urls.dealerHome}/shops/${this.state.shop.id}`, {
+            headers: {
+                'Authorization': 'Bearer '+ this.props.userToken
+            }
+        })
+        .then((response) => {
+            if (response.status === 200){
+                this.props.history.push(`${urls.dealerHome}/shops`);
+            }
+            
+        })
+        this.setState({showDialog: false})
+    }
     render = () => {
         let shop = this.state.shop
         let initialValues = {
@@ -144,7 +167,17 @@ class ViewShop extends Component {
         }
         return (
             <Container>
+                <Button variant="primary" onClick={this.handleShow}>
+                    Delete
+                </Button>
                 <Row className="justify-content-md-center">
+                
+                <DeleteShopModal 
+                    show={this.state.showDialog} 
+                    onConfirm={this.handleConfirmDelete} 
+                    onHide={this.handleHide}
+                    shop={this.state.shop}
+                />
                     <Col lg={7}>
                     <Formik
                 validationSchema={EditShopSchema}

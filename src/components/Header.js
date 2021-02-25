@@ -85,7 +85,7 @@ function AuthButton(props) {
         </Nav>
 
     ) : (
-        <Nav>
+        <Nav className="flex-column flex-lg-row">
             <Nav.Link href="/customer/register">Register</Nav.Link>
             <Nav.Link href="/user/login">Login</Nav.Link>
         </Nav>
@@ -155,7 +155,7 @@ class Header extends Component {
                 <Mobile><FontAwesomeIcon icon={faSearch} onClick={this.toggleSearchBar}/></Mobile>
                 <Navbar.Toggle aria-controls="basic-navbar-nav" />
                 <Navbar.Collapse id="basic-navbar-nav">
-                    <Nav className="mr-auto">
+                    <Nav className="mr-auto flex-column flex-lg-row">
                     <Nav.Link href="/">Home</Nav.Link>
                     <NavDropdown title="Categories" id="basic-nav-dropdown">
                         {

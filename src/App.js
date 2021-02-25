@@ -61,7 +61,7 @@ componentDidMount = ()=>{
         var s = document.createElement('script');
         s.type = 'text/javascript';
         s.src = `https://apis.google.com/js/platform.js`;
-        var x = document.getElementsByTagName('script')[0];
+        var x = document.getElementsByTagName('script')[0]; //whatif there are no scripts?
         x.parentNode.insertBefore(s, x);
         s.addEventListener('load', e => {
             this.initGoogleAuth();
@@ -77,10 +77,6 @@ initGoogleAuth = ()=>{
         })
         this.setState({googleApi: window.gapi})
         this.setState({googleAuth: window.gapi.auth2})
-        console.log('initgoogleAuth');
-        console.log(window.gapi);
-        console.log(window.gapi.auth2);
-        
     })
 }
 updateToken = (token)=>{
@@ -156,9 +152,6 @@ logoutUser = (currentUser, history)=>{
             console.log(error);
         })
     }
-    
-    
-    //logout from google then from app.
 }
 
 render() {
