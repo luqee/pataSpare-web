@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useState} from 'react'
 import {Container, Row, Col} from 'react-bootstrap';
 import {Link, Switch, Route} from 'react-router-dom';
 import ShopInventory from './ShopInventory';
@@ -7,9 +7,29 @@ import ShopOrders from './ShopOrders';
 import ShopInquiries from './ShopInquiries';
 import CreatePart from './CreatePart';
 import InquiryView from '../InquiryView';
-import InventoryItem from './InventoryItem'
+import autoAPI from '../../api/api';
 
 function ManageShop(props){
+    const fetchShop = () => {
+        console.log('fetching shop none in location state');
+        
+        autoAPI.get('/dealer/shops/'+ props.match.params.id, {
+            headers: {
+                'Authorization': 'Bearer '+ props.userToken
+            }
+        })
+        .then((response) => {
+            if (response.status === 200){
+                setShop(response.data.data.shop)
+            }
+
+        })
+        .catch((error) => {
+            console.log(error);
+
+        })
+    }
+    let [shop, setShop] = useState(props.location.state ? props.location.state.shop : fetchShop())
     const sidebarStyle = {
         height: '100%',
         overflowX: 'hidden',
@@ -23,7 +43,8 @@ function ManageShop(props){
         display: 'block',
         borderBottom: '3px solid #343a40',
     }
-    const shop = props.location.state.shop
+    
+    
     return (
         <Container>
             <Row>

@@ -5,6 +5,7 @@ import Select from 'react-select';
 import EditPartSchema from '../../forms/schemas/EditPartSchema';
 import autoAPI from '../../api/api';
 import urls from '../../config/config';
+import DeletePartModal from './DeletePartModal'
 
 class InventoryItem extends Component{
     constructor(props){
@@ -19,23 +20,23 @@ class InventoryItem extends Component{
             tagsOptions: [],
             disabledModel: props.location.state.part.brand_id ? false: true,
             disabledYear: props.location.state.part.brand_id ? false: true,
+            showDialog: false
         }
     }
     componentDidMount = () => {
         autoAPI.get('/brands')
         .then((response) => {
             if (response.status === 200){
-                this.setState({brandSelectOptions: response.data.data.brands})
+                
                 let brandOptions = response.data.data.brands.map((brand) => {
                     return {
                         value: brand.id,
                         label: brand.name
                     }
                 })
-                this.setState({brandOptions: brandOptions})
                 let anyOption = {
                     value: 0,
-                    label: 'any'
+                    label: 'Any'
                 }
                 brandOptions.unshift(anyOption)
                 let selectedBrand = null
@@ -48,7 +49,11 @@ class InventoryItem extends Component{
                         }
                     })
                 }
-                this.setState({selectedBrand: selectedBrand})
+                this.setState({
+                    brandSelectOptions: response.data.data.brands,
+                    brandOptions: brandOptions,
+                    selectedBrand: selectedBrand
+                })
             }
 
         })
@@ -141,9 +146,28 @@ class InventoryItem extends Component{
 
         })
     }
+    handleShow = () => {
+        this.setState({showDialog: true})
+    }
+    handleHide = () => {
+        this.setState({showDialog: false})
+    }
+    handleConfirmDelete = () => {
+        autoAPI.delete(`${urls.dealerHome}/parts/${this.state.part.id}`, {
+            headers: {
+                'Authorization': 'Bearer '+ this.props.userToken
+            }
+        })
+        .then((response) => {
+            if (response.status === 200){
+                this.props.history.push(this.props.location.state.from);
+            }
+        })
+        this.setState({showDialog: false})
+    }
     render = ()=>{
         let part = this.state.part
-        
+        let selectedBrand = this.state.brandOptions.find(brand => brand.value == this.state.part.brand_id)
         let modelOptions = this.state.modelSelectOptions.map((model) => {
             return {
                 value: model.id,
@@ -198,7 +222,7 @@ class InventoryItem extends Component{
             })
         }
         let initialState = {
-            brand: this.state.selectedBrand,
+            brand: selectedBrand,
             models: selectedModels,
             years: selectedYears,
             tags: selectedCategories,
@@ -208,16 +232,23 @@ class InventoryItem extends Component{
             price: part.price,
             stock: part.stock,
         }
-        console.log('initail state');
-        console.log(initialState);
-        
         return(
             <Container>
                 <p>{`Edit ${this.state.part.title}'s Details`}</p>
+                <Button variant="primary" onClick={this.handleShow}>
+                    Delete
+                </Button>
+                <DeletePartModal 
+                    show={this.state.showDialog} 
+                    onConfirm={this.handleConfirmDelete} 
+                    onHide={this.handleHide}
+                    part={this.state.part}
+                />
                 <Row>
                     <Col lg={7}>
                     <Formik
                     validationSchema={EditPartSchema}
+                    enableReinitialize={true}
                     initialValues={initialState}
                     onSubmit={this.editPart}
                     render={({
@@ -244,6 +275,7 @@ class InventoryItem extends Component{
                             <Form.Group controlId="brand">
                             <Form.Label>Brand:</Form.Label>
                             <Select
+                                value={values.brand}
                                 options={this.state.brandOptions}
                                 onChange={(selected) => {
                                     setFieldValue('brand', selected);
@@ -253,7 +285,7 @@ class InventoryItem extends Component{
                                     }
                                     this.handleBrand(selected);
                                 }}
-                                value={values.brand}
+                                
                             />
                             <ErrorMessage name="brand" render={(msg) => {
                                 return <Form.Control.Feedback type="invalid" style={{
