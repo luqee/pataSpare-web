@@ -11,8 +11,6 @@ import autoAPI from '../../api/api';
 
 function ManageShop(props){
     const fetchShop = () => {
-        console.log('fetching shop none in location state');
-        
         autoAPI.get('/dealer/shops/'+ props.match.params.id, {
             headers: {
                 'Authorization': 'Bearer '+ props.userToken

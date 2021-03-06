@@ -50,6 +50,10 @@ function Store(props){
                     borderBottom: '3px solid #007bff',
                     }}>
                 <div style={{
+                    backgroundColor: '#000000',
+                    opacity: '0.6'
+                }}>
+                <div style={{
                     display: 'flex',
                     position: 'absolute',
                     top: '10px',
@@ -74,21 +78,22 @@ function Store(props){
                     
                 </div>
                 <div style={{
-                    color: '#212529',
+                    color: '#ffffff',
                 }}>
-                <Card.Title>{shop.name}</Card.Title>
-                <Card.Text><Rating
-                    emptySymbol={<FontAwesomeIcon icon={faStar} />}
-                    fullSymbol={<FontAwesomeIcon icon={faStar} color={`gold`}/>}
-                    initialRating={shopRating} // to-do calculate average rating
-                    readonly
-                /></Card.Text>
-                <Card.Text><FontAwesomeIcon icon={faMapMarker} />  {shop.location}</Card.Text>
-                <Card.Text>
-                <Button size={'sm'} id={`numberBtn${shop.id}`} onClick={showNumber}> View Number</Button>
-                <p id={`numberTxt${shop.id}`} style={{
-                    display: `none`
-                }}><FontAwesomeIcon icon={faPhone} />{`  ${shop.number}`}</p></Card.Text>
+                    <Card.Title>{shop.name}</Card.Title>
+                    <Card.Text><Rating
+                        emptySymbol={<FontAwesomeIcon icon={faStar} />}
+                        fullSymbol={<FontAwesomeIcon icon={faStar} color={`gold`}/>}
+                        initialRating={shopRating} // to-do calculate average rating
+                        readonly
+                    /></Card.Text>
+                    <Card.Text><FontAwesomeIcon icon={faMapMarker} />  {shop.location}</Card.Text>
+                    <Card.Text>
+                    <Button size={'sm'} id={`numberBtn${shop.id}`} onClick={showNumber}> View Number</Button>
+                    <p id={`numberTxt${shop.id}`} style={{
+                        display: `none`
+                    }}><FontAwesomeIcon icon={faPhone} />{`  ${shop.number}`}</p></Card.Text>
+                </div>
                 </div>
                 </Card>
                 </Col>

@@ -53,26 +53,33 @@ class Categories extends React.Component{
                                     }}>
                                         <div style={{
                                             backgroundImage: `url(${urls.hostRoot}/${cat.category_image})`,
-                                            display: 'flex',
-                                            justifyContent: 'center',
-                                            alignItems: 'center',
                                             width: '90%',
                                             height: '80%',
                                             borderRadius: '5%'
                                         }}>
-                                        <Link to={`/part-category/${cat.id}`} style={{
-                                            textDecoration: 'none'
-                                        }}>
-                                        <div style={{
-                                            color: '#ffffff',
-                                            fontSize: '1.5em',
-                                            fontWeight: 'bold',
-                                            backgroundColor: '#007bff',
-                                            padding: '0 5px'
-                                        }}>
-                                            {cat.name}
-                                        </div>
-                                        </Link>
+                                            <div class="mask" style={{
+                                                height: '100%',
+                                                width: '100%',
+                                                justifyContent: 'center',
+                                                alignItems: 'center',
+                                                display: 'flex',
+                                                backgroundColor: '#000000',
+                                                opacity: '0.6'
+                                            }}>
+                                                <Link to={`/part-category/${cat.id}`} style={{
+                                                    textDecoration: 'none'
+                                                }}>
+                                                <div style={{
+                                                    color: '#ffffff',
+                                                    fontSize: '1.5em',
+                                                    fontWeight: 'bold',
+                                                    padding: '0 5px'
+                                                }}>
+                                                    {cat.name}
+                                                </div>
+                                                </Link>
+                                            </div>
+                                        
                                         </div>
 
                                     </Col>
