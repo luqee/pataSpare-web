@@ -28,10 +28,12 @@ class UserLoginForm extends Component {
 		// event.preventDefault();
 		this.setState({formState: values})
 		let postData = {...values};
-
+		console.log('submiting login.');
 		autoAPI.post(urls.userLogin, JSON.stringify(postData))
 		.then((response) => {
 			actions.setSubmitting(false);
+			console.log('After login.');
+			console.log(response);
 			if (response.data.status === 200) {
 				let responseData = response.data.data;
 				this.props.userContext.updateUser(responseData.user)
@@ -46,6 +48,8 @@ class UserLoginForm extends Component {
 		})
 		.catch((error) => {
 			actions.setSubmitting(false);
+			console.log('Error while login.');
+			console.log(error)
 			let responseData = error.response.data
 			let errors = []
 			if(responseData.status === 422 || responseData.status === 403){

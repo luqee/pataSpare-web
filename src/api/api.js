@@ -4,6 +4,7 @@ import { useMediaQuery } from 'react-responsive'
 
 const autoAPI = axios.create({
   baseURL: urls.baseURL,
+  withCredentials: true,
   headers: {'Content-Type': 'application/json', 'X-Requested-With': 'XMLHttpRequest'}
 });
 
