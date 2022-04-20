@@ -9,6 +9,7 @@ import Category from '../components/admin/Category';
 import ManageUser from '../components/admin/ManageUser';
 import Brand from '../components/admin/Brand';
 import Messages from '../components/admin/Messages';
+import CreateDealer from '../components/admin/CreateDealer'
 
 const sidebarStyle = {
     height: '100%',
@@ -41,6 +42,9 @@ function AdminPage(props){
                 <Route exact path={`${props.match.path}`} component={Dash}/>
                 <Route exact path={`${props.match.path}/users`} render={routeProps => {
                     return <Users {...routeProps} userToken={props.userToken} />
+                }}/>
+                <Route exact path={`${props.match.path}/users/create`} render={routeProps => {
+                    return <CreateDealer {...routeProps} userToken={props.userToken} />
                 }}/>
                 <Route exact path={`${props.match.path}/categories`} render={routeProps => {
                     return <Categories {...routeProps} userToken={props.userToken} />

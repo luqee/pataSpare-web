@@ -34,6 +34,11 @@ class Users extends React.Component{
                 <Row>
                     <Col>
                     <p>Users Management</p>
+                    <Link to={{
+                        pathname: `${this.props.match.url}/create`,
+                    }}>
+                        <Button>Add Vendor</Button>
+                    </Link>
                     </Col>
                 </Row>
                 <Row style={{
