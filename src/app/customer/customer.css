@@ -1,0 +1,14 @@
+div#sidebar{
+    height: 100%;
+    overflow-x: hidden;
+    padding-top: 20px;
+}
+
+a#sidebarLink{
+    padding: 6px 8px 6px 16px;
+    text-decoration: none;
+    font-size: 20px;
+    color: #343a40;
+    display: block;
+    border-bottom: 3px solid #343a40;
+}

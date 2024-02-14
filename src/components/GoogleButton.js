@@ -1,62 +1,60 @@
-import React from 'react';
-import autoAPI from '../api/api';
-import Loader from './Loader';
+import { useAuthContext } from '@/context/AuthContext'
+import { useEffect } from 'react'
 
-class GoogleButton extends React.Component {
-    constructor(props){
-        super(props)
-    }
-    componentDidMount = () => {
-        window['onSignIn'] = this.onSignIn;
+export const GoogleButton = ({dcx})=>{
+    const {socialLogin} = useAuthContext()
+
+    useEffect(()=>{
+        setupButton()
+        return ()=>{
+            delete window['onSignIn'];
+        }
+    }, [])
+
+    const setupButton = () => {
+        window['onSignIn'] = onSignIn;
         if(!window.gapi){
+            console.log('loading gsi client');
             var s = document.createElement('script');
             s.type = 'text/javascript';
-            s.src = `https://apis.google.com/js/platform.js`;
+            s.src = `https://accounts.google.com/gsi/client`;
+            s.async = true
             var x = document.getElementsByTagName('script')[0];
             x.parentNode.insertBefore(s, x);
             s.addEventListener('load', e => {
-                this.renderGoogleButton();
+                console.log('gsi client loaded');
             })
-        }else{
-            this.renderGoogleButton();
         }
+        console.log('gsi client already present');
     }
-    renderGoogleButton = () => {
-        window.gapi.signin2.render('g-signin2', {})
-    }
-    componentWillUnmount = () => {
-        delete window['onSignIn'];
-    }
-    onSignIn = (googleUser) => {
-        let profile = googleUser.getBasicProfile()
+
+    const onSignIn = (response) => {
         let info = {
-            'username': profile.getName(),
-            'email': profile.getEmail(),
-            'id_token': googleUser.getAuthResponse().id_token
+            'provider': 'google',
+            'id_token': response.credential
         }
-        autoAPI.post(`/auth/social/google`, JSON.stringify(info))
-        .then(response => {
-            if (response.data.status === 200) {
-                let responseData = response.data.data;
-				this.props.userContext.updateUser(responseData.user)
-                this.props.userContext.updateToken(responseData.token)
-                console.log('match prop in auth');
-                console.log(this.props.match);
-                this.props.history.push(`/customer`);
-            }
-        })
-        .catch((error) => {
-            console.log('An Error while authenticating');
-            console.log(error);
+        socialLogin(info)
+    }
+    
+    return (
+        <>
+        <div id="g_id_onload"
+            data-client_id={`${process.env.NEXT_PUBLIC_CLIENT_ID}`}
+            data-context={dcx}
+            data-ux_mode="popup"
+            data-callback="onSignIn"
+            data-auto_select="true"
+            data-itp_support="true">
+        </div>
 
-        });
-    }
-    render = () => {
-        return (
-            <div className="g-signin2" data-onsuccess='onSignIn' data-width='inherit' data-longtitle='true'>
-            </div>
-        )
-    }
+        <div class="g_id_signin"
+            data-type="standard"
+            data-shape="pill"
+            data-theme="filled_blue"
+            data-text="signup_with"
+            data-size="medium"
+            data-logo_alignment="left">
+        </div>
+        </>
+    )
 }
-
-export default GoogleButton;

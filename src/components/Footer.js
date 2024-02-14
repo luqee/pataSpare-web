@@ -1,58 +1,50 @@
 import React from 'react';
-import {Link} from 'react-router-dom';
-import {Container, Row, Col} from 'react-bootstrap';
+import { Row, Col} from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faFacebook, faTwitter, faYoutube, faInstagram } from '@fortawesome/free-brands-svg-icons'
+import Link from 'next/link';
 
-function Footer(props){
+export const Footer = ()=>{
     return (
-        <Container className='footer' fluid style={{
-            paddingTop: '20px',
-            backgroundColor: '#212529',
-            color: '#ffffff',
-            flexShrink: 0
+        <Row style={{
+            justifyContent: 'space-evenly'
         }}>
-            <Row style={{
-                justifyContent: 'space-evenly'
-            }}>
-            <Col lg={4} style={{
-                flexBasis: '30%'
-            }}>
-                <div>SUPPORT</div>
-                <a style={{
-                    color: '#ffffff',
-                    textDecoration: 'none'
-                }} href={'/contact'}>Contact Us</a>
-            </Col>
-            <Col lg={4} style={{
-                flexBasis: '30%'
-            }}>
-                <div>LEGAL</div>
-                <Link style={{
-                    color: '#ffffff',
-                    textDecoration: 'none'
-                }} to={`/privacy`}>
-                    Privacy Policy
-                </Link><br/>
-                <Link style={{
-                    color: '#ffffff',
-                    textDecoration: 'none'
-                }} to={`/terms`}>
-                    Terms &amp; Conditions
-                </Link>
-            </Col>
-            <Col lg={4} style={{
-                flexBasis: '30%'
-            }}>
-                <div>SOCIAL</div>
-                <div class="fb-like" data-href="https://web.facebook.com/PataSpare-106357314168691" data-width="" data-layout="standard" data-action="like" data-size="small" data-share="true"></div>
-                {/* <FontAwesomeIcon icon={faFacebook} /><br/> */}
-                <FontAwesomeIcon icon={faTwitter} /><br/>
-                <FontAwesomeIcon icon={faYoutube} /><br/>
-                <FontAwesomeIcon icon={faInstagram} /><br/>
-            </Col>
-            </Row>
-        </Container>
+        <Col lg={4} style={{
+            flexBasis: '30%'
+        }}>
+            <div>SUPPORT</div>
+            <Link style={{
+                color: '#ffffff',
+                textDecoration: 'none'
+            }} href={'/contact'}>Contact Us</Link>
+        </Col>
+        <Col lg={4} style={{
+            flexBasis: '30%'
+        }}>
+            <div>LEGAL</div>
+            <Link style={{
+                color: '#ffffff',
+                textDecoration: 'none'
+            }} href={`/privacy`}>
+                Privacy Policy
+            </Link><br/>
+            <Link style={{
+                color: '#ffffff',
+                textDecoration: 'none'
+            }} href={`/terms`}>
+                Terms &amp; Conditions
+            </Link>
+        </Col>
+        <Col lg={4} style={{
+            flexBasis: '30%'
+        }}>
+            <div>SOCIAL</div>
+            <div class="fb-like" data-href="https://web.facebook.com/PataSpare-106357314168691" data-width="" data-layout="standard" data-action="like" data-size="small" data-share="true"></div>
+            {/* <FontAwesomeIcon icon={faFacebook} /><br/> */}
+            <FontAwesomeIcon icon={faTwitter} /><br/>
+            <FontAwesomeIcon icon={faYoutube} /><br/>
+            <FontAwesomeIcon icon={faInstagram} /><br/>
+        </Col>
+        </Row>
     )
 }
-export default Footer;

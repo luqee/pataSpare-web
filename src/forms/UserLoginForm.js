@@ -1,115 +1,91 @@
-import React, { Component } from 'react';
 import {Form, Button} from 'react-bootstrap';
-import { Formik, ErrorMessage } from 'formik';
-import autoAPI from '../api/api';
-import urls from '../config/config';
-import DivWithErrorHandling from '../components/withErrorHandlingHoc';
+import { Formik, ErrorMessage } from 'formik'
+import DivWithErrorHandling from '@/components/withErrorHandlingHoc';
 import LoginSchema from './schemas/LoginSchema';
+import { useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { useAuthContext } from '@/context/AuthContext';
 
-class UserLoginForm extends Component {
-	constructor(props){
-		super(props);
-		this.state = {
-			showError: false,
-			errors: '',
-			formState: {
-				email: '',
-				password: ''
-			}
-		}
-	}
-	setShowError = (showError, errors='') => {
-		if(showError){
-			this.setState({errors: errors})
-		}
-		this.setState({showError: showError})
-	}
-	loginUser = (values, actions) => {
-		// event.preventDefault();
-		this.setState({formState: values})
+export const UserLoginForm =()=> {
+
+	const {login, setUser} = useAuthContext()
+	let [showError, setShowError] = useState(false)
+	let [errors, setErrors] = useState({})
+	let [formState, setformState] = useState({
+		email: '',
+		password: '',
+	})
+
+	const router = useRouter()
+	const loginUser = (values, actions) => {
+		setformState(values)
 		let postData = {...values};
-		console.log('submiting login.');
-		autoAPI.post(urls.userLogin, JSON.stringify(postData))
-		.then((response) => {
-			actions.setSubmitting(false);
-			console.log('After login.');
-			console.log(response);
-			if (response.data.status === 200) {
+		login(postData, (response)=>{
+			actions.setSubmitting(false)
+			if (response.status === 200) {
 				let responseData = response.data.data;
-				this.props.userContext.updateUser(responseData.user)
-				this.props.userContext.updateToken(responseData.token)
-				if(this.props.history.location.state !== undefined){
-					this.props.history.push(this.props.history.location.state.from)
+				setUser(responseData.user)
+				router.replace('/customer')
+			}else{
+				let errors = []
+				if(response.status === 422 || response.status === 403){
+					errors[0] = response.data.message
 				}else{
-					this.props.history.push(`/customer`);
+					errors[0] = response.message
+				}
+				if(errors){
+					setErrors(errors)
+					setShowError(true)
 				}
 			}
-			
 		})
-		.catch((error) => {
-			actions.setSubmitting(false);
-			console.log('Error while login.');
-			console.log(error)
-			let responseData = error.response.data
-			let errors = []
-			if(responseData.status === 422 || responseData.status === 403){
-				errors[0] = responseData.data.message
-			}else{
-				errors[0] = responseData.message
-			}
-			if(errors){
-				this.setShowError(true, errors)
-			}
-		});
 	}
-  render() {
-	  let initialValues = {...this.state.formState}
+
     return (
-		<DivWithErrorHandling showError={this.state.showError} errors={this.state.errors}>
+		<DivWithErrorHandling showError={showError} errors={errors}>
 			<Formik
 				validationSchema={LoginSchema}
-				initialValues={initialValues}
-				onSubmit={this.loginUser}
-				render={({
-					values,
-					errors, 
-					dirty,
-					isSubmitting,
-					handleChange,
-					handleSubmit,
-				})=>(
-					<Form onSubmit={handleSubmit}>
-						<Form.Group controlId="email">
-							<Form.Label>Email address</Form.Label>
-							<Form.Control type="email" placeholder="Enter email" value={values.email} onChange={handleChange} />
-							<ErrorMessage name="email" render={(msg) => {
-							return  <Form.Control.Feedback type="invalid" style={{
-							display: `block`
-							}}>
-							{msg}
-							</Form.Control.Feedback>
-							}} />
-						</Form.Group>
-						<Form.Group controlId="password">
-							<Form.Label>Password</Form.Label>
-							<Form.Control type="password" placeholder="Password" value={values.password} onChange={handleChange}  />
-							<ErrorMessage name="password" render={(msg) => {
-							return  <Form.Control.Feedback type="invalid" style={{
-							display: `block`
-							}}>
-							{msg}
-							</Form.Control.Feedback>
-							}}/>
-						</Form.Group>
-						<Button variant="primary"  type="submit" disabled={isSubmitting || errors.length > 0 || !dirty}>
-						Login
-						</Button>
-					</Form>
-				)}
-			/>
+				initialValues={formState}
+				onSubmit={loginUser}>
+					{
+						({
+							values,
+							errors, 
+							dirty,
+							isSubmitting,
+							handleChange,
+							handleSubmit,
+						})=>(
+							<Form onSubmit={handleSubmit}>
+								<Form.Group controlId="email">
+									<Form.Label>Email address</Form.Label>
+									<Form.Control type="email" placeholder="Enter email" value={values.email} onChange={handleChange} />
+									<ErrorMessage name="email" render={(msg) => {
+									return  <Form.Control.Feedback type="invalid" style={{
+									display: `block`
+									}}>
+									{msg}
+									</Form.Control.Feedback>
+									}} />
+								</Form.Group>
+								<Form.Group controlId="password">
+									<Form.Label>Password</Form.Label>
+									<Form.Control type="password" placeholder="Password" value={values.password} onChange={handleChange}  />
+									<ErrorMessage name="password" render={(msg) => {
+									return  <Form.Control.Feedback type="invalid" style={{
+									display: `block`
+									}}>
+									{msg}
+									</Form.Control.Feedback>
+									}}/>
+								</Form.Group>
+								<Button variant="primary"  type="submit" disabled={isSubmitting || errors.length > 0 || !dirty}>
+								Login
+								</Button>
+							</Form>
+						)
+					}
+				</Formik>
 		</DivWithErrorHandling>
-    );
-  }
+    )
 }
-
-export default UserLoginForm;

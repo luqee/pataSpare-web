@@ -1,5 +1,5 @@
 .Header{
-    background-image: url('../images/header-back.jpg');
+    /* background-image: url('../images/header-back.jpg'); */
     height: 250px;
 }
 
@@ -8,4 +8,8 @@
 }
 #Header a.navbar-brand{
     color: #ffffff !important;
+}
+
+div#siteNav{
+    margin-right: auto;
 }

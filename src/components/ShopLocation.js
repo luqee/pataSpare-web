@@ -1,37 +1,37 @@
-import React, {Component} from 'react';
+import {useEffect, useState} from 'react';
 import {Button} from 'react-bootstrap';
-import GA from '../api/GoogleAnalytics';
+import GA from '@/utils/SiteAnalytics'
 
-class ShopLocation extends Component {
-    constructor(props){
-        super(props);
-        this.state = {
-            map: null,
-            shopLocationMarker: null,
-            deviceLocation: null,
-            directionsService: null,
-            directionsDisplay: null
-        }
-    }
-    initMap = () => {
+export const ShopLocation = ({shop})=>{
+
+    const [map, setMap] = useState(null)
+    const [shopLocationMarker, setShopLocationMarker] = useState(null)
+    const [deviceLocation, setDeviceLocation] = useState(null)
+    const [directionsService, setDirectionsService] = useState(null)
+    const [directionsDisplay, setDirectionsDisplay] = useState(null)
+
+    const initMap = () => {
         let map = new window.google.maps.Map(document.getElementById('map'), {
-            center: {lat: parseFloat(this.props.shop.latitude), lng: parseFloat(this.props.shop.longitude)},
+            center: {lat: parseFloat(shop.latitude), lng: parseFloat(shop.longitude)},
             zoom: 10
         });
         let shopLocationMarker = new window.google.maps.Marker({
-            position: {lat: parseFloat(this.props.shop.latitude), lng: parseFloat(this.props.shop.longitude)},
+            position: {lat: parseFloat(shop.latitude), lng: parseFloat(shop.longitude)},
             map: map,
         })
-        this.setState({map: map, shopLocationMarker: shopLocationMarker});
+        setMap(map)
+        setShopLocationMarker(shopLocationMarker)
     }
-    handleLocationError = (browserHasGeolocation, infoWindow, pos) => {
+
+    const handleLocationError = (browserHasGeolocation, infoWindow, pos) => {
         infoWindow.setPosition(pos);
         infoWindow.setContent(browserHasGeolocation ?
                               'Error: The Geolocation service failed.' :
                               'Error: Your browser doesn\'t support geolocation.');
-        infoWindow.open(this.state.map);
+        infoWindow.open(map);
     }
-    showDirection = () => {
+
+    const showDirection = () => {
         if(GA.init()){
             GA.recordDirectionsView()
         }
@@ -44,13 +44,13 @@ class ShopLocation extends Component {
               lat: position.coords.latitude,
               lng: position.coords.longitude
             };
-            this.setState({deviceLocation: pos});
+            setDeviceLocation(pos)
             var directionsService = new window.google.maps.DirectionsService();
             var directionsDisplay = new window.google.maps.DirectionsRenderer();
-            directionsDisplay.setMap(this.state.map);
+            directionsDisplay.setMap(map);
             let directionRequest = {
                 origin: pos,
-                destination: {lat: parseFloat(this.props.shop.latitude), lng: parseFloat(this.props.shop.longitude)},
+                destination: {lat: parseFloat(shop.latitude), lng: parseFloat(shop.longitude)},
                 travelMode: 'DRIVING'
             }
             directionsService.route(directionRequest, (response, status) =>{
@@ -62,47 +62,41 @@ class ShopLocation extends Component {
             });
             // infoWindow.setPosition(pos);
             // infoWindow.setContent('My Location');
-            // infoWindow.open(this.state.map);
-            // this.state.map.setCenter(pos);
+            // infoWindow.open(map);
+            // map.setCenter(pos);
           }, () => {
-            this.handleLocationError(true, infoWindow, this.state.map.getCenter());
+            handleLocationError(true, infoWindow, map.getCenter());
           });
         } else {
           // Browser doesn't support Geolocation
-          this.handleLocationError(false, infoWindow, this.state.map.getCenter());
+          handleLocationError(false, infoWindow, map.getCenter());
         }
     }
-    handleLocationError = (browserHasGeolocation, infoWindow, pos) => {
-        infoWindow.setPosition(pos);
-        infoWindow.setContent(browserHasGeolocation ?
-                              'Error: The Geolocation service failed.' :
-                              'Error: Your browser doesn\'t support geolocation.');
-        infoWindow.open(this.state.map);
-    }
-    componentDidMount = () => {
+
+    const setupMap = () => {
         if (!window.google) {
             var s = document.createElement('script');
             s.type = 'text/javascript';
-            s.src = `https://maps.googleapis.com/maps/api/js?key=${process.env.REACT_APP_GOOGLE_KEY}`;
+            s.src = `https://maps.googleapis.com/maps/api/js?key=${process.env.NEXT_PUBLIC_GOOGLE_KEY}`;
             var x = document.getElementsByTagName('script')[0];
             x.parentNode.insertBefore(s, x);
             s.addEventListener('load', e => {
-                this.initMap();
+                initMap();
             })
         } else {
-            this.initMap();
+            initMap();
         }
     }
     
-    render = () => {
-        return (
-            <div>
-                <div className='map' id='map' style={{ maxWidth: 'auto', height: '250px' }}>
-                </div>
-                <Button onClick={this.showDirection} >Directions</Button>
-            </div>
-        )
-    }
-}
+    useEffect(()=>{
+        setupMap()
+    }, [])
 
-export default ShopLocation;
+    return (
+        <div>
+            <div className='map' id='map' style={{ maxWidth: 'auto', height: '250px' }}>
+            </div>
+            <Button onClick={showDirection} >Directions</Button>
+        </div>
+    )
+}

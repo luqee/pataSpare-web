@@ -1,60 +1,40 @@
 {
-  "name": "auto-parts-front-end",
+  "name": "pataspare-www",
   "version": "0.1.0",
   "private": true,
-  "dependencies": {
-    "@emotion/core": "^10.0.21",
-    "@fontsource/roboto": "^4.4.5",
-    "@fortawesome/fontawesome-svg-core": "^1.2.19",
-    "@fortawesome/free-brands-svg-icons": "^5.9.0",
-    "@fortawesome/free-solid-svg-icons": "^5.9.0",
-    "@fortawesome/react-fontawesome": "^0.1.4",
-    "@material-ui/core": "^4.11.4",
-    "@material-ui/icons": "^4.11.2",
-    "axios": "^0.18.1",
-    "bootstrap": "^4.3.1",
-    "formik": "^1.5.8",
-    "node-sass": "^4.13.1",
-    "query-string": "^6.12.1",
-    "react": "^16.8.6",
-    "react-bootstrap": "^1.0.0-beta.9",
-    "react-burger-menu": "^2.6.11",
-    "react-dom": "^16.8.6",
-    "react-ga": "^2.7.0",
-    "react-helmet": "^5.2.1",
-    "react-phone-input-2": "2.9.3",
-    "react-rating": "^1.7.2",
-    "react-redux": "^7.1.0",
-    "react-responsive": "^8.0.1",
-    "react-router-dom": "^4.3.1",
-    "react-scripts": "^3.0.1",
-    "react-select": "^3.0.4",
-    "react-spinners": "^0.6.1",
-    "redux": "^4.0.4",
-    "underscore": "^1.9.1",
-    "viewerjs": "^1.3.7",
-    "yup": "^0.27.0"
-  },
   "scripts": {
-    "start": "react-scripts start",
-    "start-ssl": "export HTTPS=true&&react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
   },
-  "eslintConfig": {
-    "extends": "react-app"
+  "dependencies": {
+    "@fortawesome/fontawesome-svg-core": "^6.5.1",
+    "@fortawesome/free-brands-svg-icons": "^6.5.1",
+    "@fortawesome/free-solid-svg-icons": "^6.5.1",
+    "@fortawesome/react-fontawesome": "^0.2.0",
+    "axios": "^1.6.5",
+    "bootstrap": "^5.3.2",
+    "formik": "^2.4.5",
+    "next": "14.0.4",
+    "react": "^18",
+    "react-bootstrap": "^2.10.0",
+    "react-dom": "^18",
+    "react-ga": "^3.3.1",
+    "react-phone-input-2": "^2.15.1",
+    "react-rating": "^2.0.5",
+    "react-responsive": "^9.0.2",
+    "react-select": "^5.8.0",
+    "react-spinners": "^0.13.8",
+    "viewerjs": "^1.11.6",
+    "yup": "^1.3.3"
   },
-  "browserslist": [
-    ">0.2%",
-    "not dead",
-    "not ie <= 11",
-    "not op_mini all"
-  ],
   "devDependencies": {
-    "babel-preset-es2015": "^6.24.1",
-    "babel-preset-react": "^6.24.1",
-    "babel-register": "^6.26.0",
-    "react-router-sitemap": "^1.2.0"
+    "@types/node": "^20",
+    "@types/react": "^18",
+    "@types/react-dom": "^18",
+    "eslint": "^8",
+    "eslint-config-next": "14.0.4",
+    "typescript": "^5"
   }
 }

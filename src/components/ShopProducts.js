@@ -1,23 +1,18 @@
-import React, { Component } from 'react';
 import {Container, Row, Col} from 'react-bootstrap';
-import PartItem from '../components/PartItem';
-import autoAPI from '../api/api';
+import {PartItem} from '@/components/PartItem'
+import { useEffect, useState } from 'react';
+import { getParts } from '@/utils/api';
 
-class ShopProducts extends Component {
-    constructor(props){
-        super(props);
-        this.state = {
-            parts: null,
+export const ShopProducts= ({shop})=> {
+    const [parts, setParts] = useState(null)
 
-        }
-    }
-    componentDidMount = () => {
-        console.log('did mount');
-        console.log(this.props);
-        autoAPI.get(`/parts?shop_id=${this.props.shop.id}`)
+    const fetchParts = () => {
+        let searchParams = new URLSearchParams()
+        searchParams.set('shop_id', shop.id)
+        getParts(searchParams.toString())
         .then((response) => {
-            if (response.data.status === 200){
-                this.setState({parts: response.data.data.parts})
+            if (response.status === 200){
+                setParts(response.data.data.parts)
             }
         })
         .catch((error) => {
@@ -25,27 +20,28 @@ class ShopProducts extends Component {
 
         });
     }
-    render() {
-        return (
-            <Container>
-                <Row>
-                {
-                    (this.state.parts !== null && this.state.parts.length > 0) ? (
-                        this.state.parts.map((part, index) => {
-                            return (
-                            <Col key={index} lg={4}>
-                                <PartItem history={this.props.history} part={part} key={part.id}/>
-                            </Col>
-                            )
-                        })
-                    ):(
-                        !this.state.parts && <p>CURRENTLY THERE ARE NO PARTS</p>
-                    )
-                }
-                </Row>
-            </Container>
-        )
-    }
+    useEffect(()=>{
+        fetchParts()
+    },[])
+
+    return (
+        <Container>
+            <Row>
+            {
+                (parts !== null && parts.length > 0) ? (
+                    parts.map((part, index) => {
+                        return (
+                        <Col key={index} lg={4}>
+                            <PartItem part={part} key={part.id}/>
+                        </Col>
+                        )
+                    })
+                ):(
+                    !parts && <p>CURRENTLY THERE ARE NO PARTS</p>
+                )
+            }
+            </Row>
+        </Container>
+    )
 }
 
-export default ShopProducts;

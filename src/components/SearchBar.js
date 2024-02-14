@@ -1,93 +1,102 @@
-import React from 'react';
+import { useEffect, useState } from 'react';
 import {Container, Col, Form, Button} from 'react-bootstrap';
-import autoAPI from '../api/api';
 import Select from 'react-select';
-/** @jsx jsx */
-import { jsx, css } from '@emotion/core'
+import { getBrands, getSearch } from '@/utils/api';
+import { useRouter } from 'next/navigation';
+import {SearchForm, Search} from "@/styles/Search.module.css";
 
-class SearchBar extends React.Component {
-    constructor(props){
-        super(props);
-        this.state = {
-            brandOptions: [],
-            modelOptions: [],
-            yearOptions: [],
-            brand: null,
-            model: null,
-            year: null,
-            searchTerm: '',
-            searchResults: [],
-            results_set: false
-        }
-    }
-    componentDidMount = () => {
-        autoAPI.get('/brands')
+export const SearchBar = ()=>{
+    const [brands, setBrands] = useState([])
+    const [brandOptions, setBrandOptions] = useState([])
+    const [models, setModels] = useState([])
+    const [modelOptions, setModelOptions] = useState([])
+    const [years, setYears] = useState([])
+    const [yearOptions, setYearOptions] = useState([])
+
+    const [brand, setBrand] = useState(null)
+    const [model, setModel] = useState(null)
+    const [year, setYear] = useState(null)
+    const [searchTerm, setSearchTerm] = useState('')
+    
+    useEffect(()=>{
+        fetchBrands()
+    }, [])
+
+    const fetchBrands = () => {
+        getBrands()
         .then((response) => {
             if (response.status === 200){
-                this.setState({brandOptions: response.data.data.brands})
+                setBrands(response.data.data.brands)
             }
         })
         .catch((error) => {
             console.log(error)
         })
     }
-    handleBrand = (selected) => {
-        this.setState({brand: selected});
-        this.state.brandOptions.forEach((brand) => {
+
+    const handleBrand = (selected) => {
+        setBrand(selected);
+        brands.forEach((brand) => {
             if (brand.id === parseInt(selected.value)){
-                this.setState({modelOptions: brand.models});
-                this.setState({yearOptions: []});
+                setModels(brand.models);
+                setYears([]);
             }
         })
-        this.setState({model: null})
-        this.setState({year: null})
+        setModel(null)
+        setYear(null)
     }
-    handleModel = (selected) => {
-        this.setState({model: selected})
-        this.state.modelOptions.forEach((model) => {
+
+    const handleModel = (selected) => {
+        setModel(selected)
+        models.forEach((model) => {
             if (model.id === parseInt(selected.value)){
-                this.setState({yearOptions: model.years})
+                setYears(model.years)
             }
         })
-        this.setState({year: null})
+        setYear(null)
     }
-    handleYear = (selected) => {
-        this.setState({year: selected})
+
+    const handleYear = (selected) => {
+        setYear(selected)
     }
-    handleSearchInput = (e) => {
-        this.setState({searchTerm: e.target.value})
+
+    const handleSearchInput = (e) => {
+        setSearchTerm(e.target.value)
     }
-    search = (event) => {
+
+    const search = (event) => {
         event.preventDefault();
-        let queryString = `term=${this.state.searchTerm}`
-        if(this.state.searchTerm !== ''){
-            queryString = `term=${this.state.searchTerm}`
-        }else{
-            queryString = `term=none`
+        const searchParams = new URLSearchParams()
+        if(searchTerm !== ''){
+            searchParams.append('term', searchTerm)
         }
-        if(this.state.brand){
-            queryString = queryString.concat(`&brand=${this.state.brand.value}`)
+        if(brand){
+            searchParams.append('brand', brand.value)
         }
-        if(this.state.model){
-            queryString = queryString.concat(`&model=${this.state.model.value}`)
+        if(model){
+            searchParams.append('model', model.value)
         }
-        if(this.state.year){
-            queryString = queryString.concat(`&year=${this.state.year.value}`)
+        if(year){
+            searchParams.append('year', year.value)
         }
 
-        autoAPI.get(`/search?${queryString}`)
+        const router = useRouter()
+
+        getSearch(searchParams)
         .then((response) => {
             if (response.data.status === 200){
-                let path = {
-                    pathname: `/results`,
-                    state: {
-                        results: response.data.data,
-                        term: this.state.searchTerm
-                    }
-                }
-                this.setState({brand: null, model: null, year: null, searchTerm: ''})
-                this.props.history.push('')
-                this.props.history.push(path)
+                // let path = {
+                //     pathname: `/results`,
+                //     state: {
+                //         results: response.data.data,
+                //         term: searchTerm
+                //     }
+                // }
+                setBrand(null)
+                setModel(null)
+                setYear(null)
+                setSearchTerm('')
+                router.push('/results')
             }
         })
         .catch((error) => {
@@ -95,8 +104,21 @@ class SearchBar extends React.Component {
 
         });
     }
-    render = () => {
-        let brandOptions = this.state.brandOptions.map((brand) => {
+
+    useEffect(()=>{
+        setUpBrandOptions()
+    }, [brands])
+
+    useEffect(()=>{
+        setupModelOptions()
+    }, [models])
+
+    useEffect(()=>{
+        setUpYearOptions()
+    }, [years])
+
+    const setUpBrandOptions = ()=>{
+        let brandOptions = brands.map((brand) => {
             return {
                 value: brand.id,
                 label: brand.name
@@ -113,7 +135,11 @@ class SearchBar extends React.Component {
             }
             return 0
         })
-        let modelOptions = this.state.modelOptions.map((model) => {
+        setBrandOptions(brandOptions)
+    }
+
+    const setupModelOptions = ()=>{
+        let modelOptions = models.map((model) => {
             return {
                 value: model.id,
                 label: model.name
@@ -130,64 +156,55 @@ class SearchBar extends React.Component {
             }
             return 0
         })
-        let yearOptions = this.state.yearOptions.map((year) => {
+        setModelOptions(modelOptions)
+    }
+
+    const setUpYearOptions = ()=>{
+        let yearOptions = years.map((year) => {
             return {
                 value: year.year,
                 label: year.year
             }
         })
-        return <Container id="searchBar" fluid css={css`
-            @media (max-width: 768px){
-                display: none;
-            }
-        `}>
-            <Form inline style={{
-                    justifyContent: 'center',
-                    paddingTop: '5px '
-                }}>
-                <Form.Row style={{
-                    width: '80%',
-                }}>
-                    <Col sm={3}>
-                    <Select
-                        placeholder={`Select Make`}
-                        options={brandOptions}
-                        onChange={this.handleBrand}
-                        value={this.state.brand}
-                    />
-                    </Col>
-                    <Col sm={3}>
-                    <Select
-                        value={this.state.model}
-                        placeholder={`Select Model`}
-                        onChange={this.handleModel}
-                        options={modelOptions}
-                    />
-                    </Col>
-                    <Col sm={3} >
-                    <Select
-                        value={this.state.year}
-                        placeholder={`Select Year`}
-                        options={yearOptions}
-                        onChange={this.handleYear}
-                    />
-                    </Col>
-                    <Col sm={3} >
-                    <Form.Group controlId="query" style={{
-                        display: 'flex',
-                        flexWrap:"nowrap"
-                    }}>
-                        <Form.Control type="text" placeholder="Search" value={this.state.searchTerm} className=" mr-sm-2" onChange={this.handleSearchInput} />
-                        <Button type="submit" onClick={this.search}>Search</Button>
-                    </Form.Group>
-
-                    </Col>
-                </Form.Row>
-            </Form>
-        </Container>
-
-
+        setYearOptions(yearOptions)
     }
-}
 
-export default SearchBar;
+
+    return <>
+    <Container className={Search} id="searchBar" fluid>
+    <Form className={SearchForm}>
+        <Form.Group>
+        <Select
+                placeholder={`Select Make`}
+                options={brandOptions}
+                onChange={handleBrand}
+                value={brand}
+            />
+        </Form.Group>
+        <Form.Group>
+        <Select
+                value={model}
+                placeholder={`Select Model`}
+                onChange={handleModel}
+                options={modelOptions}
+            />
+        </Form.Group>
+        <Form.Group>
+        <Select
+                value={year}
+                placeholder={`Select Year`}
+                options={yearOptions}
+                onChange={handleYear}
+            />
+        </Form.Group>
+        <Form.Group controlId="query" style={{
+                display: 'flex',
+                flexWrap:"nowrap"
+            }}>
+                <Form.Control type="text" placeholder="Search" value={searchTerm} className=" mr-sm-2" onChange={handleSearchInput} />
+                <Button type="submit" onClick={search}>Search</Button>
+            </Form.Group>
+    </Form>
+    </Container>
+    </>
+}

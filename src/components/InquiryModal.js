@@ -1,42 +1,38 @@
-import React, {useState, useContext} from 'react';
+import {useState} from 'react';
 import {Modal, Form, Button} from 'react-bootstrap';
-import autoAPI from '../api/api';
-import { UserContext } from '../App';
+import {postInquiries} from '@/utils/api';
 
-function InquiryModal(props){
-    const [query, handleQuery] = useState('');
-    const shop = props.shop;
-    const userContext = useContext(UserContext)
+export const InquiryModal = ({shop, part, onHide})=>{
+    const [query, setQuery] = useState('')
+
     const sendInquiry = () => {
         let req = {
             shop_id: shop.id,
             query: query
         }
-        if(props.part !== null){
-            req['part_id'] = props.part.id
+        if(part !== null){
+            req['part_id'] = part.id
         }
-        autoAPI.post('/inquiries', JSON.stringify(req), {
-            headers: {
-                'Authorization': 'Bearer '+ userContext.token
-            }
-        })
+        postInquiries(req)
         .then((response) => {
-            if (response.data.status === 201) {
-                props.onHide();
+            if (response.status === 201) {
+                onHide();
             }
         })
         .catch((error) => {
             console.log(error);
-            props.onHide();
+            onHide();
         
         });
     }
+    
     const handleChange = (event) => {
-        handleQuery(event.target.value)
+        setQuery(event.target.value)
     }
+
     return (
         <Modal 
-            {...props}
+            onHide={onHide}
             size='lg'
             aria-labelledby="contained-modal-title-vcenter"
             centered
@@ -55,5 +51,3 @@ function InquiryModal(props){
         </Modal>
     )
 }
-
-export default InquiryModal;
