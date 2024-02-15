@@ -83,7 +83,7 @@ export const CustomerRegisterForm = ()=>{
                     <Form.Label>Email address</Form.Label>
                     <Form.Control type="email" placeholder="Enter email" value={values.email} onChange={handleChange} />
                     <Form.Text className="text-muted">
-                    We'll always maintain your privacy
+                    <span>We&apos;ll always maintain your privacy</span>
                     </Form.Text>
                     <ErrorMessage name="email" render={(msg) => {
                     return  <Form.Control.Feedback type="invalid" style={{

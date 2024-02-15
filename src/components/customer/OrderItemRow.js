@@ -1,5 +1,5 @@
 import {Image} from 'react-bootstrap';
-import urls from '@/config/urls';
+import {urls} from '@/config/urls';
 
 export const OrderItemRow = ({item})=>{
     return (

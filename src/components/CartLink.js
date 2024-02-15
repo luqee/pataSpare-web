@@ -5,7 +5,7 @@ import { faShoppingCart } from '@fortawesome/free-solid-svg-icons';
 import { useEffect, useState } from 'react';
 
 export const CartLink = () =>{
-    const {cart} = useCartContext({})
+    const {cart} = useCartContext()
 
     const [totalItems, setTotalItems] = useState(0)
 

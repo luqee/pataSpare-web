@@ -1,13 +1,13 @@
 'use client'
 import { useState } from "react";
 import { Container, Row, Col } from "react-bootstrap";
-import MakeOrderForm from "@/forms/MakeOrderForm"
+import {MakeOrderForm} from "@/forms/MakeOrderForm"
 import Loader from "@/components/Loader";
-import {useCart} from '@/context/CartContext'
+import { useCartContext} from '@/context/CartContext'
 import { useRouter } from "next/navigation"
 
 const CreateOrder = ()=>{
-    const {cart, updateCart} = useCart()
+    const {cart, updateCart} = useCartContext()
     let [loading, setLoading] = useState(false)
     const router =  useRouter()
 

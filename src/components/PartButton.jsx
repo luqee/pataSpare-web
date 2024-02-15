@@ -5,7 +5,7 @@ import { useCartContext } from '@/context/CartContext';
 import { useEffect, useState } from 'react';
 import { postCart } from '@/utils/api';
 
-const PartButton = ({partId, qty}:{partId:number, qty:number})=>{
+const PartButton = ({partId, qty})=>{
     const [quantity, setQty] = useState(qty)
     let {cart, updateCart} = useCartContext()
     let [adding, setAdding] = useState(false)
@@ -18,7 +18,7 @@ const PartButton = ({partId, qty}:{partId:number, qty:number})=>{
     const countInCart = () => {
         let count = 0
         if(cart){
-            cart.items.forEach((item:any) => {
+            cart.items.forEach((item) => {
                 if(item.part_id === partId){
                     count = item.quantity
                 }
@@ -29,7 +29,7 @@ const PartButton = ({partId, qty}:{partId:number, qty:number})=>{
 
     const addToCart = () => {
         setAdding(true)
-        let itemData:{part_id:number, quantity: number, cart_id?: number}  = {
+        let itemData = {
             part_id: partId,
             quantity: quantity
         }

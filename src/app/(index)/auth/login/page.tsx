@@ -22,7 +22,7 @@ const UserLogin = ()=> {
                     <UserLoginForm />
                 </div>
                 <p>Forgot password? <Link href='/auth/recovery'>Reset here</Link></p>
-                <p>Don't have an account? <Link href='/auth/register'>Sign up</Link></p>
+                <p>Don&apos;t have an account? <Link href='/auth/register'>Sign up</Link></p>
                 </Col>
             </Row>
         </Container>

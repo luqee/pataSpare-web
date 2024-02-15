@@ -4,7 +4,7 @@ import { Container, Col, Row, Form, Button, Alert } from 'react-bootstrap';
 import Loader from '@/components/Loader';
 import RecoverySchema from '@/forms/schemas/RecoverySchema';
 import { Formik, ErrorMessage } from 'formik';
-import formStyles from '@/styles/Form.module.scss';
+import formStyles from '@/styles/Form.module.css';
 import { postRequestReset } from '@/utils/api';
 
 const PasswordRecover = ()=> {

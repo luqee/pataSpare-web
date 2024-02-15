@@ -3,7 +3,7 @@ import { Container, Col, Row, Form, Button } from 'react-bootstrap';
 import Loader from '@/components/Loader';
 import ResetSchema from '@/forms/schemas/ResetSchema';
 import { Formik, ErrorMessage } from 'formik';
-import formStyles from '@/styles/Form.module.scss';
+import formStyles from '@/styles/Form.module.css';
 import { useState } from 'react';
 import { postPasswordReset } from '@/utils/api';
 import { useAuthContext } from '@/context/AuthContext';

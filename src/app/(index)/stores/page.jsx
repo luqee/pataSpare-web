@@ -1,5 +1,4 @@
 'use client'
-import { Metadata } from 'next'
 import { useEffect, useState } from 'react';
 import {Container, Row, Col} from 'react-bootstrap';
 import {Store} from '@/components/Store';

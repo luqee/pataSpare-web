@@ -63,7 +63,7 @@ export const SearchBar = ()=>{
     const handleSearchInput = (e) => {
         setSearchTerm(e.target.value)
     }
-
+    const router = useRouter()
     const search = (event) => {
         event.preventDefault();
         const searchParams = new URLSearchParams()
@@ -79,8 +79,6 @@ export const SearchBar = ()=>{
         if(year){
             searchParams.append('year', year.value)
         }
-
-        const router = useRouter()
 
         getSearch(searchParams)
         .then((response) => {

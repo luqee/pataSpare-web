@@ -1,7 +1,7 @@
 import { useEffect, useState} from 'react';
 import {Form, Button} from 'react-bootstrap';
 import PhoneInput from 'react-phone-input-2'
-import 'react-phone-input-2/dist/style.css'
+import 'react-phone-input-2/lib/style.css'
 import { Formik, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 

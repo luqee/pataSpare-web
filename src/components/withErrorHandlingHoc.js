@@ -1,4 +1,3 @@
-import React from 'react';
 import {Alert} from 'react-bootstrap';
 const withErrorHandling = WrappedComponent => ({ showError, errors, children }) => {
     let errorLists = Object.values(errors)
