@@ -4,11 +4,16 @@ import { cookies } from "next/headers";
 export async function POST(req: Request) {
 
   const data = await req.json()
-  let response = await autoAPI.post(`/auth/social`, JSON.stringify(data), {
-    validateStatus: function (status) {
-      return status < 500; // Resolve only if the status code is less than 500
-    }
-  })
+  let response = null
+  try {
+    response = await autoAPI.post(`/auth/social`, JSON.stringify(data), {
+        validateStatus: function (status) {
+            return status < 500; // Resolve only if the status code is less than 500
+        }
+    })
+  } catch (error) {
+    console.log(error)
+  }
   if (response) {
     if (response.status === 200) {    
         cookies().set('user', JSON.stringify(response.data.data.user))
@@ -17,12 +22,8 @@ export async function POST(req: Request) {
     return Response.json(response.data, {
       status: response.status
     })
-  } else {
-    // No response received
-    console.log('No response received');
-    console.log(response);
-    return Response.json(response, {
-      status: 400
-    })
   }
+  return Response.json({ error: 'Error Processing request' }, {
+    status: 400,
+  })
 }

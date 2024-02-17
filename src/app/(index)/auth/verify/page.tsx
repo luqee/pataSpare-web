@@ -11,11 +11,8 @@ const Activate =()=>{
     const router = useRouter()
 
     const activate = () => {
-        console.log("=================================================");
-        console.log(queryString);
         let url = null
         if(url = queryString.get('q')){
-            // let parsed = queryString.parse(this.props.location.search)
             let query = new URLSearchParams()
             query.set('url', url)
             getVerify(query.toString())

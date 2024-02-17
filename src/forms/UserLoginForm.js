@@ -8,7 +8,7 @@ import { useAuthContext } from '@/context/AuthContext';
 
 export const UserLoginForm =()=> {
 
-	const {login, setUser} = useAuthContext()
+	const {login, updateUser} = useAuthContext()
 	let [showError, setShowError] = useState(false)
 	let [errors, setErrors] = useState({})
 	let [formState, setformState] = useState({
@@ -23,8 +23,7 @@ export const UserLoginForm =()=> {
 		login(postData, (response)=>{
 			actions.setSubmitting(false)
 			if (response.status === 200) {
-				let responseData = response.data.data;
-				setUser(responseData.user)
+				updateUser()
 				router.replace('/customer')
 			}else{
 				let errors = []

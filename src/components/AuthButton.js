@@ -6,7 +6,7 @@ import {useAuthContext} from '@/context/AuthContext'
 export const AuthButton = ()=> {
     const {user, logout} = useAuthContext()
 
-    return user.id ? (
+    return user ? (
         <Nav>
             <NavDropdown title={<FontAwesomeIcon icon={faUser} />} id="basic-nav-dropdown">
                 <NavDropdown.Item href={`/customer`}>My Account</NavDropdown.Item>

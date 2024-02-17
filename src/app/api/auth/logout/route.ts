@@ -16,19 +16,12 @@ export async function POST(req: Request) {
     if (response.status == 200) {
         cookies().delete('user')
         cookies().delete('token')
-        return Response.json(response.data, {
-          status: response.status
-        })
     }
     return Response.json(response.data, {
         status: response.status
-      })
-  } else {
-    // No response received
-    console.log('No response received');
-    console.log(response);
-    return Response.json(response, {
-        status: 400
-      })
+    })
   }
+  return Response.json({ error: 'Error Processing request' }, {
+    status: 400,
+  })
 }
