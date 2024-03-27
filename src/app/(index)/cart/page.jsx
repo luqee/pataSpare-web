@@ -110,7 +110,7 @@ const UserCart = ()=>{
                 </Table>
                 <Row>
                 {
-                    Object.keys(user).length > 0 ? <Button onClick={()=>{placeOrder()}}>Place Order</Button>
+                    user ? <Button onClick={()=>{placeOrder()}}>Place Order</Button>
                     :<Link href={`/auth/login`}>
                         Login to place an order
                     </Link>

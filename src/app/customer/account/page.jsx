@@ -53,9 +53,9 @@ const Account = ()=>{
                 <div className='dealer-register'>
                     <Formik
                         initialValues={{
-                            username: user.name,
-                            email: user.email,
-                            number: user.number ? user.number: '',
+                            username: user?.name,
+                            email: user?.email,
+                            number: user?.number ? user?.number: '',
                         }}
                         validationSchema={UserUpgradeSchema}
                         onSubmit={becomeVendor}>

@@ -7,7 +7,7 @@ const AuthContext = createContext({})
 
 export const AuthProvider = ({ children }) => {
   const router = useRouter()
-    const [user, setUser] = useState({});
+    const [user, setUser] = useState(null);
     const [loading, setLoading] = useState(true);
   
     useEffect(()=>{
@@ -23,7 +23,7 @@ export const AuthProvider = ({ children }) => {
         let user = JSON.parse(decodeURIComponent(sessionUser))
         setUser(user)
       }else{
-        setUser({})
+        setUser(null)
       }
       setLoading(false)
     }

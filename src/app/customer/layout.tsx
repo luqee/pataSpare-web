@@ -1,6 +1,6 @@
 import type { Metadata, Viewport } from 'next'
 import 'bootstrap/dist/css/bootstrap.css';
-import '@/app/globals.css'
+import './globals.css'
 import { Col, Container, Row } from 'react-bootstrap'
 import {Header} from '@/components/Header'
 import {Footer} from '@/components/Footer'
@@ -8,7 +8,6 @@ import {AuthProvider} from '@/context/AuthContext'
 import {CartProvider} from '@/context/CartContext'
 import Link from 'next/link';
 import './customer.css'
-
 
 export const viewport: Viewport = {
   themeColor: '#000000',

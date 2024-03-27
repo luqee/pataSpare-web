@@ -27,7 +27,8 @@ const PartButton = ({partId, qty})=>{
         return count
     }
 
-    const addToCart = () => {
+    const addToCart = (event) => {
+        event.preventDefault()
         setAdding(true)
         let itemData = {
             part_id: partId,
@@ -39,6 +40,7 @@ const PartButton = ({partId, qty})=>{
         postCart(itemData)
         .then((response)=>{
             setAdding(false)
+            console.log(response);
             if (response.status === 201) {
                 updateCart()
             }

@@ -1,6 +1,6 @@
 import type { Metadata, Viewport } from 'next'
 import 'bootstrap/dist/css/bootstrap.css';
-import '@/app/globals.css'
+import './globals.css'
 import { Container } from 'react-bootstrap'
 import {Header} from '@/components/Header'
 import {Footer} from '@/components/Footer'

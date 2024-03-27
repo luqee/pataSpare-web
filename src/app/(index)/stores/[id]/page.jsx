@@ -103,7 +103,7 @@ const StoreView = ({params})=>{
                     backgroundSize: 'cover',
                     }}>
                         {
-                            Object.keys(user).length > 0? <Button style={{
+                            user? <Button style={{
                                 position: 'absolute',
                                 bottom: '10px',
                                 right: '10px'
@@ -169,7 +169,7 @@ const StoreView = ({params})=>{
                     <Tab.Pane eventKey="reviews">
                         <div>
                         {
-                            Object.keys(user).length > 0 ? <div className="userReview">
+                            user ? <div className="userReview">
                                 <Rating
                                     initialRating={rating}
                                     emptySymbol={<FontAwesomeIcon icon={faStar} />}

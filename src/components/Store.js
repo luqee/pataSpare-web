@@ -69,7 +69,7 @@ export const Store = ({shop})=>{
                     right: '10px'
                 }}>
                     {
-                        user?.id > 0 ? <Button size={'sm'} onClick={()=> setModalShow(true)}><FontAwesomeIcon icon={faQuestionCircle}/>{`  Inquire`}</Button>
+                        user ? <Button size={'sm'} onClick={()=> setModalShow(true)}><FontAwesomeIcon icon={faQuestionCircle}/>{`  Inquire`}</Button>
                         :<Link href={`/auth/login`}>
                             Login to Inquire
                         </Link>
