@@ -4,7 +4,7 @@ import {CartItem} from '@/components/CartItem';
 import { useCartContext} from '@/context/CartContext'
 import {useAuthContext} from '@/context/AuthContext'
 import { useEffect, useState } from 'react';
-import {deleteCartItem, putCarts} from '@/utils/api'
+import {deleteCartItem, getCart, putCarts} from '@/utils/api'
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 
@@ -12,18 +12,31 @@ import Link from 'next/link';
 const UserCart = ()=>{
     const {cart, updateCart} = useCartContext()
     const {user} = useAuthContext()
+    const [cartFull, setCartFull] = useState(null)
     const [order, setOrder] = useState(null)
     const [orderPlaced, setOrderPlaced] = useState(false)
     const [totalSum, setTotalSum] = useState(0)
+
+    const fetchCart = () => {
+        if (cart) {
+            getCart(cart.id)
+            .then((response) => {
+                if (response.status === 200) {
+                    setCartFull(response.data.data.cart)
+                }
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+        }
+    }
 
     const removeFromCart = (part_id) => {
         let query = new URLSearchParams()
         query.set('part', part_id)
         deleteCartItem(cart.id, query.toString())
         .then((response) => {
-            if (response.status === 200){
-                updateCart()
-            }
+            updateCart()
         }).catch((error) => {
             console.log(error)
         })
@@ -52,9 +65,9 @@ const UserCart = ()=>{
 
     const getTotal = () => {
         let total = 0
-        if(cart && cart.items){
-            if(cart.items.length > 0){
-                let totalItems = cart.items.map((item) => {
+        if(cartFull && cartFull.items){
+            if(cartFull.items.length > 0){
+                let totalItems = cartFull.items.map((item) => {
                     return parseInt(item.quantity) * parseInt(item.part.price)
                 })
                 total =  totalItems.reduce((prev, next) => {
@@ -66,8 +79,14 @@ const UserCart = ()=>{
     }
 
     useEffect(()=>{
-        getTotal()
+        fetchCart()
     }, [cart])
+
+    useEffect(()=>{
+        if (cartFull) {
+            getTotal()
+        }
+    }, [cartFull])
 
     return (
         <Container className='items' id='items'>
@@ -81,7 +100,7 @@ const UserCart = ()=>{
         <Row>
         <Col lg={12}>
         {
-            (cart) ? (
+            (cartFull) ? (
                 <div>
                     <Table>
                     <thead>
@@ -96,9 +115,9 @@ const UserCart = ()=>{
                     </thead>
                     <tbody>
                     {
-                        cart.items.map((item, index) => {
+                        cartFull.items.map((item) => {
                             return (
-                                <CartItem key={index} item={item} updateCart={updateItem} removeFromCart={removeFromCart} />
+                                <CartItem key={item.id} item={item} updateCart={updateItem} removeFromCart={removeFromCart} />
                             )
                         })
                     }

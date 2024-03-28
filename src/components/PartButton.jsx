@@ -7,25 +7,9 @@ import { postCart } from '@/utils/api';
 
 const PartButton = ({partId, qty})=>{
     const [quantity, setQty] = useState(qty)
-    let {cart, updateCart} = useCartContext()
+    let {cart, updateCart, countInCart} = useCartContext()
     let [adding, setAdding] = useState(false)
-    let [inCart, setInCart] = useState(0)
-
-    useEffect(()=>{
-        setInCart(countInCart())
-    }, [cart])
-
-    const countInCart = () => {
-        let count = 0
-        if(cart){
-            cart.items.forEach((item) => {
-                if(item.part_id === partId){
-                    count = item.quantity
-                }
-            })
-        }
-        return count
-    }
+    const inCart = countInCart(partId)
 
     const addToCart = (event) => {
         event.preventDefault()
@@ -40,7 +24,6 @@ const PartButton = ({partId, qty})=>{
         postCart(itemData)
         .then((response)=>{
             setAdding(false)
-            console.log(response);
             if (response.status === 201) {
                 updateCart()
             }
@@ -54,7 +37,6 @@ const PartButton = ({partId, qty})=>{
         zIndex: 10
     }} size={'sm'} onClick={addToCart}>
         <FontAwesomeIcon icon={faShoppingCart} /> {adding?'Adding...':'Add'}
-        <br />
         {
             (inCart === 0) ? null:
             <span>{`(${inCart})`}</span>

@@ -32,6 +32,10 @@ export const postCart = (requestData)=>{
   return appAPI.post(`/api/carts`, JSON.stringify(requestData))
 }
 
+export const getCart = (id)=>{
+  return appAPI.get(`/api/carts/${id}`)
+}
+
 export const deleteCartItem = (id, query)=>{
   return appAPI.delete(`/api/carts/${id}?${query}`)
 }

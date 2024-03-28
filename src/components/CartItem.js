@@ -3,7 +3,7 @@ import { Button, Form} from 'react-bootstrap';
 import {urls} from '@/config/urls';
 import Image from 'next/image';
 
-export const CartItem = ({item, updateCart})=>{
+export const CartItem = ({item, updateCart, removeFromCart})=>{
     let [qty, setQty] = useState(parseInt(item.quantity))
     let [qtyChanged, setQtyChanged] = useState(false)
     let [updating, setUpdating] = useState(false)

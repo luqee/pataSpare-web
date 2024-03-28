@@ -11,10 +11,20 @@ export const CartProvider = ({ children }) => {
       updateCart()
     }, [])
   
+    const countInCart = (partId) => {
+      let count = 0
+      if(cart){
+          cart.items.forEach((item) => {
+              if(item.part_id === partId){
+                  count = item.quantity
+              }
+          })
+      }
+      return count
+    }
+
     const updateCart = ()=>{
       const cartCookie = document.cookie.split("; ").find((row) => row.startsWith("cart="))?.split("=")[1];
-      console.log("in updating");
-      console.log(cartCookie);
       if (cartCookie) {
         let localCart = JSON.parse(decodeURIComponent(cartCookie))
         setCart(localCart)
@@ -24,7 +34,7 @@ export const CartProvider = ({ children }) => {
     }
 
     return (
-      <CartContext.Provider value={{ cart: cart, updateCart }}>
+      <CartContext.Provider value={{ cart, updateCart, countInCart }}>
         {children}
       </CartContext.Provider>
     );
