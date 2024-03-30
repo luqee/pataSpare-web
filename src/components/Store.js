@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from 'react';
-import {Container, Row, Col, Card, Button, CardText} from 'react-bootstrap';
+'use client'
+import { useState } from 'react';
+import {Button} from 'react-bootstrap';
 import {urls} from '@/config/urls';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faStar, faMapMarker, faQuestionCircle, faShoppingBag, faPhone } from '@fortawesome/free-solid-svg-icons';
+import {faMapMarker, faQuestionCircle, faShoppingBag, faPhone } from '@fortawesome/free-solid-svg-icons';
 import {InquiryModal} from '@/components/InquiryModal'
 import GA from '@/utils/SiteAnalytics'
 import Link from 'next/link';
@@ -49,7 +50,7 @@ export const Store = ({shop})=>{
     }
 
     return (
-        <div className='shop-item-container'>
+        <div>
             <InquiryModal shop={shop} part={null} show={modalShow} onHide={()=>{setModalShow(false)}}/>
             <div className={Shop} style={{
                 backgroundImage: `url(${urls.apiHost}/${shop.shop_image})`

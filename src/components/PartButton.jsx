@@ -1,8 +1,9 @@
+'use client'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faShoppingCart } from '@fortawesome/free-solid-svg-icons';
 import { Button } from 'react-bootstrap'
 import { useCartContext } from '@/context/CartContext';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { postCart } from '@/utils/api';
 
 const PartButton = ({partId, qty})=>{

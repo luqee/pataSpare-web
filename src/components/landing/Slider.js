@@ -1,3 +1,4 @@
+'use client'
 import React from 'react';
 import {Container, Row, Col, Carousel} from 'react-bootstrap';
 import slider1 from '@/images/slider/slider1.jpg';

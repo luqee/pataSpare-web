@@ -1,33 +1,33 @@
-import React, { useEffect, useState } from 'react';
 import {Container, Row, Col} from 'react-bootstrap';
-import Loader from '@/components/Loader'
 import {urls} from '@/config/urls'
-import {getCategories} from '@/utils/api'
 import Link from 'next/link';
+import { autoAPI } from '@/config/axios';
 
-export const CategoriesSection = ()=>{
-    const [categories, setCategories] = useState([])
-    const [loading, setLoading] = useState(true)
 
-    const fetchCategories = ()=>{
-        const searchParams = new URLSearchParams()
-        searchParams.set('preview', 'true')
-        getCategories(searchParams.toString())
-        .then((response) => {
-            setLoading(false)
-            if (response.status === 200){
-                setCategories(response.data.data.categories)
-            }
-        })
-        .catch((error) => {
-            console.log(error);
-            setLoading(false)
-        })
+const fetchCategories = async ()=>{
+    const searchParams = new URLSearchParams()
+    searchParams.set('preview', 'true')
+    let reqPath = '/categories'
+    reqPath+=`?${searchParams.toString()}`
+    const response = await autoAPI.get(reqPath, {
+        validateStatus: function (status) {
+            return status < 500;
+        }
+    })
+    if (!response){
+        console.log('No response received');
+        throw new Error('Failed to get Categories')
     }
+    if (!response.status === 200){
+        console.log('Error response received');
+        throw new Error('Error while to get Categories')
+    }
+    console.log('Response is 200');
+    return response.data.data.categories
+}
 
-    useEffect(()=>{
-        fetchCategories()
-    }, [])
+export const CategoriesSection = async ()=>{
+    const categories = await fetchCategories()
 
     // const colStyle = {
     //     backgroundImage: `url(${logo})`,
@@ -40,9 +40,8 @@ export const CategoriesSection = ()=>{
     return (
         <Container className='categories' id='categories'>
             <Row style={{minHeight: '20px', justifyContent: `center`}}>
-                <Loader loading={loading} />
                 {
-                    (!loading && categories.length > 0) ? (
+                    (categories.length > 0) ? (
                         categories.map((cat, indx) => {
                             return (
                                 <Col lg={4} key={indx} style={{

@@ -1,9 +1,11 @@
+
 .Shop{
     height: 175px;
     /* background-image: `url(${urls.apiHost}/${shop.shop_image})`; */
     background-size:cover;
     border-bottom: 3px solid #007bff;
     position: relative;
+    border-radius: 2%;
 }
 
 .ShopOptions{
@@ -24,3 +26,4 @@
     border-radius: 15%;
     padding: 15px;
 }
+

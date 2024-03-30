@@ -1,3 +1,4 @@
+'use client'
 import {Container, Row, Col, Card } from 'react-bootstrap';
 import banner1 from '@/images/banner1.jpg';
 

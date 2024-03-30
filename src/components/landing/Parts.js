@@ -1,47 +1,55 @@
-import { useEffect, useState } from 'react';
 import {Container, Row, Col} from 'react-bootstrap';
 import {PartItem} from '@/components/PartItem';
-import Loader from '@/components/Loader';
-import {getParts} from '@/utils/api'
+import { autoAPI } from '@/config/axios';
 
-export const PartsSection = ()=>{
-    const [latestParts, setLatestParts] = useState([])
-    const [recommendParts, setRecommendParts] = useState([])
-    const [loading, setLoading] = useState(true)
-    
-    useEffect(()=>{
-        fetchParts()
-    }, [])
-
-    const fetchParts = () => {
-        const searchParams = new URLSearchParams()
-        searchParams.set('criteria', 'latest')
-        getParts(searchParams.toString())
-        .then((response) => {
-            setLoading(false)
-            if (response.status === 200){
-                setLatestParts(response.data.data.parts)
-            }
-        })
-        .catch((error) => {
-            console.log(error);
-            setLoading(false)
-        })
-
-        searchParams.set('criteria', 'recommended')
-        getParts(searchParams.toString())
-        .then((response) => {
-            setLoading(false)
-            if (response.status === 200){
-                setRecommendParts(response.data.data.parts)
-            }
-        })
-        .catch((error) => {
-            console.log(error);
-            this.setState({loading: false})  
-        })
+const fetchLatestParts = async () => {
+    const searchParams = new URLSearchParams()
+    searchParams.set('criteria', 'latest')
+    let reqPath = '/parts'
+    reqPath+=`?${searchParams.toString()}`
+    const response = await autoAPI.get(reqPath,{
+        validateStatus: function (status) {
+            return status < 500;
+        }
+    })
+    if (!response){
+        console.log('No response received');
+        throw new Error('Failed to get parts')
     }
+    if (!response.status === 200){
+        console.log('Error response received');
+        throw new Error('Error while to get parts')
+    }
+    console.log('Response is 200');
+    return response.data.data.parts
+}
 
+const fetchRecParts = async () => {
+    const searchParams = new URLSearchParams()
+    searchParams.set('criteria', 'recommended')
+    let reqPath = '/parts'
+    reqPath+=`?${searchParams.toString()}`
+    const response = await autoAPI.get(reqPath,{
+        validateStatus: function (status) {
+            return status < 500;
+        }
+    })
+    if (!response){
+        console.log('No response received');
+        throw new Error('Failed to get parts')
+    }
+    if (!response.status === 200){
+        console.log('Error response received');
+        throw new Error('Error while to get parts')
+    }
+    console.log('Response is 200');
+    return response.data.data.parts
+}
+
+export const PartsSection = async ()=>{
+    const latestParts = await fetchLatestParts()
+    const recommendParts = await fetchRecParts()
+    
     return (
         <Container className='products' id='products'>
             <Row style={{
@@ -56,10 +64,8 @@ export const PartsSection = ()=>{
                 justifyContent: `center`,
                 paddingBottom: '5px'
             }}>
-                <Loader loading={loading} />
-            
                 {
-                    (!loading && latestParts.length > 0) ? (
+                    (latestParts.length > 0) ? (
                         latestParts.map((part, indx) => {
                             return (
                                 <Col lg={3} key={indx}>
@@ -83,9 +89,8 @@ export const PartsSection = ()=>{
                 justifyContent: `center`,
                 paddingBottom: '5px'
             }}>
-                <Loader loading={loading} />
                 {
-                    (!loading && recommendParts.length > 0) ? (
+                    (recommendParts.length > 0) ? (
                         recommendParts.map((part, indx) => {
                             return (
                                 <Col lg={3} key={indx}>

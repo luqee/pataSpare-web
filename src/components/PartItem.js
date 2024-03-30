@@ -1,3 +1,4 @@
+'use client'
 import {Card } from 'react-bootstrap'
 import {urls} from '@/config/urls'
 import Link from 'next/link';

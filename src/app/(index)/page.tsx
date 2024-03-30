@@ -1,4 +1,3 @@
-'use client'
 import {ImageSlider} from '@/components/landing/Slider'
 import {CategoriesSection} from '@/components/landing/Categories'
 import {PartsSection} from '@/components/landing/Parts'
