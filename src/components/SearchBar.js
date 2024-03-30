@@ -1,4 +1,5 @@
-import { useEffect, useState } from 'react';
+'use client'
+import { use, useEffect, useState } from 'react';
 import {Container, Col, Form, Button} from 'react-bootstrap';
 import Select from 'react-select';
 import { getBrands, getSearch } from '@/utils/api';
@@ -173,6 +174,7 @@ export const SearchBar = ()=>{
     <Form className={SearchForm}>
         <Form.Group>
         <Select
+            instanceId={'make'}
                 placeholder={`Select Make`}
                 options={brandOptions}
                 onChange={handleBrand}
@@ -181,6 +183,7 @@ export const SearchBar = ()=>{
         </Form.Group>
         <Form.Group>
         <Select
+            instanceId={'model'}
                 value={model}
                 placeholder={`Select Model`}
                 onChange={handleModel}
@@ -189,6 +192,7 @@ export const SearchBar = ()=>{
         </Form.Group>
         <Form.Group>
         <Select
+            instanceId={'year'}
                 value={year}
                 placeholder={`Select Year`}
                 options={yearOptions}

@@ -52,11 +52,11 @@ export const StoresSection = ()=> {
                     (!loading && shops.length > 0) ? (
                         shops.map((shop, index) => {
                             while (index < 3) {
-                                return (<Col key={index} lg={4}><Store key={shop.id} shop={shop} /></Col> )
+                                return (<Col key={shop.id} lg={4}><Store key={shop.id} shop={shop} /></Col> )
                             }
                         })
                     ):(
-                        <p></p>
+                        <Col></Col>
                     )
                 }
             </Row>

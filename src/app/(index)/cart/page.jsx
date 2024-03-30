@@ -126,15 +126,15 @@ const UserCart = ()=>{
                         <td>{totalSum}</td>
                     </tr>
                     </tbody>
-                </Table>
-                <Row>
-                {
-                    user ? <Button onClick={()=>{placeOrder()}}>Place Order</Button>
-                    :<Link href={`/auth/login`}>
-                        Login to place an order
-                    </Link>
-                }
-                </Row>
+                    </Table>
+                    <div>
+                    {
+                        user ? <Button onClick={()=>{placeOrder()}}>Place Order</Button>
+                        :<Link href={`/auth/login`}>
+                            Login to place an order
+                        </Link>
+                    }
+                    </div>
                 </div>
             ):(
                 <p>NO ITEMS IN CART</p>

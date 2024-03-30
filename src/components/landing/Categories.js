@@ -57,7 +57,7 @@ export const CategoriesSection = ()=>{
                                         height: '80%',
                                         borderRadius: '5%'
                                     }}>
-                                        <div class="mask" style={{
+                                        <div className="mask" style={{
                                             height: '100%',
                                             width: '100%',
                                             justifyContent: 'center',

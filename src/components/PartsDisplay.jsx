@@ -38,9 +38,9 @@ const PartsDisplay = ()=>{
                 <Loader loading={loading} />
             {
                 (!loading && parts.length > 0) ? (
-                    parts.map((part, index) => {
+                    parts.map((part) => {
                         return (
-                        <Col key={index} lg={3}>
+                        <Col key={part.id} lg={3}>
                             <PartItem part={part} key={part.id}/>
                         </Col>
                         )

@@ -39,7 +39,7 @@ export const Footer = ()=>{
             flexBasis: '30%'
         }}>
             <div>SOCIAL</div>
-            <div class="fb-like" data-href="https://web.facebook.com/PataSpare-106357314168691" data-width="" data-layout="standard" data-action="like" data-size="small" data-share="true"></div>
+            <div className="fb-like" data-href="https://web.facebook.com/PataSpare-106357314168691" data-width="" data-layout="standard" data-action="like" data-size="small" data-share="true"></div>
             {/* <FontAwesomeIcon icon={faFacebook} /><br/> */}
             <FontAwesomeIcon icon={faTwitter} /><br/>
             <FontAwesomeIcon icon={faYoutube} /><br/>

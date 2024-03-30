@@ -1,18 +1,19 @@
 import React, { useEffect, useState } from 'react';
-import {Container, Row, Col, Card, Button} from 'react-bootstrap';
+import {Container, Row, Col, Card, Button, CardText} from 'react-bootstrap';
 import {urls} from '@/config/urls';
-import Rating from 'react-rating';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faStar, faMapMarker, faQuestionCircle, faShoppingBag, faPhone } from '@fortawesome/free-solid-svg-icons';
 import {InquiryModal} from '@/components/InquiryModal'
 import GA from '@/utils/SiteAnalytics'
 import Link from 'next/link';
 import { useAuthContext } from '@/context/AuthContext';
+import { Rating, ThinStar } from "@smastrom/react-rating";
+import '@smastrom/react-rating/style.css'
+import { Shop, ShopOptions, ShopDetails } from "@/styles/shopItem.module.css"
 
 export const Store = ({shop})=>{
     const {user} = useAuthContext 
     let [modalShow, setModalShow] = useState(false)
-    let [shopRating, setShopRating] = useState(0)
 
     const showNumber = () =>{
         if(GA.init()){
@@ -27,6 +28,7 @@ export const Store = ({shop})=>{
     }
 
     const calculateRating = ()=>{
+        let rating = 0
         if(shop.reviews.length > 0 ){
             let shopRatings = shop.reviews.map((review) => {
                 if(review.rating === undefined){
@@ -35,72 +37,51 @@ export const Store = ({shop})=>{
                     return review.rating
                 }
             })
-            shopRating = shopRatings.reduce((prev, next) => prev + next) / shop.reviews.length
-            setShopRating(shopRating)
+            rating = shopRatings.reduce((prev, next) => prev + next) / shop.reviews.length
         }
+        return rating
     }
 
-    useEffect(()=>{
-        calculateRating()
-    }, [shop])
+    const ratingStyles = {
+        itemShapes: ThinStar,
+        activeFillColor: '#ffb700',
+        inactiveFillColor: '#fbf1a9'
+    }
 
     return (
-        <Container style={{
-            paddingBottom: '10px',
-            minHeight: '50px',
-        }}>
+        <div className='shop-item-container'>
             <InquiryModal shop={shop} part={null} show={modalShow} onHide={()=>{setModalShow(false)}}/>
-            <Row>
-                <Col>
-                <Card style={{
-                    width: '100%',
-                    backgroundImage: `url(${urls.apiHost}/${shop.shop_image})`,
-                    backgroundSize: 'cover',
-                    borderBottom: '3px solid #007bff',
-                    }}>
-                <div style={{
-                    backgroundColor: '#000000',
-                    opacity: '0.6'
-                }}>
-                <div style={{
-                    display: 'flex',
-                    position: 'absolute',
-                    top: '10px',
-                    right: '10px'
-                }}>
+            <div className={Shop} style={{
+                backgroundImage: `url(${urls.apiHost}/${shop.shop_image})`
+            }}>
+                <div className={ShopOptions}>
+                    <Link href={`/stores/${shop.id}`}>
+                    <Button size={'sm'}><FontAwesomeIcon icon={faShoppingBag}/>{`  Shop`}</Button>
+                    </Link>
                     {
                         user ? <Button size={'sm'} onClick={()=> setModalShow(true)}><FontAwesomeIcon icon={faQuestionCircle}/>{`  Inquire`}</Button>
                         :<Link href={`/auth/login`}>
                             Login to Inquire
                         </Link>
                     }
-                    &nbsp;
-                    <Link href={`/stores/${shop.id}`}>
-                    <Button size={'sm'}><FontAwesomeIcon icon={faShoppingBag}/>{`  Shop`}</Button>
-                    </Link>
                     
                 </div>
-                <div style={{
-                    color: '#ffffff',
-                }}>
-                    <Card.Title>{shop.name}</Card.Title>
-                    <Card.Text><Rating
-                        emptySymbol={<FontAwesomeIcon icon={faStar} />}
-                        fullSymbol={<FontAwesomeIcon icon={faStar} color={`gold`}/>}
-                        initialRating={shopRating} // to-do calculate average rating
+                <div className={ShopDetails}>
+                    <p>{shop.name}</p>
+                    <Rating
+                        style={{ maxWidth: 100 }}
+                        itemStyles={ratingStyles}
+                        value={calculateRating()} // to-do calculate average rating
                         readonly
-                    /></Card.Text>
-                    <Card.Text><FontAwesomeIcon icon={faMapMarker} />  {shop.location}</Card.Text>
-                    <Card.Text>
+                        isDisabled
+                    />
+                    <p><FontAwesomeIcon icon={faMapMarker} />  {shop.location}</p>
                     <Button size={'sm'} id={`numberBtn${shop.id}`} onClick={showNumber}> View Number</Button>
-                    <p id={`numberTxt${shop.id}`} style={{
+                    <span id={`numberTxt${shop.id}`} style={{
                         display: `none`
-                    }}><FontAwesomeIcon icon={faPhone} />{`  ${shop.number}`}</p></Card.Text>
+                    }}><FontAwesomeIcon icon={faPhone} />{`  ${shop.number}`}</span>
                 </div>
                 </div>
-                </Card>
-                </Col>
-            </Row>
-        </Container>
+        </div>
     )
 }

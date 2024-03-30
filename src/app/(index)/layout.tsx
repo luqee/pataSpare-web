@@ -68,7 +68,9 @@ export default function RootLayout({
               paddingTop: '10px',
               flex: '1'
             }} >
+              <div>
               {children}
+              </div>
             </Container>
             <Container className='footer' fluid style={{
               paddingTop: '20px',
