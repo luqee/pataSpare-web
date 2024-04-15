@@ -20,7 +20,6 @@ const fetchShops = async () => {
         console.log('Error response received');
         throw new Error('Error while to get shops')
     }
-    console.log('Response is 200');
     return response.data.data.shops
 }
 

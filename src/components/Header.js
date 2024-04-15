@@ -1,42 +1,34 @@
 'use client'
-import React, { useEffect, useState } from 'react'
 import {Nav, NavDropdown, Container, Navbar}from 'react-bootstrap'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faSearch } from '@fortawesome/free-solid-svg-icons'
 import './MainHeader.css';
 import logo from '@/images/pataspare-logo.png'
-import { getCategories } from '@/utils/api';
-import { useRouter } from 'next/navigation';
-import {Mobile} from '@/config/config'
 import {CartLink} from '@/components/CartLink'
 import {AuthButton} from '@/components/AuthButton'
 import {SearchBar} from '@/components/SearchBar'
 import Image from 'next/image'
+import { autoAPI } from '@/config/axios'
+import { SearchToggle } from "@/components/SearchToggle";
 
-export const Header =()=> {
-    const [categories, setCategories] = useState([])
-    const [ismobile, setIsmobile] = useState(false)
-    useEffect(()=>{
-        fetchCategories()
-    }, [])
-
-    const fetchCategories = ()=> {
-        getCategories()
-        .then((response) => {
-            if (response.status === 200) {
-                setCategories(response.data.data.categories)
-            }
-        })
-        .catch((error) => {
-            console.log('Woops an error '+error);
-        })
+const fetchCategories = async ()=> {
+    const response = await autoAPI.get('/categories', {
+        validateStatus: function (status) {
+            return status < 500;
+        }
+    })
+    if (!response){
+        console.log('No response received');
+        throw new Error('Failed to get Categories')
     }
-
-    const toggleSearchBar = (event) =>{
-        let searchBar = document.getElementById('searchBar')
-        searchBar.style.display = searchBar.style.display == 'block'? 'none': 'block';
+    if (!response.status === 200){
+        console.log('Error response received');
+        throw new Error('Error while to get Categories')
     }
+    return response.data.data.categories
+}
 
+export const Header = async ()=> {
+    const categories = await fetchCategories()
+    
     return (
         <Container id={`Header`} fluid>
             <Navbar expand="lg" style={{
@@ -52,14 +44,14 @@ export const Header =()=> {
                 alt="Pataspare logo"
             />
             </Navbar.Brand>
-            <Mobile><FontAwesomeIcon icon={faSearch} onClick={toggleSearchBar}/></Mobile>
+            {/* <SearchToggle /> */}
             <Navbar.Toggle aria-controls="basic-navbar-nav" />
             <Navbar.Collapse id="basic-navbar-nav">
                 <Nav id='siteNav' className="mr-auto flex-column flex-lg-row">
                 <Nav.Link href="/">Home</Nav.Link>
                 <NavDropdown title="Categories" id="basic-nav-dropdown">
                     {
-                        categories.map((category, index) => {
+                        categories && categories.map((category, index) => {
                             return (<NavDropdown.Item key={index} href={`/parts?category=${category.id}`}>{category.name}</NavDropdown.Item>)
                         })
                     }
@@ -73,11 +65,11 @@ export const Header =()=> {
                 <Nav>
                 <Nav.Link href='https://vendor.pataspare.co.ke'>Sell on PataSpare</Nav.Link>
                 </Nav>
-                <CartLink />
-                <AuthButton />
+                {/* <CartLink /> */}
+                {/* <AuthButton /> */}
             </Navbar.Collapse>
             </Navbar>
-            <SearchBar />
+            {/* <SearchBar /> */}
         </Container>
 
     )

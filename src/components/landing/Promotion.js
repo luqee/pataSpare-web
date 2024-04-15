@@ -1,6 +1,5 @@
 'use client'
 import {Container, Row, Col, Card } from 'react-bootstrap';
-import banner1 from '@/images/banner1.jpg';
 
 export const PromotionSection = ()=>{
     const cardStyle = {
@@ -8,7 +7,7 @@ export const PromotionSection = ()=>{
     }
     return (
         <Container fluid className='promo' style={{
-            backgroundImage: `url(${banner1})`,
+            backgroundImage: `url(/img/banner1.jpg)`,
             height: '400px',
             backgroundAttachment: 'fixed',
             backgroundRepeat: 'no-repeat',

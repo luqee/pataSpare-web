@@ -17,7 +17,11 @@ export const PartItem = ({part})=>{
             }} href={`/parts/${part.id}`}>
             <Card.Img variant="top" src={`${urls.apiHost}/${part.part_image}`} width={250} height={250}/>
             <Card.Body>
-                <Card.Title>{part.title}</Card.Title>
+                <Card.Title style={{
+                    overflow: 'hidden',
+                    textOverflow: 'ellipsis',
+                    whiteSpace: 'nowrap'
+                }}>{part.title}</Card.Title>
                 <Card.Text>
                 Price: {part.price}
                 </Card.Text>

@@ -1,0 +1,33 @@
+.Categories{
+    padding-top: 20px;
+}
+
+.Category{
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 125px;
+    border-radius: 5%;
+}
+
+.CatLink{
+    color: #ffffff;
+    text-decoration: none;
+    font-size: 1.5em;
+    font-weight: bold;
+    
+}
+
+.Mask{
+    position: absolute;
+    top: 0;
+    height: 100%;
+    width: 100%;
+    background-color: #000000;
+    opacity: 0.6;
+    border-radius: 5%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}

@@ -20,7 +20,6 @@ const fetchLatestParts = async () => {
         console.log('Error response received');
         throw new Error('Error while to get parts')
     }
-    console.log('Response is 200');
     return response.data.data.parts
 }
 
@@ -42,7 +41,6 @@ const fetchRecParts = async () => {
         console.log('Error response received');
         throw new Error('Error while to get parts')
     }
-    console.log('Response is 200');
     return response.data.data.parts
 }
 
