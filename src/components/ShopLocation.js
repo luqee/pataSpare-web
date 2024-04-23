@@ -1,3 +1,4 @@
+'use client'
 import {useEffect, useState} from 'react';
 import {Button} from 'react-bootstrap';
 import GA from '@/utils/SiteAnalytics'

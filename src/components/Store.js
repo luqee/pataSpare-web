@@ -8,8 +8,7 @@ import {InquiryModal} from '@/components/InquiryModal'
 import GA from '@/utils/SiteAnalytics'
 import Link from 'next/link';
 import { useAuthContext } from '@/context/AuthContext';
-import { Rating, ThinStar } from "@smastrom/react-rating";
-import '@smastrom/react-rating/style.css'
+import { ShopRating } from "@/components/ShopRating";
 import { Shop, ShopOptions, ShopDetails } from "@/styles/shopItem.module.css"
 
 export const Store = ({shop})=>{
@@ -26,27 +25,6 @@ export const Store = ({shop})=>{
         let numberText = document.getElementById(numberTxt)
         numberButton.style.display = 'none'
         numberText.style.display = 'block'
-    }
-
-    const calculateRating = ()=>{
-        let rating = 0
-        if(shop.reviews.length > 0 ){
-            let shopRatings = shop.reviews.map((review) => {
-                if(review.rating === undefined){
-                    return 0
-                }else{
-                    return review.rating
-                }
-            })
-            rating = shopRatings.reduce((prev, next) => prev + next) / shop.reviews.length
-        }
-        return rating
-    }
-
-    const ratingStyles = {
-        itemShapes: ThinStar,
-        activeFillColor: '#ffb700',
-        inactiveFillColor: '#fbf1a9'
     }
 
     return (
@@ -69,13 +47,7 @@ export const Store = ({shop})=>{
                 </div>
                 <div className={ShopDetails}>
                     <p>{shop.name}</p>
-                    <Rating
-                        style={{ maxWidth: 100 }}
-                        itemStyles={ratingStyles}
-                        value={calculateRating()} // to-do calculate average rating
-                        readonly
-                        isDisabled
-                    />
+                    <ShopRating shop={shop} />
                     <p><FontAwesomeIcon icon={faMapMarker} />  {shop.location}</p>
                     <Button size={'sm'} id={`numberBtn${shop.id}`} onClick={showNumber}> View Number</Button>
                     <span id={`numberTxt${shop.id}`} style={{
