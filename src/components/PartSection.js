@@ -5,6 +5,7 @@ import {urls} from '@/config/urls';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {faQuestionCircle } from '@fortawesome/free-solid-svg-icons';
 import {InquiryModal} from '@/components/InquiryModal'
+import { LoginModal } from "@/components/LoginModal";
 import GA from '@/utils/SiteAnalytics'
 import { useAuthContext } from '@/context/AuthContext';
 import PartButton from '@/components/PartButton';
@@ -13,8 +14,9 @@ import Viewer from 'viewerjs'
 import 'viewerjs/dist/viewer.css';
 
 export const PartSection = ({part})=>{
-    const {user} = useAuthContext 
+    const {user} = useAuthContext()
     let [modalShow, setModalShow] = useState(false)
+    let [modalLoginShow, setModalLoginShow] = useState(false)
     let [quantity, setQuantity] = useState(1)
 
     useEffect(()=>{
@@ -23,7 +25,8 @@ export const PartSection = ({part})=>{
 
     return (
         <Container>
-            <InquiryModal shop={part.shop} part={part} show={modalShow} onHide={()=>{setModalShow(false)}}/>
+            <InquiryModal shop={part.shop} part={part} modalShow={modalShow} onHide={()=>{setModalShow(false)}}/>
+            <LoginModal modalShow={modalLoginShow} onHide={()=>{setModalLoginShow(false)}}/>
             <Row>
                 <Col>
                 <Image id={`partImage`} src={`${urls.apiHost}/${part.part_image}`} width={200} height={200} />
@@ -44,7 +47,13 @@ export const PartSection = ({part})=>{
                 <PartButton partId={part.id} qty={quantity} />
                 </div>
                 <div>
-                <Button onClick={() => {setModalShow(true)}}><FontAwesomeIcon icon={faQuestionCircle} /> Inquire</Button>
+                <Button onClick={() => {
+                    if (user) {
+                        setModalShow(true)
+                    }else{
+                        setModalLoginShow(true)
+                    }
+                }}><FontAwesomeIcon icon={faQuestionCircle} /> Inquire</Button>
                 </div>
                 </Col>
             </Row>

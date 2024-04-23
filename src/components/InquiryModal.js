@@ -2,7 +2,7 @@ import {useState} from 'react';
 import {Modal, Form, Button} from 'react-bootstrap';
 import {postInquiries} from '@/utils/api';
 
-export const InquiryModal = ({shop, part, onHide})=>{
+export const InquiryModal = ({shop, part, onHide, modalShow})=>{
     const [query, setQuery] = useState('')
 
     const sendInquiry = () => {
@@ -31,7 +31,8 @@ export const InquiryModal = ({shop, part, onHide})=>{
     }
 
     return (
-        <Modal 
+        <Modal
+            show={modalShow}
             onHide={onHide}
             size='lg'
             aria-labelledby="contained-modal-title-vcenter"

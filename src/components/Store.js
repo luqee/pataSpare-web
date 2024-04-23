@@ -10,10 +10,12 @@ import Link from 'next/link';
 import { useAuthContext } from '@/context/AuthContext';
 import { ShopRating } from "@/components/ShopRating";
 import { Shop, ShopOptions, ShopDetails } from "@/styles/shopItem.module.css"
+import { LoginModal } from './LoginModal';
 
 export const Store = ({shop})=>{
-    const {user} = useAuthContext 
+    const {user} = useAuthContext()
     let [modalShow, setModalShow] = useState(false)
+    let [modalLoginShow, setModalLoginShow] = useState(false)
 
     const showNumber = () =>{
         if(GA.init()){
@@ -29,7 +31,8 @@ export const Store = ({shop})=>{
 
     return (
         <div>
-            <InquiryModal shop={shop} part={null} show={modalShow} onHide={()=>{setModalShow(false)}}/>
+            <InquiryModal shop={shop} part={null} modalShow={modalShow} onHide={()=>{setModalShow(false)}}/>
+            <LoginModal modalShow={modalLoginShow} onHide={()=>{setModalLoginShow(false)}}/>
             <div className={Shop} style={{
                 backgroundImage: `url(${urls.apiHost}/${shop.shop_image})`
             }}>
@@ -37,13 +40,13 @@ export const Store = ({shop})=>{
                     <Link href={`/stores/${shop.id}`}>
                     <Button size={'sm'}><FontAwesomeIcon icon={faShoppingBag}/>{`  Shop`}</Button>
                     </Link>
-                    {
-                        user ? <Button size={'sm'} onClick={()=> setModalShow(true)}><FontAwesomeIcon icon={faQuestionCircle}/>{`  Inquire`}</Button>
-                        :<Link href={`/auth/login`}>
-                            Login to Inquire
-                        </Link>
-                    }
-                    
+                    <Button size={'sm'} onClick={()=> {
+                        if (user) {
+                            setModalShow(true)
+                        }else{
+                            setModalLoginShow(true)
+                        }
+                    }}><FontAwesomeIcon icon={faQuestionCircle}/>{`  Inquire`}</Button>
                 </div>
                 <div className={ShopDetails}>
                     <p>{shop.name}</p>

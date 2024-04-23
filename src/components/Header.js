@@ -66,7 +66,7 @@ export const Header = async ()=> {
                 <Nav.Link href='https://vendor.pataspare.co.ke'>Sell on PataSpare</Nav.Link>
                 </Nav>
                 {/* <CartLink /> */}
-                {/* <AuthButton /> */}
+                <AuthButton />
             </Navbar.Collapse>
             </Navbar>
             {/* <SearchBar /> */}

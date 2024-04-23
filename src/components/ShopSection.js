@@ -11,7 +11,7 @@ import Image from 'next/image';
 import { ShopRating } from "@/components/ShopRating";
 
 export const ShopSection = ({shop})=>{
-    const {user} = useAuthContext
+    const {user} = useAuthContext()
 
     const showNumber = () =>{
         if(GA.init()){

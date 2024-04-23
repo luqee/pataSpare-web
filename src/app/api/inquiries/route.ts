@@ -16,13 +16,11 @@ export const GET = async (request: NextRequest) =>{
         return Response.json(response.data, {
             status: response.status,
           })
-    } else {
-        // No response received
-        console.log('No response received');
-        return Response.json({ error: 'Error Processing request' }, {
-          status: 400,
-        });
     }
+    console.log('No response received');
+    return Response.json({ error: 'Error Processing request' }, {
+        status: 400,
+    });
 }
 
 export const POST = async (req: NextRequest) => {

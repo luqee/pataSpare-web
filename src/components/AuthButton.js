@@ -1,18 +1,11 @@
 import {Nav, NavDropdown}from 'react-bootstrap'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faUser } from '@fortawesome/free-solid-svg-icons'
+import { useAuthContext } from '@/context/AuthContext'
 
-const getUserToken = async ()=>{
-    // let token = cookies().get('token')
-    // if (token) {
-    //     return token
-    // }
-    // return null
-}
-
-export const AuthButton = async ()=> {
-    const status = true
-    return status ? (
+export const AuthButton = ()=> {
+    const {user, logout} = useAuthContext()
+    return user ? (
         <Nav>
             <NavDropdown title={<FontAwesomeIcon icon={faUser} />} id="basic-nav-dropdown">
                 <NavDropdown.Item href={`/customer`}>My Account</NavDropdown.Item>
