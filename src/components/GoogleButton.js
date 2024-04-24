@@ -37,7 +37,7 @@ export const GoogleButton = ({dcx})=>{
     }
     
     return (
-        <>
+        <div>
         <div id="g_id_onload"
             data-client_id={`${process.env.NEXT_PUBLIC_CLIENT_ID}`}
             data-context={dcx}
@@ -55,6 +55,6 @@ export const GoogleButton = ({dcx})=>{
             data-size="medium"
             data-logo_alignment="left">
         </div>
-        </>
+        </div>
     )
 }

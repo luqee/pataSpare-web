@@ -1,3 +1,4 @@
+'use client'
 import {Form, Button} from 'react-bootstrap';
 import { Formik, ErrorMessage } from 'formik'
 import DivWithErrorHandling from '@/components/withErrorHandlingHoc';
@@ -7,6 +8,7 @@ import { useRouter } from 'next/navigation';
 import { useAuthContext } from '@/context/AuthContext';
 import {GoogleButton} from '@/components/GoogleButton';
 import Link from 'next/link'
+import {LoginForm, LoginFormText} from '@/styles/Form.module.css';
 
 export const UserLoginForm =()=> {
 
@@ -43,7 +45,7 @@ export const UserLoginForm =()=> {
 	}
 
     return (
-		<>
+		<div className={LoginForm}>
 		<GoogleButton dcx={'signin'} />
 		<DivWithErrorHandling showError={showError} errors={errors}>
 			<Formik
@@ -90,8 +92,8 @@ export const UserLoginForm =()=> {
 					}
 				</Formik>
 		</DivWithErrorHandling>
-		<p>Forgot password? <Link href='/auth/recovery'>Reset here</Link></p>
-		<p>Don&apos;t have an account? <Link href='/auth/register'>Sign up</Link></p>
-		</>
+		<p className={LoginFormText}>Forgot password? <Link href='/auth/recovery'>Reset here</Link></p>
+		<p className={LoginFormText}>Don&apos;t have an account? <Link href='/auth/register'>Sign up</Link></p>
+		</div>
     )
 }
