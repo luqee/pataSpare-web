@@ -38,23 +38,23 @@ export const GoogleButton = ({dcx})=>{
     
     return (
         <div>
-        <div id="g_id_onload"
-            data-client_id={`${process.env.NEXT_PUBLIC_CLIENT_ID}`}
-            data-context={dcx}
-            data-ux_mode="popup"
-            data-callback="onSignIn"
-            data-auto_select="true"
-            data-itp_support="true">
-        </div>
+            <div id="g_id_onload"
+                data-client_id={`${process.env.NEXT_PUBLIC_CLIENT_ID}`}
+                data-context={dcx}
+                data-ux_mode="popup"
+                data-callback="onSignIn"
+                data-auto_select="true"
+                data-itp_support="true">
+            </div>
 
-        <div className="g_id_signin"
-            data-type="standard"
-            data-shape="pill"
-            data-theme="filled_blue"
-            data-text="signup_with"
-            data-size="medium"
-            data-logo_alignment="left">
-        </div>
+            <div className="g_id_signin"
+                data-type="standard"
+                data-shape="pill"
+                data-theme="filled_blue"
+                data-text="signup_with"
+                data-size="medium"
+                data-logo_alignment="left">
+            </div>
         </div>
     )
 }

@@ -9,7 +9,7 @@ import GA from '@/utils/SiteAnalytics'
 import Link from 'next/link';
 import { useAuthContext } from '@/context/AuthContext';
 import { ShopRating } from "@/components/ShopRating";
-import { Shop, ShopOptions, ShopDetails } from "@/styles/shopItem.module.css"
+import { Shop, ShopOptions, ShopDetails, StoreLink } from "@/styles/shopItem.module.css"
 import { LoginModal } from './LoginModal';
 
 export const Store = ({shop})=>{
@@ -17,7 +17,8 @@ export const Store = ({shop})=>{
     let [modalShow, setModalShow] = useState(false)
     let [modalLoginShow, setModalLoginShow] = useState(false)
 
-    const showNumber = () =>{
+    const showNumber = (e) =>{
+        e.preventDefault()
         if(GA.init()){
             GA.recordNumberView()
         }
@@ -33,14 +34,19 @@ export const Store = ({shop})=>{
         <div>
             <InquiryModal shop={shop} part={null} modalShow={modalShow} onHide={()=>{setModalShow(false)}}/>
             <LoginModal modalShow={modalLoginShow} onHide={()=>{setModalLoginShow(false)}}/>
+            <Link href={`/stores/${shop.id}`} className={StoreLink}>
             <div className={Shop} style={{
                 backgroundImage: `url(${urls.apiHost}/${shop.shop_image})`
             }}>
                 <div className={ShopOptions}>
-                    <Link href={`/stores/${shop.id}`}>
+                    {/* <Link href={`/stores/${shop.id}`}>
                     <Button size={'sm'}><FontAwesomeIcon icon={faShoppingBag}/>{`  Shop`}</Button>
-                    </Link>
-                    <Button size={'sm'} onClick={()=> {
+                    </Link> */}
+                    <Button style={{
+                        position: 'relative',
+                        zIndex: 10
+                    }} size={'sm'} onClick={(e)=> {
+                        e.preventDefault()
                         if (user) {
                             setModalShow(true)
                         }else{
@@ -52,12 +58,16 @@ export const Store = ({shop})=>{
                     <p>{shop.name}</p>
                     <ShopRating shop={shop} />
                     <p><FontAwesomeIcon icon={faMapMarker} />  {shop.location}</p>
-                    <Button size={'sm'} id={`numberBtn${shop.id}`} onClick={showNumber}> View Number</Button>
+                    <Button style={{
+                        position: 'relative',
+                        zIndex: 10
+                    }} size={'sm'} id={`numberBtn${shop.id}`} onClick={showNumber}> View Number</Button>
                     <span id={`numberTxt${shop.id}`} style={{
                         display: `none`
                     }}><FontAwesomeIcon icon={faPhone} />{`  ${shop.number}`}</span>
                 </div>
-                </div>
+            </div>
+            </Link>
         </div>
     )
 }
