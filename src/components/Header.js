@@ -8,33 +8,16 @@ import {SearchBar} from '@/components/SearchBar'
 import Image from 'next/image'
 import { autoAPI } from '@/config/axios'
 import { SearchToggle } from "@/components/SearchToggle";
+import { fetchCategories } from "@/actions/category";
 
-const fetchCategories = async ()=> {
-    const response = await autoAPI.get('/categories', {
-        validateStatus: function (status) {
-            return status < 500;
-        }
-    })
-    if (!response){
-        console.log('No response received');
-        throw new Error('Failed to get Categories')
-    }
-    if (!response.status === 200){
-        console.log('Error response received');
-        throw new Error('Error while to get Categories')
-    }
-    return response.data.data.categories
-}
-
-export const Header = async ()=> {
-    const categories = await fetchCategories()
-    
+export const Header = ({categories})=> {
     return (
-        <Container id={`Header`} fluid>
-            <Navbar expand="lg" style={{
-                borderBottom: '5px solid #343a40',
-                backgroundColor: '#007bff',
-            }}>
+        <Container id={`Header`} fluid style={{
+            borderBottom: '5px solid #343a40',
+            backgroundColor: '#007bff',
+            padding: 0
+        }}>
+            <Navbar expand="lg">
             <Navbar.Brand href="/">
             <Image
                 src={logo}

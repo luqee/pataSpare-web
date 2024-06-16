@@ -6,6 +6,7 @@ import {Header} from '@/components/Header'
 import {Footer} from '@/components/Footer'
 import {AuthProvider} from '@/context/AuthContext'
 import {CartProvider} from '@/context/CartContext'
+import { fetchCategories } from '@/actions/category';
 
 export const viewport: Viewport = {
   themeColor: '#000000',
@@ -37,18 +38,19 @@ export const metadata: Metadata = {
   },
 }
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode
 }) {
+  const categories = await fetchCategories()
   return (
     <html lang="en">
       <body>
       <AuthProvider>
         <CartProvider>
           {/* { GA.init() && <GA.RouteTracker /> } */}
-          <Container fluid className="App" style={{
+          <div className="App" style={{
             padding: '0',
             height: '100%',
             display: 'flex',
@@ -60,9 +62,9 @@ export default function RootLayout({
                 top: '0',
                 zIndex: '20',
             }}>
-              <Header />
+              <Header categories={categories} />
             </Container>
-            <Container style={{
+            <Container fluid style={{
               marginTop: `${100}px`,
               paddingBottom: '10px,',
               paddingTop: '10px',
@@ -79,7 +81,7 @@ export default function RootLayout({
             }}>
               <Footer />
             </Container>
-        </Container>
+        </div>
         </CartProvider>
       </AuthProvider>
       </body>

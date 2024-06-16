@@ -8,7 +8,6 @@ const AuthContext = createContext({})
 export const AuthProvider = ({ children }) => {
   const router = useRouter()
     const [user, setUser] = useState(null);
-    const [loading, setLoading] = useState(true);
   
     useEffect(()=>{
       // Check authentication status on page load
@@ -17,7 +16,6 @@ export const AuthProvider = ({ children }) => {
     }, [])
 
     const updateUser = ()=>{
-      setLoading(true)
       const sessionUser = document.cookie.split("; ").find((row) => row.startsWith("user="))?.split("=")[1];
       if (sessionUser) {
         let user = JSON.parse(decodeURIComponent(sessionUser))
@@ -25,19 +23,18 @@ export const AuthProvider = ({ children }) => {
       }else{
         setUser(null)
       }
-      setLoading(false)
     }
 
-    const login = (userData, loginCallBack) => {
-      postLogin(userData)
-      .then((response) => {
-        loginCallBack(response)
-      })
-      .catch((error) => {
-        console.log('Error while login in.');
-        console.log(error)
-      })
-    };
+    // const login = (userData, loginCallBack) => {
+    //   postLogin(userData)
+    //   .then((response) => {
+    //     loginCallBack(response)
+    //   })
+    //   .catch((error) => {
+    //     console.log('Error while login in.');
+    //     console.log(error)
+    //   })
+    // };
 
     const socialLogin = (info)=>{
       postSocialLogin(info)
@@ -67,7 +64,7 @@ export const AuthProvider = ({ children }) => {
     };
   
     return (
-      <AuthContext.Provider value={{ user, login, socialLogin, logout, updateUser }}>
+      <AuthContext.Provider value={{ user, socialLogin, logout, updateUser }}>
         {children}
       </AuthContext.Provider>
     );

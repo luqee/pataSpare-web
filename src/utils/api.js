@@ -92,13 +92,13 @@ export const getOrder = (id)=>{
   return appAPI.get(`/api/orders/${id}`)
 }
 
-export const postRegister = (requestData)=>{
-  return appAPI.post(`/api/auth/register`, JSON.stringify(requestData))
-}
+// export const postRegister = (requestData)=>{
+//   return appAPI.post(`/api/auth/register`, JSON.stringify(requestData))
+// }
 
-export const getEmailResend = (query)=>{
-  return appAPI.get(`/api/auth/email?${query}`)
-}
+// export const getEmailResend = (query)=>{
+//   return appAPI.get(`/api/auth/email?${query}`)
+// }
 
 export const getVerify = (query)=>{
   return appAPI.get(`/api/auth/verify?${query}`)

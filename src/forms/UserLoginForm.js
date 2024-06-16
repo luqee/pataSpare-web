@@ -8,7 +8,8 @@ import { useRouter } from 'next/navigation';
 import { useAuthContext } from '@/context/AuthContext';
 import {GoogleButton} from '@/components/GoogleButton';
 import Link from 'next/link'
-import {LoginForm, LoginFormText} from '@/styles/Form.module.css';
+import formStyles from '@/styles/Form.module.css';
+import { loginAction } from "@/actions/auth";
 
 export const UserLoginForm =()=> {
 
@@ -24,28 +25,29 @@ export const UserLoginForm =()=> {
 	const loginUser = (values, actions) => {
 		setformState(values)
 		let postData = {...values};
-		login(postData, (response)=>{
-			actions.setSubmitting(false)
-			if (response.status === 200) {
-				updateUser()
-				router.refresh()
-			}else{
-				let errors = []
-				if(response.status === 422 || response.status === 403){
-					errors[0] = response.data.message
-				}else{
-					errors[0] = response.message
-				}
-				if(errors){
-					setErrors(errors)
-					setShowError(true)
-				}
-			}
-		})
+		loginAction(postData)
+		// login(postData, (response)=>{
+		// 	actions.setSubmitting(false)
+		// 	if (response.status === 200) {
+		// 		updateUser()
+		// 		router.refresh()
+		// 	}else{
+		// 		let errors = []
+		// 		if(response.status === 422 || response.status === 403){
+		// 			errors[0] = response.data.message
+		// 		}else{
+		// 			errors[0] = response.message
+		// 		}
+		// 		if(errors){
+		// 			setErrors(errors)
+		// 			setShowError(true)
+		// 		}
+		// 	}
+		// })
 	}
 
     return (
-		<div className={LoginForm}>
+		<div className={formStyles.Form}>
 		<GoogleButton dcx={'signin'} />
 		<DivWithErrorHandling showError={showError} errors={errors}>
 			<Formik
@@ -92,8 +94,8 @@ export const UserLoginForm =()=> {
 					}
 				</Formik>
 		</DivWithErrorHandling>
-		<p className={LoginFormText}>Forgot password? <Link href='/auth/recovery'>Reset here</Link></p>
-		<p className={LoginFormText}>Don&apos;t have an account? <Link href='/auth/register'>Sign up</Link></p>
+		<p className={formStyles.FormText}>Forgot password? <Link href='/auth/recovery'>Reset here</Link></p>
+		<p className={formStyles.FormText}>Don&apos;t have an account? <Link href='/auth/register'>Sign up</Link></p>
 		</div>
     )
 }
